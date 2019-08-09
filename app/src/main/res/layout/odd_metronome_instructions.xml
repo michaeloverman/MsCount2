@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppThemeTransBlackBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<!--    android:background="@color/transparentBlack"-->
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/centerline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
+    <TextView
+        android:id="@+id/radio_instruction"
+        android:text="Select to play subdivisions."
+        style="@style/InstructionOverlayTextStyle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintRight_toLeftOf="@+id/centerline"
+        />
+    <TextView
+        android:id="@+id/startstop_instruction"
+        android:text="Start and stop the metronome"
+        style="@style/InstructionOverlayTextStyle"
+        android:gravity="end"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/centerline"
+        />
+    <TextView
+        android:id="@+id/tempo_instruction"
+        android:text="Swipe to change tempo."
+        style="@style/InstructionOverlayTextStyle"
+        android:gravity="end"
+        app:layout_constraintBottom_toTopOf="@+id/subdivision_instruction"
+        app:layout_constraintTop_toBottomOf="@+id/startstop_instruction"
+        app:layout_constraintLeft_toRightOf="@id/centerline"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+    <TextView
+        android:id="@+id/primary_pulse_instruction"
+        android:text="Tap and select new number to change primary beat length."
+        style="@style/InstructionOverlayTextStyle"
+        android:gravity="start"
+        app:layout_constraintBottom_toTopOf="@+id/subdivision_instruction"
+        app:layout_constraintTop_toBottomOf="@+id/startstop_instruction"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/centerline"
+        />
+
+    <TextView
+        android:id="@+id/subdivision_instruction"
+        android:text="Click a number to add a beat with that many subdivisions. Click the \'X\' to delete last beat."
+        style="@style/InstructionOverlayTextStyle"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/help_cancel_button"
+        app:layout_constraintTop_toBottomOf="@+id/tempo_instruction"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <Button
+        android:id="@+id/help_cancel_button"
+        android:text="@string/okay"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

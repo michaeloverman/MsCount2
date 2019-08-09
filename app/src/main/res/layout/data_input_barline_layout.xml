@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+
+              android:id="@+id/barline_grouping"
+              android:orientation="horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/actual_line_barline"
+        tools:ignore="contentDescription"
+        android:layout_width="@dimen/data_entry_barline_image_width"
+        android:layout_height="@dimen/data_entry_barline_image_height"
+        android:paddingTop="@dimen/data_entry_barline_padding"
+        android:src="@color/colorPrimaryDark"/>
+    <TextView
+        android:id="@+id/data_entry"
+        tools:text="12"
+        android:textSize="@dimen/data_entry_text_view_font_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

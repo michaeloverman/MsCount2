@@ -1,0 +1,42 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/widget"
+                android:padding="@dimen/widget_margin">
+<!--                android:background="@color/colorPrimaryLight"-->
+
+    <TextView
+        android:id="@+id/widget_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/widget_padding"
+        android:background="@color/colorPrimaryDark"
+        android:contentDescription="@string/app_name_content_description"
+        android:text="@string/app_name"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/widget_text_size"
+        android:textStyle="bold|italic"/>
+
+    <ListView
+        android:id="@+id/widget_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/widget_header"
+        android:dividerHeight="@dimen/widget_divider_height"
+        android:background="@color/colorPrimary"
+        tools:listitem="@layout/widget_list_item">
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/widget_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:fontFamily="sans-serif"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:text="@string/there_are_no_current_favorite_programs"
+        />
+
+</RelativeLayout>

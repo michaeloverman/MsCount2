@@ -1,0 +1,102 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <!--<dimen name="activity_horizontal_margin">16dp</dimen>-->
+    <!--<dimen name="activity_vertical_margin">16dp</dimen>-->
+    <dimen name="home_screen_button_margin">16dp</dimen>
+    <dimen name="list_time_text_size">20sp</dimen>
+    <dimen name="list_item_min_height">40dp</dimen>
+    <dimen name="list_item_padding">8dp</dimen>
+    <dimen name="data_entry_outside_margin">16dp</dimen>
+    <dimen name="generic_8dp_margin">8dp</dimen>
+    <dimen name="tempo_button_size">50dp</dimen>
+    <dimen name="fab_elevation">6dp</dimen>
+    <dimen name="button_corner_radius">4dp</dimen>
+    <dimen name="button_padding_rl">8dp</dimen>
+    <dimen name="home_screen_button_height">48dp</dimen>
+    <dimen name="fab_right_margin">32dp</dimen>
+    <dimen name="normal_met_fab_margin">16dp</dimen>
+    <dimen name="normal_met_tempo_vertical_padding">48dp</dimen>
+    <dimen name="subdivision_fab_margin">4dp</dimen>
+    <dimen name="data_entry_sub_button_text_size">60sp</dimen>
+    <dimen name="data_entry_barline_text_size">88sp</dimen>
+    <!--<dimen name="data_entry_sub_button_margin">4dp</dimen>-->
+    <dimen name="data_entry_title_text_size">18sp</dimen>
+    <dimen name="data_entry_usual_margin">16dp</dimen>
+    <dimen name="data_entry_usual_padding">4dp</dimen>
+    <dimen name="data_entry_interbutton_vertical_margin">8dp</dimen>
+    <dimen name="data_entry_recycler_view_min_height">60dp</dimen>
+    <dimen name="data_entry_single_input_text_size">35sp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
+    <dimen name="widget_item_padding_top_bottom">2dp</dimen>
+    <dimen name="widget_item_padding_start">4dp</dimen>
+    <dimen name="widget_item_font_size">18sp</dimen>
+    <dimen name="metadata_vertical_margin">8dp</dimen>
+    <dimen name="metadata_normal_horizontal_margin">16dp</dimen>
+    <dimen name="oddmet_vertical_margin">16dp</dimen>
+    <dimen name="widget_padding">8dp</dimen>
+    <dimen name="widget_text_size">24sp</dimen>
+    <dimen name="widget_divider_height">1dp</dimen>
+    <dimen name="data_entry_barline_image_width">3dp</dimen>
+    <dimen name="data_entry_barline_image_height">44dp</dimen>
+    <dimen name="data_entry_barline_padding">6dp</dimen>
+    <dimen name="data_entry_text_view_font_size">12sp</dimen>
+    <dimen name="get_integer_dialog_edittext_width">64dp</dimen>
+    <dimen name="get_integer_dialog_edittext_height">44dp</dimen>
+    <dimen name="get_integer_dialog_margin">8dp</dimen>
+    <dimen name="list_item_composer_margin">16dp</dimen>
+    <dimen name="big_yellow_circle_vert_margin">16dp</dimen>
+    <dimen name="big_yellow_circle_horz_margin">8dp</dimen>
+    <dimen name="meta_data_edittext_width">105dp</dimen>
+    <dimen name="metadata_edittext_height">42dp</dimen>
+    <dimen name="meta_data_horz_margin">8dp</dimen>
+    <dimen name="meta_data_short_edittext_width">63dp</dimen>
+    <dimen name="rhythm_value_recycler_width">151dp</dimen>
+    <dimen name="rhythm_value_recycler_height">56dp</dimen>
+    <dimen name="meta_data_program_button_top_margin">38dp</dimen>
+    <dimen name="meta_data_save_button_top_margin">24dp</dimen>
+    <dimen name="meta_options_cancel_button_top_margin">56dp</dimen>
+    <dimen name="normal_met_tempo_font_size">100dp</dimen>
+    <!--<dimen name="tempo_button_layout_top_margin">180dp</dimen>-->
+    <!--<dimen name="normal_met_tempo_buttons_bottom_margin">30dp</dimen>-->
+    <dimen name="normal_met_subdiv_plus_minus_bottom_margin">16dp</dimen>
+    <dimen name="note_value_image_view_margin">2dp</dimen>
+    <dimen name="odd_met_tempo_font_size">100dp</dimen>
+    <dimen name="odd_met_subdiv_button_size">48dp</dimen>
+    <dimen name="odd_met_xtra_subdiv_button_size">40dp</dimen>
+    <dimen name="odd_met_subdiv_button_margin">8dp</dimen>
+    <dimen name="odd_met_subdiv_button_font_size">30dp</dimen>
+    <dimen name="odd_met_multiplier_view_margin">35dp</dimen>
+    <dimen name="odd_met_multiplier_view_font_size">45dp</dimen>
+    <dimen name="odd_met_subdiv_checkbox_font_size">24sp</dimen>
+    <dimen name="odd_met_subdiv_button_outer_margin">16dp</dimen>
+    <dimen name="program_select_composer_name_label_font_size">32sp</dimen>
+    <dimen name="pro_met_name_label_font_size">14sp</dimen>
+    <dimen name="pro_met_title_label_font_size">24sp</dimen>
+    <dimen name="pro_met_tempo_font_size">40sp</dimen>
+    <dimen name="pro_met_tempo_label_top_margin">28dp</dimen>
+    <dimen name="pro_met_measure_label_top_margin">21dp</dimen>
+    <dimen name="pro_met_primary_beat_image_size">60dp</dimen>
+    <dimen name="pro_met_primary_beat_image_margin">48dp</dimen>
+    <dimen name="pro_met_equal_sign_font_size">40dp</dimen>
+    <dimen name="pro_met_equal_sign_margin">50dp</dimen>
+    <dimen name="select_composer_button_padding">4dp</dimen>
+    <dimen name="select_composer_button_bottom_margin">16dp</dimen>
+    <dimen name="widget_min_height">110dp</dimen>
+    <dimen name="widget_min_width">180dp</dimen>
+
+    <dimen name="big_round_button_size">177dp</dimen>
+    <dimen name="top_met_select_button_margin">38dp</dimen>
+
+    <dimen name="instruction_text_default_margin">8dp</dimen>
+    <dimen name="instruction_text_default_textSize">20sp</dimen>
+    <dimen name="clickable_text_min_height">48dp</dimen>
+	<dimen name="flexbox_lr_margin">24dp</dimen>
+	<dimen name="subdivision_frame_width">350dp</dimen>
+    <dimen name="subdivision_frame_height">140dp</dimen>
+
+</resources>

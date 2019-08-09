@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppThemeTransBlackBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<!--    android:background="@color/transparentBlack"-->
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/centerline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
+    <TextView
+        android:id="@+id/meta_data_entry_instruction"
+        android:text="@string/select_new_prog_instr"
+        style="@style/InstructionOverlayTextStyle"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+    <TextView
+        android:id="@+id/startstop_instruction"
+        android:text="@string/start_stop_met"
+        style="@style/InstructionOverlayTextStyle"
+        android:gravity="end"
+        app:layout_constraintTop_toBottomOf="@+id/meta_data_entry_instruction"
+        android:layout_marginTop="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/centerline"
+        />
+    <TextView
+        android:id="@+id/tempo_instruction"
+        android:text="@string/use_arrows"
+        style="@style/InstructionOverlayTextStyle"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/startstop_instruction"
+        app:layout_constraintBottom_toTopOf="@+id/other_instructions"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/other_instructions"
+        android:text="@string/pencil_heart_does_what"
+        style="@style/InstructionOverlayTextStyle"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/help_cancel_button"
+        app:layout_constraintTop_toBottomOf="@+id/tempo_instruction"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <Button
+        android:id="@+id/help_cancel_button"
+        android:text="@string/okay"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

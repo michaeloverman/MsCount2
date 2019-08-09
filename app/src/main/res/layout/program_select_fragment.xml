@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="tech.michaeloverman.mscount.database.PieceSelectFragment">
+              <!--android:background="@color/colorPrimaryLight"-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/composers_name_label"
+            android:text="@string/single_space"
+            tools:text="Last Name, First Name"
+            android:textSize="@dimen/program_select_composer_name_label_font_size"
+            android:textColor="@color/secondaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/clickable_text_min_height"
+            android:layout_marginTop="@dimen/generic_8dp_margin"
+            android:visibility="visible"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:transitionName="@string/transition_composer_name_view"
+            />
+        <TextView
+            android:id="@+id/local_database_label"
+            android:text="@string/local_database_label"
+            tools:text="@string/local_database_label"
+            android:textSize="@dimen/program_select_composer_name_label_font_size"
+            android:textColor="@color/secondaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/clickable_text_min_height"
+            android:layout_marginTop="@dimen/generic_8dp_margin"
+            android:visibility="invisible"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/composers_name_label"
+            android:transitionName="@string/transition_composer_name_view"
+            />
+    </FrameLayout>
+    <include layout="@layout/select_program_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

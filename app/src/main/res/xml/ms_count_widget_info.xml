@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:initialKeyguardLayout="@layout/ms_count_widget"
+                    android:initialLayout="@layout/ms_count_widget"
+                    android:minHeight="@dimen/widget_min_height"
+                    android:minWidth="@dimen/widget_min_width"
+                    android:resizeMode="horizontal|vertical"
+                    android:updatePeriodMillis="0"
+                    >
+<!--                    android:previewImage="@drawable/example_appwidget_preview"-->
+</appwidget-provider>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="subdivision_colors">
+        <item>@color/colorSubdivisionIndicator0</item>
+        <item>@color/colorSubdivisionIndicator1</item>
+        <item>@color/colorSubdivisionIndicator2</item>
+        <item>@color/colorSubdivisionIndicator3</item>
+        <item>@color/colorSubdivisionIndicator4</item>
+        <item>@color/colorSubdivisionIndicator5</item>
+        <item>@color/colorSubdivisionIndicator6</item>
+        <item>@color/colorSubdivisionIndicator7</item>
+        <item>@color/colorSubdivisionIndicator8</item>
+        <item>@color/colorSubdivisionIndicator9</item>
+        <item>@color/colorSubdivisionIndicator10</item>
+    </array>
+
+    <string-array name="pref_click_options">
+        <item>Error Items</item>
+        <item>Error Items</item>
+        <item>Error Items</item>
+        <item>Error Items</item>
+        <item>Error Items</item>
+        <item>Error Items</item>
+    </string-array>
+    <string-array name="pref_click_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+
+    </string-array>
+
+    <integer-array name="note_values">
+        <item>@drawable/ic_16thnote</item>
+        <item>@drawable/ic_dotted16th</item>
+        <item>@drawable/ic_8th</item>
+        <item>@drawable/ic_dotted8th</item>
+        <item>@drawable/ic_quarter</item>
+        <item>@drawable/ic_dotted_4th</item>
+        <item>@drawable/ic_half</item>
+        <item>@drawable/ic_dotted_2th</item>
+        <item>@drawable/ic_whole</item>
+    </integer-array>
+
+    <string-array name="note_value_content_descriptions">
+        <item>@string/sixteenth_content_description</item>
+        <item>@string/dotted_sixteenth_content_description</item>
+        <item>@string/eighth_content_description</item>
+        <item>@string/dotted_eighth_content_description</item>
+        <item>@string/quarter_content_description</item>
+        <item>@string/dotted_quarter_content_description</item>
+        <item>@string/half_content_description</item>
+        <item>@string/dotted_half_content_description</item>
+        <item>@string/whole_content_description</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--android:background="@color/colorPrimaryLight"-->
+    
+    <TextView
+        android:id="@+id/composer_label_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/composer"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/data_entry_outside_margin"
+        android:layout_marginStart="@dimen/data_entry_outside_margin"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <EditText
+        android:id="@+id/composer_last_name_text_entry"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/data_entry_outside_margin"
+        android:layout_marginStart="@dimen/data_entry_outside_margin"
+        android:inputType="textCapWords"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+        android:nextFocusDown="@+id/composer_first_name_text_entry"
+        android:digits="@string/valid_characters_string"
+        android:hint="@string/last_name"
+        app:layout_constraintTop_toBottomOf="@+id/composer_label_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/composer_first_name_text_entry"
+        tools:ignore="Deprecated"/>
+    
+    <EditText
+        android:id="@+id/composer_first_name_text_entry"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/data_entry_outside_margin"
+        android:layout_marginStart="@dimen/data_entry_outside_margin"
+        android:inputType="textCapWords"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+        android:nextFocusDown="@+id/title_text_entry"
+        android:digits="@string/valid_characters_string"
+        android:hint="@string/first_name"
+        app:layout_constraintTop_toBottomOf="@+id/composer_label_view"
+        app:layout_constraintLeft_toRightOf="@id/composer_last_name_text_entry"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="Deprecated"/>
+
+    <TextView
+        android:id="@+id/title_label_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        app:layout_constraintTop_toBottomOf="@+id/composer_last_name_text_entry"
+        android:layout_marginStart="@dimen/data_entry_outside_margin"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <EditText
+        android:id="@+id/title_text_entry"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textCapWords"
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@+id/baseline_subdivision_entry"
+        android:digits="@string/valid_characters_string"
+        android:hint="@string/title_hint_string"
+        app:layout_constraintTop_toBottomOf="@+id/title_label_view"
+        android:layout_marginStart="@dimen/data_entry_outside_margin"
+        android:layout_marginEnd="@dimen/data_entry_outside_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="Deprecated"/>
+
+    <TextView
+        android:id="@+id/baseline_subdivision_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/subdivisions_in_primary_beat"
+        app:layout_constraintTop_toBottomOf="@+id/title_text_entry"
+        android:layout_marginStart="@dimen/data_entry_outside_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="@dimen/data_entry_outside_margin"/>
+
+    <TextView
+        android:id="@+id/countoff_subdivision_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/subdivisions_clicked_in_countoff"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="@dimen/metadata_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@+id/baseline_subdivision_entry"
+        android:layout_marginStart="@dimen/metadata_normal_horizontal_margin"/>
+
+    <EditText
+        android:id="@+id/baseline_subdivision_entry"
+        android:layout_width="@dimen/meta_data_edittext_width"
+        android:layout_height="@dimen/metadata_edittext_height"
+        android:layout_marginStart="@dimen/data_entry_outside_margin"
+        android:ems="6"
+        android:gravity="center"
+        android:hint="@string/_2"
+        android:inputType="number"
+        android:digits="0123456789"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@+id/countoff_subdivision_entry"
+        app:layout_constraintLeft_toRightOf="@+id/baseline_subdivision_label"
+        app:layout_constraintBaseline_toBaselineOf="@+id/baseline_subdivision_label"/>
+
+    <EditText
+        android:id="@+id/countoff_subdivision_entry"
+        android:layout_width="@dimen/meta_data_edittext_width"
+        android:layout_height="@dimen/metadata_edittext_height"
+        android:ems="6"
+        android:gravity="center"
+        android:hint="@string/_2"
+        android:inputType="number"
+        android:digits="0123456789"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@+id/default_tempo_entry"
+        app:layout_constraintLeft_toRightOf="@+id/countoff_subdivision_label"
+        android:layout_marginStart="@dimen/metadata_normal_horizontal_margin"
+        app:layout_constraintBaseline_toBaselineOf="@+id/countoff_subdivision_label"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"
+        />
+
+    <TextView
+        android:id="@+id/default_tempo_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/default_tempo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="@dimen/meta_data_horz_margin"
+        android:layout_marginEnd="@dimen/meta_data_horz_margin"
+        app:layout_constraintRight_toLeftOf="@+id/guideline"
+        android:layout_marginTop="@dimen/metadata_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@+id/countoff_subdivision_entry"/>
+
+    <EditText
+        android:id="@+id/default_tempo_entry"
+        android:layout_width="@dimen/meta_data_short_edittext_width"
+        android:layout_height="@dimen/metadata_edittext_height"
+        android:layout_marginEnd="@dimen/metadata_normal_horizontal_margin"
+        android:layout_marginStart="@dimen/metadata_normal_horizontal_margin"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/_120"
+        android:inputType="number"
+        android:imeOptions="actionNext"
+        android:nextFocusForward="@+id/baseline_rhythmic_value_recycler"
+        app:layout_constraintLeft_toLeftOf="@+id/default_tempo_label"
+        app:layout_constraintRight_toRightOf="@+id/default_tempo_label"
+        app:layout_constraintTop_toBottomOf="@+id/default_tempo_label" />
+
+    <TextView
+        android:id="@+id/baseline_rhythmic_value_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/rhythm_of_primary_click"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="@dimen/metadata_normal_horizontal_margin"
+        app:layout_constraintTop_toTopOf="@+id/default_tempo_label"
+        android:layout_marginTop="0dp"
+        android:layout_marginStart="@dimen/metadata_normal_horizontal_margin"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/baseline_rhythmic_value_recycler"
+        android:layout_width="@dimen/rhythm_value_recycler_width"
+        android:layout_height="@dimen/rhythm_value_recycler_height"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/baseline_rhythmic_value_label"
+        app:layout_constraintRight_toRightOf="@+id/baseline_rhythmic_value_label"
+        app:layout_constraintLeft_toLeftOf="@+id/baseline_rhythmic_value_label"
+        android:layout_marginStart="@dimen/metadata_normal_horizontal_margin"
+        android:layout_marginEnd="@dimen/metadata_normal_horizontal_margin"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/enter_beats_button"
+        android:contentDescription="@string/program_beats_content_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/program_beats_2lines"
+        app:backgroundTint="@color/colorPrimary"
+        android:layout_marginTop="@dimen/meta_data_program_button_top_margin"
+        app:layout_constraintRight_toRightOf="@+id/baseline_rhythmic_value_recycler"
+        app:layout_constraintLeft_toLeftOf="@+id/baseline_rhythmic_value_recycler"
+        app:layout_constraintTop_toBottomOf="@+id/default_tempo_entry"
+        android:layout_marginStart="@dimen/metadata_normal_horizontal_margin"
+        android:layout_marginEnd="@dimen/metadata_normal_horizontal_margin"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/save_program_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save_program"
+        app:backgroundTint="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_beats_button"
+        android:layout_marginTop="@dimen/meta_data_save_button_top_margin"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="@dimen/metadata_normal_horizontal_margin"
+        android:layout_marginEnd="@dimen/metadata_normal_horizontal_margin"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/options_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/options"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintRight_toRightOf="@+id/default_tempo_label"
+        app:layout_constraintLeft_toLeftOf="@+id/default_tempo_label"
+        app:layout_constraintTop_toTopOf="@+id/enter_beats_button"
+        />
+
+    <FrameLayout
+        android:id="@+id/help_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:background="@color/transparentBlack"
+        android:elevation="12dp">
+        <include layout="@layout/meta_data_input_instructions"
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+            />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

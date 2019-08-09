@@ -1,0 +1,222 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Ms. Count</string>
+    <string name="start">Start</string>
+    <!--<string name="bpm">BPM</string>-->
+    <string name="unformatted_bpm">%1$d bpm</string>
+    <!--<string name="stop">Stop</string>-->
+    <!--<string name="programmed_metronome">Programmed Metronome</string>-->
+    <!--<string name="choose_etude">Select an etude</string>-->
+    <!--<string name="work_titles_label">    </string>-->
+
+    <!--<string name="beats_in_current_measure">Beats in Current Measure: %d</string>-->
+    <string name="valid_characters_string">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,-;:!?+=()#</string>
+    <string name="select_piece_by">Select a piece by…</string>
+    <string name="select_a_composer">Select a composer:</string>
+    <string name="normal_metronome">Normal Metronome</string>
+    <string name="pre_programmed_metronome">Ms. Count Metronome</string>
+    <!--<string name="create_edit_program">Create/Edit Program</string>-->
+    <string name="whole_num_format">#</string>
+    <string name="tenths_num_format">#.#</string>
+    <string name="too_many_subdivisions">No more than ten beats per measure.</string>
+    <string name="sign_in_cancelled">Sign in to Database cancelled.</string>
+    <string name="no_internet_connection">Connect to internet, and sign again.</string>
+    <string name="unknown_error">An error has occurred signing in to the database. Please try again.</string>
+    <string name="unknown_sign_in_response">A response from the database has come back that we don\'t understand. Not sure if you\'re signed in or not…</string>
+    <string name="overwrite_data_confirmation">%1$s by %2$s already exists in the database. Are you sure you want to overwrite with new data?</string>
+    <string name="title_of_the_piece_dummy_data">Title Of the Piece</string>
+    <string name="save">Save</string>
+    <!--<string name="no_program_selected_instruction_toast">Select a program for metronome</string>-->
+    <string name="use_local_database">Access local database</string>
+    <string name="use_cloud_database">Access cloud database</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+    <string name="down_beat_click_key">down_beat_click</string>
+    <string name="inner_beat_click_key">inner_beat_click</string>
+    <string name="subdivision_beat_click_key">subdivision_beat_click</string>
+    <string name="down_beat_click">Down beat click</string>
+    <string name="inner_beat_click">Inner beat click</string>
+    <string name="subdivision_click">Subdivision click</string>
+
+    <string name="mark_as_favorite_menu">Mark as favorite</string>
+    <string name="mark_as_unfavorite_menu">Unmark as favorite</string>
+    <string name="need_program_before_favorite">You must have a program loaded to mark it as favorite.</string>
+    <string name="not_authorized_save_local">You are not authorized to overwrite this program. Switch to local database to save.</string>
+    <string name="problem_loading">Problem loading program.</string>
+    <string name="countoff_must_fit_subdivisions">Countoff subdivisions must divide evenly into baseline subdivisions.</string>
+    <string name="tempo_between_min_max" tools:ignore="PluralsCandidate">Tempo must be between %1$d and %2$d</string>
+    <string name="tempo_must_be_integer">Tempo must be an integer.</string>
+    <string name="enter_data_before_saving">Error: Please Click \"Program Beats\" to enter your program.</string>
+    <string name="error_no_composer_message">Error: Please enter a composer\'s name.</string>
+    <string name="error_no_title_message">Error: Please enter a title.</string>
+    <string name="error_no_subdivision_message">Error: Please enter a baseline subdivision.</string>
+    <string name="error_no_countoff_message">Error: Please enter a countoff subdivision.</string>
+    <string name="select_a_piece">Select a piece…</string>
+    <string name="local_database_label">Local Database:</string>
+    <string name="delete_program">Delete Program</string>
+    <string name="cancel_delete">Cancel delete</string>
+    <string name="select_to_delete">Select Program to Delete…</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_confirmation_question">Are you sure you want to delete %1$s from the database?</string>
+    <string name="delete_program_dialog_title">Delete Program?</string>
+    <string name="deleting_title">Deleting %1$s…</string>
+    <string name="no_composer_empty_space"/>
+    <string name="select_a_program">select a program…</string>
+    <string name="transition_composer_name_view">transition_composer_name_view</string>
+    <string name="round_button_transition">round_button_transition</string>
+
+
+    <string name="programmed_banner_ad_unit_id">ca-app-pub-9915736656105375/2110261449</string>
+    <string name="normal_banner_ad_unit_id">ca-app-pub-9915736656105375/8017194246</string>
+    <string name="odd_banner_ad_unit_id">ca-app-pub-9915736656105375/8935524240</string>
+    <string name="test_device_code">D1F66D39AE17E7077D0804CCD3F8129B</string>
+    <string name="halve_all_data_values">Halve all data values</string>
+    <string name="double_all_data_values">Double all data values</string>
+    <string name="erase_data">Erase Data?</string>
+    <string name="delete_for_sure_question">You are about to delete your data. Are you sure you want to leave without saving?</string>
+    <string name="leave">Leave</string>
+    <string name="leave_without_save">Are you sure you want to leave without saving your data?</string>
+    <string name="favorite_database_error_try_again">Database error. Try reloading program and mark as favorite.</string>
+    <string name="delete_from_sql_toast">Deleting from local database…</string>
+    <string name="incorrect_format_database_id">Database id not correct integer format…</string>
+    <string name="delete_from_firebase_toast">Deleting from cloud database…</string>
+    <string name="not_authorized_to_delete_toast">You are not authorized to delete this program.</string>
+    <string name="rhythm_of_primary_click">Rhythm of primary click</string>
+    <string name="default_tempo">Default Tempo</string>
+    <string name="subdivisions_in_primary_beat">Subdivisions in primary beat</string>
+    <string name="title_hint_string">Sonata No 3, Allegro</string>
+    <string name="title">Title:</string>
+    <string name="composer">Composer:</string>
+    <string name="options">Options</string>
+    <string name="save_program">Save Program</string>
+    <string name="program_beats_2lines">Program\nBeats</string>
+    <string name="tempo_multiplier">Tempo multiplier:</string>
+    <string name="zero_point_five">0.5</string>
+    <string name="rhythm_of_display_click">Rhythm of display click:</string>
+    <string name="fortytwo">42</string>
+    <string name="measure_number_offset">Measure number offset:</string>
+    <string name="triple_all_data_values">Triple all data values</string>
+    <string name="third_all_data_values">Third all data values</string>
+
+    <!--Content Description Strings-->
+    <string name="sixteenth_content_description">sixteenth note</string>
+    <string name="dotted_sixteenth_content_description">dotted sixteenth</string>
+    <string name="eighth_content_description">eighth note</string>
+    <string name="dotted_eighth_content_description">dotted eighth</string>
+    <string name="quarter_content_description">quarter note</string>
+    <string name="dotted_quarter_content_description">dotted quarter</string>
+    <string name="half_content_description">half note</string>
+    <string name="dotted_half_content_description">dotted half</string>
+    <string name="whole_content_description">whole note</string>
+    <string name="tempo_down_button">tempo down</string>
+    <string name="tempo_up_button">tempo up</string>
+    <string name="start_stop_button">metronome start stop</string>
+    <string name="tempo_in_tenths_radio_button">tempo in tenths</string>
+    <string name="tempo_in_whole_numbers_radio_button">tempo in whole numbers</string>
+    <string name="subtract_a_subdivision">subtract a subdivision</string>
+    <string name="add_a_subdivision">add a subdivision</string>
+    <string name="remove_a_beat">remove a beat</string>
+    <string name="add_two_subs">add beat of two subdivisions</string>
+    <string name="add_three_subs">add beat of three subdivisions</string>
+    <string name="add_beat_of_four_subdivisions">add beat of four subdivisions</string>
+    <string name="open_other_subdivision_options_button">open other subdivision options</string>
+    <string name="one_sub_beat">add beat of one subdivision</string>
+    <string name="add_five_beat">add beat of five subdivisions</string>
+    <string name="add_beat_of_six_subdivisions">add beat of six subdivisions</string>
+    <string name="add_beat_of_seven_subdivisions">add beat of seven subdivisions</string>
+    <string name="add_beat_of_eight_subdivisions">add beat of eight subdivisions</string>
+    <string name="add_beat_of_nine_subdivisions">add beat of nine subdivisions</string>
+    <string name="add_beat_of_ten_subdivisions">add beat of ten subdivisions</string>
+    <string name="barline_content_description">barline, measure number %1$d</string>
+    <string name="add_barline_button_content_description">add a barline</string>
+    <string name="note_value_note_equals">%1$s equals</string>
+
+    <!--Data Input Layout Buttons-->
+    <string name="barline_character">|</string>
+    <string name="question_mark">\?</string>
+    <string name="delete">Delete</string>
+    <string name="back">Back</string>
+    <string name="_11">11</string>
+
+    <string name="click_sounds">Click Sounds</string>
+    <string name="odd_metronome">Odd Metronome</string>
+
+    <!--Metadata Input-->
+    <string name="last_name">Last name</string>
+    <string name="first_name">First name</string>
+    <string name="subdivisions_clicked_in_countoff">Subdivisions clicked in countoff</string>
+    <string name="edit_existing_program">Edit existing program</string>
+    <string name="there_are_no_current_favorite_programs">There are no current favorite programs.</string>
+
+    <!--NUMBERS!!-->
+    <string name="_1">1</string>
+    <string name="_2">2</string>
+    <string name="_3">3</string>
+    <string name="_4">4</string>
+    <string name="_5">5</string>
+    <string name="_6">6</string>
+    <string name="_7">7</string>
+    <string name="_8">8</string>
+    <string name="_9">9</string>
+    <string name="_10">10</string>
+    <string name="_12">12</string>
+    <string name="_120">120</string>
+    <string name="elipses">…</string>
+    <string name="_2_equals">2=</string>
+
+    <!--Programmed Metronome-->
+    <string name="subdivisions">Subdivisions</string>
+    <string name="single_space"/>
+    <string name="current_measure_colon">Current Measure:</string>
+    <string name="dash_dash">--</string>
+    <string name="equals">=</string>
+    <string name="create_new_program">Create new program</string>
+    <string name="select_composer">Select Composer</string>
+
+    <!--Normal Metronome-->
+    <string name="vol_abbrev_colon">vol: %1$d</string>
+
+    <!--Oddmeter Metronome-->
+    <string name="pulse_equals">%1$d=</string>
+    <string name="no_programs_currently_in_database">No programs currently in local database.</string>
+    <!--<string name="unknown_error_occurred">Unknown error occurred…</string>-->
+    <string name="need_subdivs_to_click_subdivs">You must enter subdivisions to click subdivisions…</string>
+    <string name="program_beats_content_description">program beats</string>
+    <string name="repeat_measure">repeat measure</string>
+    <string name="app_name_content_description">ms count metronome</string>
+    <string name="programmed_interstitial_unit_id">ca-app-pub-9915736656105375/9963638641</string>
+    <string name="double_dash_no_measure_number">--</string>
+    <string name="database_error_save_cancelled">Error: Database problem. Save canceled.</string>
+    <string name="please_enter_only_numbers_countoff">Please enter only numbers for countoff.</string>
+    <string name="countoff_must_be_even_divisor">Countoff subdivisions must be an even divisor of the baseline subdivisions.</string>
+    <string name="enter_only_number_subdivs">Please enter only numbers for subdivisions.</string>
+    <string name="subdivs_out_of_range">Subdivisions out of range.</string>
+    <string name="id_not_found">Program with id %1$d is not found in the database.</string>
+    <string name="select_program_first">Please select a program before starting metronome.</string>
+    <string name="database_error_try_again">A database error occurred. Please try again.</string>
+    <string name="return_result_problem">Problem with return result</string>
+    <string name="cant_evenly_divide">Can\'t evenly divide values.</string>
+    <string name="enter_subdivision_value">Enter a subdivision value…</string>
+    <string name="error_save_canceled">Error: Save to database cancelled.</string>
+    <string name="enter_composer_name_and_title">Please enter a composer name and title before continuing.</string>
+
+    <string name="help">Help</string>
+    <string name="okay">Got it!</string>
+    <string name="enter_beats">Enter beats using the number of subdivisions per beat. Enter a new barline for each new measure. \'?\' will allow you to enter any subdivision value. \'Delete\' button deletes last or selected entry. To insert, select entry in edit window. New values will be inserted before selected value. Delete a value in the middle of the piece by selecting unwanted value, and hitting \'Delete\'. Save before leaving this screen or data will be lost.</string>
+    <string name="select_new_prog_instr">Tap title to select new program. Local/Cloud databases can be toggled from the options menu.</string>
+    <string name="start_stop_met">Start and stop the metronome</string>
+    <string name="use_arrows">Use arrow keys to change tempo.</string>
+    <string name="pencil_heart_does_what">Pencil takes you program creation/editing. Heart marks program as favorite, and includes it in widget for launch direct from homescreen.</string>
+    <string name="subdivision_one">subdivision one</string>
+    <string name="subdivision_two">subdivision two</string>
+    <string name="subdivision_three">subdivision three</string>
+    <string name="subdivision_four">subdivision four</string>
+    <string name="subdivision_five">subdivision five</string>
+    <string name="subdivision_six">subdivision six</string>
+    <string name="subdivision_seven">subdivision seven</string>
+    <string name="subdivision_eight">subdivision eight</string>
+    <string name="subdivision_nine">subdivision nine</string>
+    <string name="subdivision_ten">subdivision ten</string>
+
+
+</resources>

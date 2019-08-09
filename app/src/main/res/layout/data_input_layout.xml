@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--android:background="@color/colorPrimaryLight"-->
+
+    <TextView
+        android:id="@+id/data_title_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_of_the_piece_dummy_data"
+        android:textSize="@dimen/data_entry_title_text_size"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/data_entry_usual_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="@dimen/data_entry_usual_margin"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/entered_data_recycler_view"
+        android:orientation="horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/data_entry_recycler_view_min_height"
+        android:background="@color/parchment"
+        app:layout_constraintTop_toBottomOf="@+id/data_title_view"
+        android:layout_marginLeft="@dimen/data_entry_usual_margin"
+        android:layout_marginStart="@dimen/data_entry_usual_margin"
+        android:layout_marginRight="@dimen/data_entry_usual_margin"
+        android:layout_marginEnd="@dimen/data_entry_usual_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/barline"
+        android:contentDescription="@string/add_barline_button_content_description"
+        android:text="@string/barline_character"
+        
+        android:textSize="@dimen/data_entry_barline_text_size"
+        style="@style/DataEntryButtonStyle"
+        android:background="@drawable/roundcorner_dark"
+        android:layout_marginTop="@dimen/data_entry_usual_margin"
+        android:layout_marginStart="@dimen/data_entry_usual_margin"
+        app:layout_constraintTop_toBottomOf="@+id/entered_data_recycler_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/one"
+        android:text="@string/_1"
+        style="@style/DataEntryButtonStyle"
+        app:layout_constraintTop_toTopOf="@+id/barline"
+        app:layout_constraintRight_toLeftOf="@+id/two"
+        android:layout_marginEnd="@dimen/data_entry_usual_margin"
+        />
+
+    <TextView
+        android:id="@+id/two"
+        android:text="@string/_2"
+        style="@style/DataEntryButtonStyle"
+        app:layout_constraintTop_toTopOf="@+id/barline"
+        app:layout_constraintRight_toLeftOf="@+id/three"
+        android:layout_marginEnd="@dimen/data_entry_usual_margin"
+        />
+
+    <TextView
+        android:id="@+id/three"
+        android:text="@string/_3"
+        style="@style/DataEntryButtonStyle"
+        app:layout_constraintTop_toTopOf="@+id/barline"
+        app:layout_constraintRight_toLeftOf="@+id/four"
+        android:layout_marginEnd="@dimen/data_entry_usual_margin"
+        />
+
+    <TextView
+        android:id="@+id/four"
+        android:text="@string/_4"
+        style="@style/DataEntryButtonStyle"
+        app:layout_constraintTop_toTopOf="@+id/barline"
+        app:layout_constraintRight_toLeftOf="@+id/other"
+        android:layout_marginEnd="@dimen/data_entry_usual_margin"
+        />
+
+    <TextView
+        android:id="@+id/five"
+        android:text="@string/_5"
+        style="@style/DataEntryButtonStyle"
+        app:layout_constraintTop_toTopOf="@+id/seven"
+        app:layout_constraintRight_toLeftOf="@+id/seven"
+        android:layout_marginEnd="@dimen/data_entry_usual_margin"
+        />
+
+    <TextView
+        android:id="@+id/six"
+        android:text="@string/_6"
+        style="@style/DataEntryButtonStyle"
+        android:layout_marginTop="@dimen/data_entry_interbutton_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@+id/one"
+        app:layout_constraintRight_toRightOf="@+id/two"
+        app:layout_constraintLeft_toLeftOf="@+id/two"
+        />
+
+    <TextView
+        android:id="@+id/seven"
+        android:text="@string/_7"
+        style="@style/DataEntryButtonStyle"
+        app:layout_constraintTop_toTopOf="@+id/ten"
+        app:layout_constraintRight_toLeftOf="@+id/ten"
+        android:layout_marginEnd="@dimen/data_entry_usual_margin"
+        />
+
+    <TextView
+        android:id="@+id/eight"
+        android:text="@string/_8"
+        style="@style/DataEntryButtonStyle"
+        android:layout_marginTop="@dimen/data_entry_interbutton_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@+id/one"
+        app:layout_constraintRight_toRightOf="@+id/three"
+        app:layout_constraintLeft_toLeftOf="@+id/three"/>
+
+    <TextView
+        android:id="@+id/nine"
+        android:text="@string/_9"
+        style="@style/DataEntryButtonStyle"
+        app:layout_constraintRight_toRightOf="@+id/four"
+        android:layout_marginTop="@dimen/data_entry_interbutton_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@+id/four"
+        app:layout_constraintLeft_toLeftOf="@+id/four"/>
+
+    <TextView
+        android:id="@+id/ten"
+        android:text="@string/_10"
+        style="@style/DataEntryButtonStyle"
+        app:layout_constraintRight_toRightOf="@+id/eight"
+        android:layout_marginTop="@dimen/data_entry_interbutton_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@+id/eight"/>
+
+    <TextView
+        android:id="@+id/twelve"
+        android:text="@string/_12"
+        style="@style/DataEntryButtonStyle"
+        android:layout_marginTop="@dimen/data_entry_interbutton_vertical_margin"
+        app:layout_constraintLeft_toLeftOf="@+id/nine"
+        app:layout_constraintTop_toBottomOf="@+id/nine"/>
+
+    <TextView
+        android:id="@+id/other"
+        android:text="@string/question_mark"
+        style="@style/DataEntryButtonStyle"
+        android:layout_marginEnd="@dimen/data_entry_usual_margin"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/barline"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/data_delete_button"
+        android:text="@string/delete"
+        android:layout_margin="@dimen/data_entry_usual_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@+id/ten"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="@dimen/data_entry_interbutton_vertical_margin"
+        android:layout_marginEnd="@dimen/data_entry_interbutton_vertical_margin"
+        android:layout_marginStart="@dimen/data_entry_interbutton_vertical_margin"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/data_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        app:backgroundTint="@color/colorPrimary"
+        android:layout_marginBottom="@dimen/data_entry_interbutton_vertical_margin"
+        android:layout_marginEnd="@dimen/data_entry_interbutton_vertical_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/data_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/colorPrimaryDark"
+        android:text="@string/back"
+        android:layout_marginBottom="@dimen/data_entry_interbutton_vertical_margin"
+        android:layout_marginStart="@dimen/data_entry_interbutton_vertical_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <ImageView
+        android:id="@+id/repeat_sign"
+        android:contentDescription="@string/repeat_measure"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:srcCompat="@drawable/ic_repeat_sign"
+        android:background="@drawable/roundcorner_primary"
+        android:layout_marginTop="@dimen/data_entry_interbutton_vertical_margin"
+        android:layout_marginStart="@dimen/data_entry_usual_margin"
+        app:layout_constraintTop_toBottomOf="@+id/barline"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <FrameLayout
+        android:id="@+id/help_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:background="@color/transparentBlack"
+        android:elevation="12dp">
+        <include layout="@layout/data_input_instructions"
+                 android:layout_height="match_parent"
+                 android:layout_width="match_parent"
+            />
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

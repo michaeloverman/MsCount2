@@ -1,0 +1,83 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>-->
+        <item name="android:windowBackground">@color/colorPrimaryLight</item>
+    </style>
+
+    <style name="AppTheme.Main" parent="@style/AppTheme"/>
+    <style name="AppTheme.SelectProgram" parent="@style/AppTheme"/>
+    <style name="AppThemeTransBlackBackground" parent="@style/AppTheme"/>
+
+    <style name="AppTheme.FirebaseSignIn" parent = "@style/AppTheme">
+        <item name="colorAccent">@color/colorSubdivisionIndicator10</item>
+    </style>
+
+    <style name="Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="popupTheme">@style/Theme.AppCompat.Light</item>
+    </style>
+
+    <style name="MetSelectorButtonStyle" parent="AppTheme.Main">
+        <item name="android:background">@drawable/horz_button_exp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/home_screen_button_height</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:paddingLeft">@dimen/button_padding_rl</item>
+        <item name="android:paddingRight">@dimen/button_padding_rl</item>
+        <item name="android:paddingStart">@dimen/button_padding_rl</item>
+        <item name="android:paddingEnd">@dimen/button_padding_rl</item>
+        <item name="android:layout_marginTop">@dimen/home_screen_button_margin</item>
+        <item name="android:layout_marginLeft">@dimen/home_screen_button_margin</item>
+        <item name="android:layout_marginRight">@dimen/home_screen_button_margin</item>
+    </style>
+
+    <style name="OddmeterButtonStyle" parent="AppTheme.Main">
+        <item name="android:layout_width">@dimen/odd_met_subdiv_button_size</item>
+        <item name="android:layout_height">@dimen/odd_met_subdiv_button_size</item>
+        <item name="android:background">@drawable/roundcorner_primary</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/odd_met_subdiv_button_font_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="OddmeterXtraButtonStyle" parent="OddmeterButtonStyle">
+        <item name="android:layout_width">@dimen/odd_met_xtra_subdiv_button_size</item>
+        <item name="android:layout_height">@dimen/odd_met_xtra_subdiv_button_size</item>
+    </style>
+
+    <style name="DataEntryButtonStyle" parent="AppTheme.Main">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/data_entry_sub_button_text_size</item>
+        <item name="android:background">@drawable/roundcorner_primary</item>
+        <item name="android:paddingStart">@dimen/data_entry_usual_padding</item>
+        <item name="android:paddingEnd">@dimen/data_entry_usual_padding</item>
+    </style>
+
+    <style name="NormalMetSubdivisionFabStyle" parent="AppTheme.Main">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/subdivision_fab_margin</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="backgroundTint">@color/colorSubdivisionIndicator10</item>
+<!--        <item name="fabSize">normal</item>-->
+        <item name="elevation">@dimen/fab_elevation</item>
+    </style>
+
+    <style name="InstructionOverlayTextStyle" parent="AppTheme.Main">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_marginTop">@dimen/instruction_text_default_margin</item>
+        <item name="android:layout_marginBottom">@dimen/instruction_text_default_margin</item>
+        <item name="android:layout_marginRight">@dimen/instruction_text_default_margin</item>
+        <item name="android:layout_marginLeft">@dimen/instruction_text_default_margin</item>
+        <item name="android:textSize">@dimen/instruction_text_default_textSize</item>
+    </style>
+
+</resources>

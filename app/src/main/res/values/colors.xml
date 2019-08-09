@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="colorPrimary">#009688</color>
+	<color name="colorPrimaryDark">#00796B</color>
+	<color name="colorAccent">#ffd800</color>
+	<color name="colorPrimaryLight">#B2DFDB</color>
+	<color name="primaryText">#212121</color>
+	<color name="secondaryText">#757575</color>
+	<color name="dividerColor">#BDBDBD</color>
+	<color name="white">#FFFFFF</color>
+	
+	<color name="colorSubdivisionIndicator10">#ff5722</color>
+	<color name="colorSubdivisionIndicator9">#fe642e</color>
+	<color name="colorSubdivisionIndicator8">#fd723b</color>
+	<color name="colorSubdivisionIndicator7">#fc7f47</color>
+	<color name="colorSubdivisionIndicator6">#fc8d54</color>
+	<color name="colorSubdivisionIndicator5">#fb9b61</color>
+	<color name="colorSubdivisionIndicator4">#faa86d</color>
+	<color name="colorSubdivisionIndicator3">#fab67a</color>
+	<color name="colorSubdivisionIndicator2">#f9c386</color>
+	<color name="colorSubdivisionIndicator1">#f8d193</color>
+	<color name="colorSubdivisionIndicator0">#f8dfa0</color>
+	
+	<color name="parchment">#F3ECE2</color>
+	
+	<color name="transparentBlack">#99000000</color>
+
+</resources>

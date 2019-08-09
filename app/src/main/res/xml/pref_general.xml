@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:title="@string/down_beat_click"
+        android:entries="@array/pref_click_options"
+        android:entryValues="@array/pref_click_values"
+        android:key="@string/down_beat_click_key" />
+    <ListPreference
+        android:title="@string/inner_beat_click"
+        android:entries="@array/pref_click_options"
+        android:entryValues="@array/pref_click_values"
+        android:key="@string/inner_beat_click_key" />
+    <ListPreference
+        android:title="@string/subdivision_click"
+        android:entries="@array/pref_click_options"
+        android:entryValues="@array/pref_click_values"
+        android:key="@string/subdivision_beat_click_key" />
+
+</PreferenceScreen>
