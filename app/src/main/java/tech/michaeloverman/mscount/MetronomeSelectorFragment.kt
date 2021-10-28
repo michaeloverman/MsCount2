@@ -48,8 +48,7 @@ class MetronomeSelectorFragment : Fragment() {
     @OnClick(R.id.normal_metronome_button, R.id.preprogrammed_metronome_button, R.id.odd_meter_metronome_button)
     fun buttonClicked(button: View) {
         Timber.d(TAG, "buttonClicked()")
-        val intent: Intent?
-        intent = when (button.id) {
+        val intent: Intent? = when (button.id) {
             R.id.normal_metronome_button -> Intent(activity, NormalMetronomeActivity::class.java)
             R.id.odd_meter_metronome_button -> Intent(activity, OddMeterMetronomeActivity::class.java)
             R.id.preprogrammed_metronome_button -> Intent(activity, ProgrammedMetronomeActivity::class.java)

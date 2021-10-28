@@ -17,7 +17,7 @@ import tech.michaeloverman.mscount.R
  */
 class SettingsFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-        val pref = findPreference(key)
+        val pref: Preference? = findPreference(key)
         if (pref != null) {
             setPreferenceSummary(pref, sharedPreferences.getString(key, ""))
         }
