@@ -37,76 +37,58 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
 //    private var mBroadcastReceiver: BroadcastReceiver? = null
 
     //	private boolean mHasWearDevice;
-    @JvmField
 	@BindView(R.id.normal_start_stop_fab)
     var mStartStopFab: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.current_tempo)
     var mTempoSetting: TextView? = null
 
-    @JvmField
 	@BindView(R.id.tempo_down_button)
     var mTempoDownButton: ImageButton? = null
 
-    @JvmField
 	@BindView(R.id.tempo_up_button)
     var mTempoUpButton: ImageButton? = null
 
-    @JvmField
 	@BindView(R.id.add_subdivisions_fab)
     var mAddSubdivisionFAB: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.expanded_add_subdivisions_fab)
     var mExpandedAddSubFab: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.expanded_subtract_subdivisions_fab)
     var mSubtractSubFab: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.subdivision_indicator1)
     var sub1: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.subdivision_indicator2)
     var sub2: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.subdivision_indicator3)
     var sub3: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.subdivision_indicator4)
     var sub4: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.subdivision_indicator5)
     var sub5: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.subdivision_indicator6)
     var sub6: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.subdivision_indicator7)
     var sub7: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.subdivision_indicator8)
     var sub8: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.subdivision_indicator9)
     var sub9: FloatingActionButton? = null
 
-    @JvmField
 	@BindView(R.id.subdivision_indicator10)
     var sub10: FloatingActionButton? = null
 
     //    @BindView(R.id.normal_adView) AdView mAdView;
-    @JvmField
 	@BindView(R.id.help_overlay)
     var mInstructionsLayout: FrameLayout? = null
     private lateinit var mSubdivisionIndicators: Array<FloatingActionButton?>

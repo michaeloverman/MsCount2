@@ -17,9 +17,11 @@ object FavoritesContract {
         val CONTENT_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(PATH_FAVORITES)
                 .build()
+        const val _ID = ""
         const val TABLE_NAME = "favorites"
         const val COLUMN_PIECE_ID = "favorite_firebase_id"
-        const val COLUMN_PIECE_TITLE = "favorite_title" //        public static Uri buildMovieUriWithId(int id) {
+        const val COLUMN_PIECE_TITLE = "favorite_title"
+        //        public static Uri buildMovieUriWithId(int id) {
         //            return CONTENT_URI.buildUpon()
         //                    .appendPath(Integer.toString(id))
         //                    .build();

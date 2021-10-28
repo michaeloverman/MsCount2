@@ -120,7 +120,6 @@ class ComposerSelectFragment : DatabaseAccessFragment() {
         }
 
         internal inner class ComposerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-            @JvmField
             @BindView(R.id.composer_name_tv)
             var composerName: TextView? = null
             override fun onClick(v: View) {
@@ -150,7 +149,6 @@ class ComposerSelectFragment : DatabaseAccessFragment() {
     }
 
     companion object {
-        @JvmStatic
         fun newInstance(): Fragment {
             Timber.d("newInstance()")
             return ComposerSelectFragment()

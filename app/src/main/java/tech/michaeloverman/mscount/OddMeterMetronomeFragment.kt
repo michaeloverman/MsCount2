@@ -35,23 +35,18 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
     private var mBroadcastReceiver: BroadcastReceiver? = null
 
     //    private boolean mHasWearDevice;
-    @JvmField
     @BindView(R.id.oddmeter_start_stop_fab)
     var mStartStopFab: FloatingActionButton? = null
 
-    @JvmField
     @BindView(R.id.oddmeter_tempo_view)
     var mTempoSetting: TextView? = null
 
-    @JvmField
     @BindView(R.id.include_subdivisions_checkBox)
     var mSubdivisionsCheckbox: CheckBox? = null
 
-    @JvmField
     @BindView(R.id.extra_subdivision_buttons)
     var mOtherButtons: LinearLayout? = null
 
-    @JvmField
     @BindView(R.id.pulse_multiplier_view)
     var mPulseMultiplierView: TextView? = null
 
@@ -60,12 +55,10 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
     private var mSubdivisionsList: MutableList<Int>? = null
     private var mSubdivisionViews: MutableList<View>? = null
 
-    @JvmField
     @BindView(R.id.subdivision_layout)
     var mSubdivisionLayout: FlexboxLayout? = null
 
     //    private LinearLayout mSubdivisionLayout;
-    @JvmField
     @BindView(R.id.help_overlay)
     var mInstructionsLayout: FrameLayout? = null
     private var mDetector: GestureDetectorCompat? = null

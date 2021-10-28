@@ -389,7 +389,6 @@ class DataEntryFragment : Fragment() {
             return newInstance(title, builder, ArrayList(), dml)
         }
 
-        @JvmStatic
         fun newInstance(title: String?, builder: PieceOfMusic.Builder?,
                         data: MutableList<DataEntry>?, dml: DataMultipliedListener?): Fragment {
             val fragment = DataEntryFragment()

@@ -33,7 +33,6 @@ import timber.log.Timber
 class ProgrammedMetronomeActivity : MetronomeActivity() {
     private var mAuth: FirebaseAuth? = null
     private var mAuthListener: AuthStateListener? = null
-    @JvmField
 	var useFirebase = false
     private var databaseMenuItem: MenuItem? = null
     override fun createFragment(): Fragment? {

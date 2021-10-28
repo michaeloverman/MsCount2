@@ -20,7 +20,6 @@ class Utilities private constructor() {
          * @param integerList List of integers
          * @return array of ints
          */
-        @JvmStatic
         fun integerListToArray(integerList: List<Int>): IntArray {
 //        if(integerList == null) return null;
             val ints = IntArray(integerList.size)
@@ -59,7 +58,6 @@ class Utilities private constructor() {
             return combination
         }
 
-        @JvmStatic
         fun appendCountoff(countoff: IntArray, beats: MutableList<Int>, downBeats: MutableList<Int>) {
             for (i in countoff.indices.reversed()) {
                 beats.add(0, countoff[i])
@@ -78,7 +76,6 @@ class Utilities private constructor() {
             return beats
         }
 
-        @JvmStatic
         fun getContentValuesFromPiece(piece: PieceOfMusic): ContentValues {
             val values = ContentValues()
             values.put(ProgramDatabaseSchema.MetProgram.COLUMN_COMPOSER, piece.author)

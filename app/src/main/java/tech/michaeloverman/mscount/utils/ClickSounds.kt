@@ -31,7 +31,6 @@ object ClickSounds {
     val clicks: List<Click>
         get() = mClicks
 
-    @JvmStatic
     fun getSoundPool(context: Context): SoundPool? {
         if (mSoundPool == null) {
             loadSounds(context)

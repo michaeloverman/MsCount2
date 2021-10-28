@@ -16,7 +16,6 @@ object PrefUtils {
     private const val PREF_USE_FIREBASE = "use_firebase"
     private const val PREF_CURRENT_TEMPO = "programmable_tempo_key"
     private const val PREF_PIECE_KEY = "programmable_piece_id"
-    @JvmStatic
     fun getDownBeatClickId(context: Context): Int {
         val shp = PreferenceManager.getDefaultSharedPreferences(context)
         val id = shp.getString(context.resources.getString(R.string.down_beat_click_key),
@@ -24,7 +23,6 @@ object PrefUtils {
         return id!!.toInt()
     }
 
-    @JvmStatic
     fun getInnerBeatClickId(context: Context): Int {
         val shp = PreferenceManager.getDefaultSharedPreferences(context)
         val id = shp.getString(context.resources.getString(R.string.inner_beat_click_key),
@@ -32,7 +30,6 @@ object PrefUtils {
         return id!!.toInt()
     }
 
-    @JvmStatic
     fun getSubdivisionBeatClickId(context: Context): Int {
         val shp = PreferenceManager.getDefaultSharedPreferences(context)
         val id = shp.getString(context.resources.getString(R.string.subdivision_beat_click_key),
@@ -64,7 +61,6 @@ object PrefUtils {
         return shp.getInt(PREF_CURRENT_TEMPO, 120)
     }
 
-    @JvmStatic
     fun saveFirebaseStatus(context: Context?, firebase: Boolean) {
         Timber.d("saving useFirebase: %s", firebase)
         val prefs = PreferenceManager
@@ -73,7 +69,6 @@ object PrefUtils {
         prefs.apply()
     }
 
-    @JvmStatic
     fun usingFirebase(context: Context?): Boolean {
         val shp = PreferenceManager.getDefaultSharedPreferences(context)
         return shp.getBoolean(PREF_USE_FIREBASE, true)

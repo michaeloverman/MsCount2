@@ -51,39 +51,30 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     private var mMetronomeBroadcastReceiver: BroadcastReceiver? = null
 
     //    private boolean mHasWearDevice;
-    @JvmField
     @BindView(R.id.current_composer_name)
     var mTVCurrentComposer: TextView? = null
 
-    @JvmField
     @BindView(R.id.current_program_title)
     var mTVCurrentPiece: TextView? = null
 
-    @JvmField
     @BindView(R.id.current_tempo_setting)
     var mTVCurrentTempo: TextView? = null
 
-    @JvmField
     @BindView(R.id.primary_beat_length_image)
     var mBeatLengthImage: ImageView? = null
 
-    @JvmField
     @BindView(R.id.start_stop_fab)
     var mStartStopButton: FloatingActionButton? = null
 
-    @JvmField
     @BindView(R.id.tempo_up_button)
     var mTempoUpButton: ImageButton? = null
 
-    @JvmField
     @BindView(R.id.tempo_down_button)
     var mTempoDownButton: ImageButton? = null
 
-    @JvmField
     @BindView(R.id.current_measure_number)
     var mCurrentMeasureNumber: TextView? = null
 
-    @JvmField
     @BindView(R.id.help_overlay)
     var mInstructionsLayout: FrameLayout? = null
 

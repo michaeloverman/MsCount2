@@ -29,9 +29,7 @@ import timber.log.Timber
 class LoadNewProgramActivity : SingleFragmentActivity() {
     private var mAuth: FirebaseAuth? = null
     private var mAuthListener: AuthStateListener? = null
-    @JvmField
     var useFirebase = false
-    @JvmField
     var mCurrentComposer: String? = null
     override fun createFragment(): Fragment? {
         return PieceSelectFragment.newInstance()

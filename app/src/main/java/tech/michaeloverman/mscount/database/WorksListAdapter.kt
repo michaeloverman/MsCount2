@@ -78,7 +78,6 @@ class WorksListAdapter     //        mTitles = titles;
     }
 
     inner class WorksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        @JvmField
         @BindView(R.id.work_title)
         var title: TextView? = null
         override fun onClick(v: View) {

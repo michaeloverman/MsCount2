@@ -15,13 +15,12 @@ object ProgramDatabaseSchema {
     const val PATH_PROGRAMS = "programs"
 
     object MetProgram : BaseColumns {
-        @JvmField
         val CONTENT_URI = BASE_URI.buildUpon()
                 .appendPath(PATH_PROGRAMS)
                 .build()
         const val TABLE_NAME = "programs"
 
-        //        public static final String _ID = "";
+        const val _ID = "";
         const val COLUMN_COMPOSER = "composer"
         const val COLUMN_TITLE = "title"
         const val COLUMN_PRIMARY_SUBDIVISIONS = "primary_subs"
