@@ -64,24 +64,24 @@
             android:label="@string/title_activity_settings">
         </activity>
 
-        <receiver android:name=".widget.MsCountWidgetProvider"
-            android:label="Ms. Count Widget"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="tech.michaeloverman.android.mscount.ACTION_DATA_UPDATED"/>
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/ms_count_widget_info"/>
-        </receiver>
+<!--        <receiver android:name=".widget.MsCountWidgetProvider"-->
+<!--            android:label="Ms. Count Widget"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>-->
+<!--                <action android:name="tech.michaeloverman.android.mscount.ACTION_DATA_UPDATED"/>-->
+<!--            </intent-filter>-->
+<!--            <meta-data-->
+<!--                android:name="android.appwidget.provider"-->
+<!--                android:resource="@xml/ms_count_widget_info"/>-->
+<!--        </receiver>-->
 
-        <service android:name=".widget.WidgetIntentService"
-            android:exported="false" />
+<!--        <service android:name=".widget.WidgetIntentService"-->
+<!--            android:exported="false" />-->
 
-        <service android:name=".widget.WidgetRemoteViewsService"
-            android:enabled="true"
-            android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
+<!--        <service android:name=".widget.WidgetRemoteViewsService"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false"-->
+<!--            android:permission="android.permission.BIND_REMOTEVIEWS" />-->
     </application>
 </manifest>

@@ -128,7 +128,7 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         super.onCreate(savedInstanceState)
         retainInstance = true
         setHasOptionsMenu(true)
-        mMetronome = Metronome(activity)
+        mMetronome = context?.let { Metronome(it) }
         mMetronome!!.setMetronomeStartStopListener(this)
 
 //		mHasWearDevice = PrefUtils.wearPresent(getContext());

@@ -22,9 +22,7 @@ import timber.log.Timber
  * Created by Michael on 2/24/2017.
  */
 class MetronomeSelectorFragment : Fragment() {
-    @JvmField
-	@BindView(R.id.big_round_button)
-    var mBigRoundButton: ImageView? = null
+    lateinit var mBigRoundButton: ImageView
 
     //	@BindView(R.id.normal_metronome_button) Button mNormalMetButton;
     //	@BindView(R.id.preprogrammed_metronome_button) Button mPreprogrammedMetButton;
@@ -39,6 +37,11 @@ class MetronomeSelectorFragment : Fragment() {
         val view = inflater.inflate(R.layout.met_selector_fragment, container, false)
         mUnbinder = ButterKnife.bind(this, view)
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mBigRoundButton = big_round_button
     }
 
     override fun onDestroyView() {

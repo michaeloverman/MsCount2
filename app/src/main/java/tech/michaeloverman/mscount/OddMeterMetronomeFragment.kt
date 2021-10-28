@@ -73,7 +73,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         super.onCreate(savedInstanceState)
         retainInstance = true
         setHasOptionsMenu(true)
-        mMetronome = Metronome(activity)
+        mMetronome = Metronome(requireActivity())
         mMetronome!!.setMetronomeStartStopListener(this)
 
 //        mHasWearDevice = PrefUtils.wearPresent(getContext());
@@ -286,7 +286,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
             }
             mMetronomeRunning = true
             mStartStopFab!!.setImageResource(android.R.drawable.ic_media_pause)
-            mMetronome!!.play(mBPM.toInt() * mMultiplier, mSubdivisionsList,
+            mMetronome!!.play(mBPM.toInt() * mMultiplier, mSubdivisionsList!!,
                     mSubdivisionsCheckbox!!.isChecked)
         }
         //        if (mHasWearDevice) mWearNotification.sendStartStop();

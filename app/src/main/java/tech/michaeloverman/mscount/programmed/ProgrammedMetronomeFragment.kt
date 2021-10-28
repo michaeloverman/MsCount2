@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.ContentValues
 import android.content.Intent
-import android.content.IntentFilter
 import android.database.Cursor
 import android.os.AsyncTask
 import android.os.Bundle
@@ -92,10 +91,10 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     private var mRunnableHandler: Handler? = null
     private var mDownRunnable: Runnable? = null
     private var mUpRunnable: Runnable? = null
-    private var mActivity: ProgrammedMetronomeActivity? = null
+    private lateinit var mActivity: ProgrammedMetronomeActivity
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
     private fun setUpMetronome() {
-        mMetronome = Metronome(mActivity)
+        mMetronome = context?.let { Metronome(it) }
         mMetronome!!.setMetronomeStartStopListener(this)
         mMetronome!!.setProgrammedMetronomeListener(this)
     }
@@ -104,7 +103,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         super.onCreate(savedInstanceState)
         retainInstance = true
         setHasOptionsMenu(true)
-        mActivity = activity as ProgrammedMetronomeActivity?
+        mActivity = activity as ProgrammedMetronomeActivity
         setUpMetronome()
 
 //        mHasWearDevice = PrefUtils.wearPresent(mActivity);
@@ -224,7 +223,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     override fun onResume() {
         Timber.d("onResume()")
         super.onResume()
-        createAndRegisterBroadcastReceiver()
+//        createAndRegisterBroadcastReceiver()
 
 //        if(mCurrentPiece != null) {
 //            updateWearNotif();
@@ -340,12 +339,12 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             Timber.d("metronomeStart() %s", mCurrentPiece!!.title)
             mMetronomeRunning = true
             mStartStopButton!!.setImageResource(android.R.drawable.ic_media_pause)
-            mMetronome!!.play(mCurrentPiece, mCurrentTempo)
+            mMetronome!!.play(mCurrentPiece!!, mCurrentTempo)
         }
         //        if(mHasWearDevice) mWearNotification.sendStartStop();
     }
 
-    override fun metronomeMeasureNumber(mm: String) {
+    override fun metronomeMeasureNumber(mm: String?) {
         mCurrentMeasureNumber!!.text = mm
     }
 
@@ -537,14 +536,14 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         }
     }
 
-    private fun createAndRegisterBroadcastReceiver() {
-        if (mMetronomeBroadcastReceiver == null) {
-            mMetronomeBroadcastReceiver = MetronomeBroadcastReceiver(this)
-        }
-        val filter = IntentFilter(Metronome.ACTION_METRONOME_START_STOP)
-        //        BroadcastManager manager = LocalBroadcastManager.getInstance(mActivity);
-        mActivity!!.registerReceiver(mMetronomeBroadcastReceiver, filter)
-    }
+//    private fun createAndRegisterBroadcastReceiver() {
+//        if (mMetronomeBroadcastReceiver == null) {
+//            mMetronomeBroadcastReceiver = MetronomeBroadcastReceiver(this)
+//        }
+//        val filter = IntentFilter(Metronome.ACTION_METRONOME_START_STOP)
+//        //        BroadcastManager manager = LocalBroadcastManager.getInstance(mActivity);
+//        mActivity!!.registerReceiver(mMetronomeBroadcastReceiver, filter)
+//    }
 
     //    private void updateWearNotif() {
     //        if(mHasWearDevice) {
@@ -606,7 +605,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     }
 
     private fun saveToSql() {
-        val contentValues = Utilities.getContentValuesFromPiece(mCurrentPiece)
+        val contentValues = Utilities.getContentValuesFromPiece(mCurrentPiece!!)
         val resolver = requireContext().contentResolver
         resolver.insert(ProgramDatabaseSchema.MetProgram.CONTENT_URI, contentValues)
     }
