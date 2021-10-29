@@ -7,17 +7,15 @@ import android.view.*
 import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.View.OnTouchListener
 import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
 import android.view.animation.AnimationUtils
-import android.widget.*
+import android.widget.Toast
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.analytics.FirebaseAnalytics
+import kotlinx.android.synthetic.main.normal_metronome_fragment.*
+import kotlinx.android.synthetic.main.normal_metronome_instructions.*
 import tech.michaeloverman.mscount.utils.Metronome
 import tech.michaeloverman.mscount.utils.MetronomeStartStopListener
 import timber.log.Timber
@@ -30,75 +28,18 @@ import kotlin.math.abs
  * Created by Michael on 2/24/2017.
  */
 class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
-    private var mMetronome: Metronome? = null
+    private lateinit var mMetronome: Metronome
     private var mMetronomeRunning = false
 
-//    //	private WearNotification mWearNotification;
-//    private var mBroadcastReceiver: BroadcastReceiver? = null
-
-    //	private boolean mHasWearDevice;
-	@BindView(R.id.normal_start_stop_fab)
-    var mStartStopFab: FloatingActionButton? = null
-
-	@BindView(R.id.current_tempo)
-    var mTempoSetting: TextView? = null
-
-	@BindView(R.id.tempo_down_button)
-    var mTempoDownButton: ImageButton? = null
-
-	@BindView(R.id.tempo_up_button)
-    var mTempoUpButton: ImageButton? = null
-
-	@BindView(R.id.add_subdivisions_fab)
-    var mAddSubdivisionFAB: FloatingActionButton? = null
-
-	@BindView(R.id.expanded_add_subdivisions_fab)
-    var mExpandedAddSubFab: FloatingActionButton? = null
-
-	@BindView(R.id.expanded_subtract_subdivisions_fab)
-    var mSubtractSubFab: FloatingActionButton? = null
-
-	@BindView(R.id.subdivision_indicator1)
-    var sub1: FloatingActionButton? = null
-
-	@BindView(R.id.subdivision_indicator2)
-    var sub2: FloatingActionButton? = null
-
-	@BindView(R.id.subdivision_indicator3)
-    var sub3: FloatingActionButton? = null
-
-	@BindView(R.id.subdivision_indicator4)
-    var sub4: FloatingActionButton? = null
-
-	@BindView(R.id.subdivision_indicator5)
-    var sub5: FloatingActionButton? = null
-
-	@BindView(R.id.subdivision_indicator6)
-    var sub6: FloatingActionButton? = null
-
-	@BindView(R.id.subdivision_indicator7)
-    var sub7: FloatingActionButton? = null
-
-	@BindView(R.id.subdivision_indicator8)
-    var sub8: FloatingActionButton? = null
-
-	@BindView(R.id.subdivision_indicator9)
-    var sub9: FloatingActionButton? = null
-
-	@BindView(R.id.subdivision_indicator10)
-    var sub10: FloatingActionButton? = null
-
-    //    @BindView(R.id.normal_adView) AdView mAdView;
-	@BindView(R.id.help_overlay)
-    var mInstructionsLayout: FrameLayout? = null
     private lateinit var mSubdivisionIndicators: Array<FloatingActionButton?>
     private lateinit var mSubdivisionFabColors: IntArray
+
+    //    Animation fadingFabAnim, unFadingFabAnim;
     private var expandingAddFabAnim: Animation? = null
     private var expandingSubFabAnim: Animation? = null
     private var collapsingAddFabAnim: Animation? = null
     private var collapsingSubFabAnim: Animation? = null
 
-    //    Animation fadingFabAnim, unFadingFabAnim;
     private var mBPM = 0f
     private var mWholeNumbersSelected = true
     private var mNumSubdivisions = 0
@@ -106,18 +47,16 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
     private lateinit var mSubdivisionVolumes: IntArray
     private var mDetector: GestureDetectorCompat? = null
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
         setHasOptionsMenu(true)
-        mMetronome = context?.let { Metronome(it) }
-        mMetronome!!.setMetronomeStartStopListener(this)
+        mMetronome = Metronome(requireContext())
+        mMetronome.setMetronomeStartStopListener(this)
 
-//		mHasWearDevice = PrefUtils.wearPresent(getContext());
-//		if (mHasWearDevice) {
-//			createAndRegisterBroadcastReceiver();
-//		}
-        mDetector = GestureDetectorCompat(this.context, MetronomeGestureListener())
+        mDetector = GestureDetectorCompat(this.context, MetronomeGestureListener() )
+
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
         mNumSubdivisions = pref.getInt(PREF_KEY_SUBDIVISIONS, 1)
         mBPM = pref.getFloat(PREF_KEY_BPM, 123.4f)
@@ -132,20 +71,28 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.normal_metronome_fragment, container, false)
-        ButterKnife.bind(this, view)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.normal_metronome_fragment, container, false)
+    }
 
-        //        AdRequest adRequest = new AdRequest.Builder().build();
-//        AdRequest.Builder adRequest = new AdRequest.Builder();
-//        if (BuildConfig.DEBUG) {
-//            adRequest.addTestDevice(getString(R.string.test_device_code));
-//        }
-//        mAdView.loadAd(adRequest.build());
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        normal_start_stop_fab.setOnClickListener { metronomeStartStop() }
+        tempo_down_button.setOnClickListener { changeTempo(-0.1f) }
+        tempo_up_button.setOnClickListener { changeTempo(0.1f) }
+        add_subdivisions_fab.setOnClickListener { addASubdivision() }
+        expanded_add_subdivisions_fab.setOnClickListener { addASubdivision() }
+        expanded_subtract_subdivisions_fab.setOnClickListener { subtractASubdivision() }
+        whole_numbers.setOnClickListener { onWholeRadioButtonClicked() }
+        decimals.setOnClickListener { onDecimalRadioButtonClicked() }
+
+        help_cancel_button.setOnClickListener { help_overlay.visibility = View.INVISIBLE }
 
         // use the "naked" listener to catch ACTION_UP (release) for resetting tempo
         // otherwise defer to GestureDetector to handle scrolling
-        mTempoSetting!!.setOnTouchListener { v: View?, event: MotionEvent ->
+        current_tempo.setOnTouchListener { v: View?, event: MotionEvent ->
             val action = event.action
             if (action == MotionEvent.ACTION_UP) {
                 if (mMetronomeRunning) {
@@ -163,53 +110,40 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         expandingSubFabAnim = AnimationUtils.loadAnimation(context, R.anim.expanding_sub_fab)
         collapsingSubFabAnim = AnimationUtils.loadAnimation(context, R.anim.collapsing_sub_fab)
         collapsingAddFabAnim = AnimationUtils.loadAnimation(context, R.anim.collapsing_add_fab)
-        collapsingAddFabAnim?.setAnimationListener(object : AnimationListener {
+        collapsingAddFabAnim?.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {}
             override fun onAnimationEnd(animation: Animation) {
-                mAddSubdivisionFAB!!.show()
+                add_subdivisions_fab.show()
             }
 
             override fun onAnimationRepeat(animation: Animation) {}
         })
-        mSubdivisionIndicators = arrayOf(sub1, sub2, sub3, sub4, sub5, sub6, sub7, sub8, sub9, sub10)
+
+        mSubdivisionIndicators = arrayOf(subdivision_indicator1, subdivision_indicator2,
+            subdivision_indicator3, subdivision_indicator4, subdivision_indicator5,
+            subdivision_indicator6, subdivision_indicator7, subdivision_indicator8,
+            subdivision_indicator9, subdivision_indicator10)
         addSubdivisionVolumeChangeListeners()
         if (mNumSubdivisions > 1) {
             expandFabs()
-            for (i in 1 until mNumSubdivisions) {
-                mSubdivisionIndicators[i]!!.show()
+            (1 until mNumSubdivisions).forEach { i ->
+                mSubdivisionIndicators[i]?.show()
             }
         }
-        if (!mWholeNumbersSelected) {
-            val b = view.findViewById<RadioButton>(R.id.decimals)
-            b.isChecked = true
-        }
-        mInstructionsLayout!!.isSoundEffectsEnabled = false
+
+        if (!mWholeNumbersSelected) decimals.isChecked = true
+
+        help_overlay.isSoundEffectsEnabled = false
+
         updateDisplay()
-        return view
     }
 
     override fun onPause() {
-//        if (mAdView != null) {
-//            mAdView.pause();
-//        }
         if (mMetronomeRunning) {
             metronomeStartStop()
         }
 
-//		if (mWearNotification != null) {
-//			mWearNotification.cancel();
-//		}
-//        requireActivity().unregisterReceiver(mBroadcastReceiver)
         super.onPause()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        //        if (mAdView != null) {
-//            mAdView.resume();
-//        }
-//        createAndRegisterBroadcastReceiver()
-        //		updateWearNotif();
     }
 
     override fun onDestroy() {
@@ -220,48 +154,20 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         prefs.putBoolean(PREF_WHOLE_NUMBERS, mWholeNumbersSelected)
         prefs.apply()
 
-//        if (mAdView != null) {
-//            mAdView.destroy();
-//        }
         super.onDestroy()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Timber.d("menu item caught: %s", item.title)
         return if (item.itemId == R.id.help_menu_item) {
-            makeInstructionsVisible()
+            help_overlay.visibility = View.VISIBLE
             true
         } else {
             super.onOptionsItemSelected(item)
         }
     }
 
-    private fun makeInstructionsVisible() {
-        mInstructionsLayout!!.visibility = View.VISIBLE
-    }
-
-    @OnClick(R.id.help_cancel_button)
-    fun instructionsCancelled() {
-        mInstructionsLayout!!.visibility = View.INVISIBLE
-    }
-
-    //	private void updateWearNotif() {
-    //		if (mHasWearDevice) {
-    //			mWearNotification = new WearNotification(getContext(),
-    //					getString(R.string.app_name), getString(R.string.unformatted_bpm, (int) mBPM));
-    //			mWearNotification.sendStartStop();
-    //		}
-    //	}
-//    private fun createAndRegisterBroadcastReceiver() {
-//        if (mBroadcastReceiver == null) {
-//            mBroadcastReceiver = MetronomeBroadcastReceiver(this)
-//        }
-//        val filter = IntentFilter(Metronome.ACTION_METRONOME_START_STOP)
-//        requireActivity().registerReceiver(mBroadcastReceiver, filter)
-//    }
-
-    @OnClick(R.id.add_subdivisions_fab, R.id.expanded_add_subdivisions_fab)
-    fun addASubdivision() {
+    private fun addASubdivision() {
         var restart = false
         if (mMetronomeRunning) {
             metronomeStartStop()
@@ -279,8 +185,7 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         if (restart) metronomeStartStop()
     }
 
-    @OnClick(R.id.expanded_subtract_subdivisions_fab)
-    fun subtractASubdivision() {
+    private fun subtractASubdivision() {
         val bundle = Bundle()
         bundle.putString("time", Calendar.getInstance().toString())
         bundle.putString("presubtract_subdivision_count", ":$mNumSubdivisions")
@@ -300,26 +205,25 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
     }
 
     private fun expandFabs() {
-        mSubtractSubFab!!.show()
-        mExpandedAddSubFab!!.show()
-        mAddSubdivisionFAB!!.hide()
-        mExpandedAddSubFab!!.startAnimation(expandingAddFabAnim)
-        mSubtractSubFab!!.startAnimation(expandingSubFabAnim)
+        expanded_subtract_subdivisions_fab.show()
+        expanded_add_subdivisions_fab.show()
+        add_subdivisions_fab.hide()
+        expanded_add_subdivisions_fab.startAnimation(expandingAddFabAnim)
+        expanded_subtract_subdivisions_fab.startAnimation(expandingSubFabAnim)
     }
 
     private fun collapseFabs() {
-        mExpandedAddSubFab!!.startAnimation(collapsingAddFabAnim)
-        mSubtractSubFab!!.startAnimation(collapsingSubFabAnim)
-        mSubtractSubFab!!.hide()
-        mExpandedAddSubFab!!.hide()
+        expanded_add_subdivisions_fab.startAnimation(collapsingAddFabAnim)
+        expanded_subtract_subdivisions_fab.startAnimation(collapsingSubFabAnim)
+        expanded_subtract_subdivisions_fab.hide()
+        expanded_add_subdivisions_fab.hide()
     }
 
-    @OnClick(R.id.normal_start_stop_fab)
     override fun metronomeStartStop() {
         if (mMetronomeRunning) {
             mMetronome!!.stop()
             mMetronomeRunning = false
-            mStartStopFab!!.setImageResource(android.R.drawable.ic_media_play)
+            normal_start_stop_fab.setImageResource(android.R.drawable.ic_media_play)
         } else {
             mMetronomeRunning = true
             if (mWholeNumbersSelected) {
@@ -327,40 +231,29 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
             } else {
                 mMetronome!!.play(mBPM, mNumSubdivisions)
             }
-            mStartStopFab!!.setImageResource(android.R.drawable.ic_media_pause)
+            normal_start_stop_fab.setImageResource(android.R.drawable.ic_media_pause)
         }
-        //		if (mHasWearDevice) mWearNotification.sendStartStop();
     }
 
-    @OnClick(R.id.whole_numbers, R.id.decimals)
-    fun onRadioButtonClicked(view: View) {
-        val checked = (view as RadioButton).isChecked
-        when (view.getId()) {
-            R.id.whole_numbers -> if (checked) {
-                mWholeNumbersSelected = true
-                mTempoDownButton!!.visibility = View.GONE
-                mTempoUpButton!!.visibility = View.GONE
-            }
-            R.id.decimals -> if (checked) {
-                mWholeNumbersSelected = false
-                mTempoDownButton!!.visibility = View.VISIBLE
-                mTempoUpButton!!.visibility = View.VISIBLE
-            }
+    private fun onDecimalRadioButtonClicked() {
+        if (decimals.isChecked) {
+            mWholeNumbersSelected = false
+            tempo_down_button.visibility = View.VISIBLE
+            tempo_up_button.visibility = View.VISIBLE
         }
         updateDisplay()
     }
 
-    @OnClick(R.id.tempo_down_button)
-    fun onDownButtonClick() {
-        changeTempo(-0.1f)
+    private fun onWholeRadioButtonClicked() {
+        if (whole_numbers.isChecked) {
+            mWholeNumbersSelected = true
+            tempo_down_button.visibility = View.GONE
+            tempo_up_button.visibility = View.GONE
+        }
+        updateDisplay()
     }
 
-    @OnClick(R.id.tempo_up_button)
-    fun onUpButtonClick() {
-        changeTempo(0.1f)
-    }
-
-    @OnClick(R.id.help_overlay)
+//    @OnClick(R.id.help_overlay)
     fun ignoreClicks() {
         // catch and ignore click on the help screen, so other buttons aren't functional
     }
@@ -373,23 +266,24 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
 
     private fun updateDisplay() {
         if (mWholeNumbersSelected) {
-            mTempoSetting?.text = mBPM.toInt().toString()
+            current_tempo.text = mBPM.toInt().toString()
         } else {
-            mTempoSetting!!.text = ((mBPM * 10).toInt().toFloat() / 10).toString()
+            current_tempo.text = ((mBPM * 10).toInt().toFloat() / 10).toString()
         }
-        //		updateWearNotif();
     }
 
     private fun addSubdivisionVolumeChangeListeners() {
 //        mSubdivisionDetector = new GestureDetectorCompat[MAX_SUBDIVISIONS];
+        mSubdivisionIndicators.forEach {
+
+        }
         for (i in 0 until MAX_SUBDIVISIONS) {
             //            mSubdivisionDetector[subdivisionID] = new GestureDetectorCompat(this.getContext(),
 //                    new SubdivisionGestureListener(subdivisionID));
-            mSubdivisionIndicators[i]!!.setOnTouchListener(object : OnTouchListener {
+            mSubdivisionIndicators[i]?.setOnTouchListener(object : OnTouchListener {
                 var firstY = 0f
                 override fun onTouch(v: View, event: MotionEvent): Boolean {
-                    val action = event.action
-                    when (action) {
+                    when (event.action) {
                         MotionEvent.ACTION_DOWN -> {
                             displayVolumeSub(i)
                             firstY = event.y
@@ -413,7 +307,7 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
     }
 
     private fun displayVolumeSub(subdiv: Int) {
-        mTempoSetting!!.text = getString(R.string.vol_abbrev_colon, mSubdivisionVolumes[subdiv])
+        current_tempo.text = getString(R.string.vol_abbrev_colon, mSubdivisionVolumes[subdiv])
     }
 
     private fun changeSubdivisionVolume(id: Int, volumeChange: Float) {
@@ -421,7 +315,7 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         if (mSubdivisionFloatVolumes[id] > MAX_FLOAT_VOLUME) mSubdivisionFloatVolumes[id] = MAX_FLOAT_VOLUME else if (mSubdivisionFloatVolumes[id] < MIN_FLOAT_VOLUME) mSubdivisionFloatVolumes[id] = MIN_FLOAT_VOLUME
         Timber.d("float volume measured: %f", mSubdivisionFloatVolumes[id])
         mSubdivisionVolumes[id] = (mSubdivisionFloatVolumes[id] / FLOAT_VOLUME_DIVIDER).toInt()
-        mTempoSetting!!.text = getString(R.string.vol_abbrev_colon, mSubdivisionVolumes[id])
+        current_tempo.text = getString(R.string.vol_abbrev_colon, mSubdivisionVolumes[id])
         setFabAppearance(mSubdivisionIndicators[id], mSubdivisionVolumes[id])
         mMetronome!!.setClickVolumes(mSubdivisionVolumes)
     }
@@ -454,6 +348,7 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         private const val PREF_KEY_SUBDIVISIONS = "pref_subdivisions"
         private const val PREF_KEY_BPM = "pref_bpm"
         private const val PREF_WHOLE_NUMBERS = "pref_whole_numbers"
+
         fun newInstance(): Fragment {
             return NormalMetronomeFragment()
         }

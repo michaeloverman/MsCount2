@@ -1,12 +1,11 @@
 /* Copyright (C) 2017 Michael Overman - All Rights Reserved */
 package tech.michaeloverman.mscount
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import timber.log.Timber
 import timber.log.Timber.DebugTree
-import tech.michaeloverman.mscount.R
 
 /**
  * Created by Michael on 4/21/2016.
@@ -27,9 +26,9 @@ abstract class SingleFragmentActivity : AppCompatActivity() {
         var fragment = fm.findFragmentById(R.id.fragment_container)
         if (fragment == null) {
             fragment = createFragment()
-            fm.beginTransaction()
-                    .add(R.id.fragment_container, fragment!!)
-                    .commit()
         }
+        fm.beginTransaction()
+            .add(R.id.fragment_container, fragment!!)
+            .commit()
     }
 }

@@ -21,17 +21,17 @@ object ClickSounds {
     private var mAssets: AssetManager? = null
     private val mClicks: MutableList<Click> = ArrayList()
     private var mSoundPool: SoundPool? = null
-    fun loadSounds(context: Context) {
+    fun loadSounds(context: Context?) {
         if (mSoundPool != null) return
         mSoundPool = SoundPool(5, AudioManager.STREAM_MUSIC, 0)
-        mAssets = context.assets
+        mAssets = context?.assets
         LoadSoundsTask().execute()
     }
 
     val clicks: List<Click>
         get() = mClicks
 
-    fun getSoundPool(context: Context): SoundPool? {
+    fun getSoundPool(context: Context?): SoundPool? {
         if (mSoundPool == null) {
             loadSounds(context)
         }
