@@ -9,8 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
+import kotlinx.android.synthetic.main.list_item_work.view.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.database.WorksListAdapter.WorksViewHolder
 import tech.michaeloverman.mscount.pojos.TitleKeyObject
@@ -24,7 +23,7 @@ import java.util.*
  */
 class WorksListAdapter     //        mTitles = titles;
 (private val mContext: Context, private val mClickHandler: WorksListAdapterOnClickHandler) : RecyclerView.Adapter<WorksViewHolder>() {
-    private var mTitles: List<TitleKeyObject>? = null
+    private var mTitles: List<TitleKeyObject> = emptyList()
 
     interface WorksListAdapterOnClickHandler {
         fun onClick(key: String?, title: String?)
@@ -38,20 +37,20 @@ class WorksListAdapter     //        mTitles = titles;
 
     override fun onBindViewHolder(holder: WorksViewHolder, position: Int) {
 //        Timber.d("onBindViewHolder()");
-        holder.title!!.text = mTitles!![position].title
-        holder.title!!.setHorizontallyScrolling(true)
-        holder.title!!.ellipsize = TextUtils.TruncateAt.MIDDLE
+        holder.title.text = mTitles[position].title
+        holder.title.setHorizontallyScrolling(true)
+        holder.title.ellipsize = TextUtils.TruncateAt.MIDDLE
         //        ViewCompat.setTransitionName(holder.title, "titleViewTrans" + position);
     }
 
     override fun getItemCount(): Int {
-        return if (mTitles == null) 0 else mTitles!!.size
+        return mTitles.size
     }
 
-    fun setTitles(titles: List<TitleKeyObject>?) {
+    fun setTitles(titles: List<TitleKeyObject>) {
         mTitles = titles
         Collections.sort(mTitles, AlphanumComparator())
-        Timber.d("setTitles() - %s titles...", mTitles!!.size)
+        Timber.d("setTitles() - %s titles...", mTitles.size)
         notifyDataSetChanged()
     }
 
@@ -78,19 +77,17 @@ class WorksListAdapter     //        mTitles = titles;
     }
 
     inner class WorksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        @BindView(R.id.work_title)
-        var title: TextView? = null
+        var title: TextView = itemView.work_title
         override fun onClick(v: View) {
             Timber.d("WorksViewHolder onClick()")
             val position = adapterPosition
-            val key = mTitles!![position].key
-            val title = mTitles!![position].title
+            val key = mTitles[position].key
+            val title = mTitles[position].title
             mClickHandler.onClick(key, title)
         }
 
         init {
             //            Timber.d("WorksViewHolder constructor()");
-            ButterKnife.bind(this, itemView)
             itemView.setOnClickListener(this)
         }
     }

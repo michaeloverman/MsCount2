@@ -1,4 +1,4 @@
-/* Copyright (C) 2017 Michael Overman - All Rights Reserved */
+/* Copyright (C) 2021 Michael Overman - All Rights Reserved */
 package tech.michaeloverman.mscount.database
 
 import android.annotation.SuppressLint
@@ -9,21 +9,16 @@ import android.database.Cursor
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.program_select_fragment.*
+import kotlinx.android.synthetic.main.select_program_list_layout.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.database.WorksListAdapter.WorksListAdapterOnClickHandler
 import tech.michaeloverman.mscount.pojos.TitleKeyObject
@@ -38,59 +33,53 @@ import java.util.*
  * Handles display and click handling of programs in the database.
  */
 class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHandler, LoaderManager.LoaderCallbacks<Cursor?> {
-    @BindView(R.id.piece_list_recycler_view)
-    var mRecyclerView: RecyclerView? = null
 
-    @BindView(R.id.composers_name_label)
-    var mComposersNameView: TextView? = null
-
-    @BindView(R.id.local_database_label)
-    var mLocalDatabaseView: TextView? = null
-
-    @BindView(R.id.error_view)
-    var mErrorView: TextView? = null
-
-    @BindView(R.id.program_select_progress_bar)
-    var mProgressSpinner: ProgressBar? = null
-
-    @BindView(R.id.select_composer_button)
-    var mSelectComposerButton: Button? = null
     private var mDeleteCancelMenuItem: MenuItem? = null
     private var mCurrentComposer: String? = null
-    private var mAdapter: WorksListAdapter? = null
+    private lateinit var mAdapter: WorksListAdapter
     private var mDeleteFlag = false
-    private var mActivity: LoadNewProgramActivity? = null
+    private lateinit var mActivity: LoadNewProgramActivity
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
         setHasOptionsMenu(true)
-        mActivity = activity as LoadNewProgramActivity?
+        mActivity = activity as LoadNewProgramActivity
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.program_select_fragment, container, false)
-        ButterKnife.bind(this, view)
-        Timber.d("onCreateView useFirebase: %s", mActivity!!.useFirebase)
+
+        Timber.d("onCreateView useFirebase: %s", mActivity.useFirebase)
+        Timber.d("Returning completed view....!!!")
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        select_composer_button.setOnClickListener { selectComposer() }
+        composers_name_label.setOnClickListener { selectComposer() }
+
         val manager = LinearLayoutManager(this.activity)
-        mRecyclerView!!.layoutManager = manager
+        piece_list_recycler_view.layoutManager = manager
         mAdapter = WorksListAdapter(requireContext(), this)
-        mRecyclerView!!.adapter = mAdapter
-        mCurrentComposer = mActivity!!.mCurrentComposer
+        piece_list_recycler_view.adapter = mAdapter
+
+        mCurrentComposer = mActivity.mCurrentComposer
         Timber.d("onCreate() Composer: %s", mCurrentComposer)
-        if (mActivity!!.useFirebase) {
-            mActivity!!.title = getString(R.string.select_piece_by)
+        if (mActivity.useFirebase) {
+            mActivity.title = getString(R.string.select_piece_by)
         } else {
-            mActivity!!.title = getString(R.string.select_a_piece)
+            mActivity.title = getString(R.string.select_a_piece)
             makeComposerRelatedViewsInvisible()
         }
-        if (mActivity!!.useFirebase && mCurrentComposer == null) {
+        if (mActivity.useFirebase && mCurrentComposer == null) {
             selectComposer()
         } else {
             composerSelected()
         }
-        Timber.d("Returning completed view....!!!")
-        return view
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -130,11 +119,10 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
         mDeleteFlag = false
         mDeleteCancelMenuItem!!.setTitle(R.string.delete_program)
         mDeleteCancelMenuItem!!.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-        mAdapter!!.notifyDataSetChanged()
+        mAdapter.notifyDataSetChanged()
         progressSpinner(false)
     }
 
-    @OnClick(R.id.select_composer_button, R.id.composers_name_label)
     fun selectComposer() {
         val fragment = ComposerSelectFragment.newInstance()
 
@@ -150,8 +138,8 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
         Timber.d("ProgramSelect onClick() pieceId: %s", pieceId)
         progressSpinner(true)
         if (!mDeleteFlag) {
-            mActivity!!.setProgramResult(pieceId)
-            mActivity!!.finish()
+            mActivity.setProgramResult(pieceId)
+            mActivity.finish()
         } else {
             dialogDeleteConfirmation(pieceId, title)
         }
@@ -162,8 +150,8 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
         dialog.setCancelable(false)
                 .setTitle(R.string.delete_program_dialog_title)
                 .setMessage(getString(R.string.delete_confirmation_question, title))
-                .setPositiveButton(android.R.string.yes) { dialogInt: DialogInterface?, which: Int ->
-                    if (mActivity!!.useFirebase) {
+                .setPositiveButton(android.R.string.yes) { _: DialogInterface?, _: Int ->
+                    if (mActivity.useFirebase) {
                         checkFirebaseAuthorizationToDelete(pieceId, title)
                     } else {
                         deletePieceFromSql(pieceId, title)
@@ -207,12 +195,10 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
         }
     }
 
-    private val firebaseAuthId: String?
-        private get() {
+    private val firebaseAuthId: String
+        get() {
             val auth = FirebaseAuth.getInstance()
-            return if (auth != null) {
-                auth.currentUser!!.uid
-            } else null
+            return auth.currentUser!!.uid
         }
 
     private fun completeAuthorizedFirebaseDelete(id: String?, title: String?) {
@@ -244,7 +230,7 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
                                 list.add(TitleKeyObject(snap.key!!, snap.value.toString()))
                             }
                             mAdapter!!.setTitles(list)
-                            mComposersNameView!!.text = mCurrentComposer
+                            composers_name_label.text = mCurrentComposer
                             progressSpinner(false)
                         }
 
@@ -277,20 +263,20 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
         progressSpinner(false)
         if (data == null) {
             Timber.d("data == null")
-            mErrorView!!.visibility = View.VISIBLE
+            error_view.visibility = View.VISIBLE
             updateEmptyProgramList()
         } else if (data.count == 0) {
             Timber.d("data.getCount() == 0")
-            mErrorView!!.visibility = View.VISIBLE
+            error_view.visibility = View.VISIBLE
             updateEmptyProgramList()
         } else {
-            mErrorView!!.visibility = View.GONE
+            error_view.visibility = View.GONE
             mAdapter!!.newCursor(data)
         }
     }
 
     override fun onLoaderReset(loader: Loader<Cursor?>) {
-        mAdapter!!.newCursor(null)
+        mAdapter.newCursor(null)
     }
 
     override fun updateData() {
@@ -307,34 +293,34 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
 
     private fun makeComposerRelatedViewsVisible() {
         Timber.d("showing views")
-        mSelectComposerButton!!.visibility = View.VISIBLE
-        mComposersNameView!!.text = mCurrentComposer
+        select_composer_button.visibility = View.VISIBLE
+        composers_name_label.text = mCurrentComposer
         if (mDeleteCancelMenuItem != null) mDeleteCancelMenuItem!!.isEnabled = true
-        mLocalDatabaseView!!.visibility = View.INVISIBLE
-        mActivity!!.title = getString(R.string.select_piece_by)
+        local_database_label.visibility = View.INVISIBLE
+        mActivity.title = getString(R.string.select_piece_by)
     }
 
     private fun makeComposerRelatedViewsInvisible() {
         Timber.d("removing views")
-        mComposersNameView!!.visibility = View.INVISIBLE
-        mLocalDatabaseView!!.visibility = View.VISIBLE
-        mSelectComposerButton!!.visibility = View.GONE
-        mActivity!!.title = getString(R.string.select_a_piece)
+        composers_name_label.visibility = View.INVISIBLE
+        local_database_label.visibility = View.VISIBLE
+        select_composer_button.visibility = View.GONE
+        mActivity.title = getString(R.string.select_a_piece)
     }
 
     private fun updateEmptyProgramList() {
-        mErrorView!!.text = getString(R.string.no_programs_currently_in_database)
-        mErrorView!!.contentDescription = getString(R.string.no_programs_currently_in_database)
+        error_view.text = getString(R.string.no_programs_currently_in_database)
+        error_view.contentDescription = getString(R.string.no_programs_currently_in_database)
         if (mDeleteCancelMenuItem != null) mDeleteCancelMenuItem!!.isEnabled = false
     }
 
     private fun progressSpinner(on: Boolean) {
         if (on) {
-            mComposersNameView!!.visibility = View.INVISIBLE
-            mProgressSpinner!!.visibility = View.VISIBLE
+            composers_name_label.visibility = View.INVISIBLE
+            program_select_progress_bar.visibility = View.VISIBLE
         } else {
-            mComposersNameView!!.visibility = View.VISIBLE
-            mProgressSpinner!!.visibility = View.INVISIBLE
+            composers_name_label.visibility = View.VISIBLE
+            program_select_progress_bar.visibility = View.INVISIBLE
         }
     }
 
@@ -343,8 +329,8 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
         override fun doInBackground(vararg params: Void?): Void? {
             val uri = ProgramDatabaseSchema.MetProgram.CONTENT_URI
             val whereClause = "_id=?"
-            val args = arrayOf(_id?.let { it.toString() })
-            mActivity!!.contentResolver.delete(uri, whereClause, args)
+            val args = arrayOf(_id?.toString())
+            mActivity.contentResolver.delete(uri, whereClause, args)
             return null
         }
 
