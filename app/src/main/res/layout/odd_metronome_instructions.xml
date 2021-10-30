@@ -16,7 +16,7 @@
         app:layout_constraintGuide_percent="0.5"/>
     <TextView
         android:id="@+id/radio_instruction"
-        android:text="Select to play subdivisions."
+        android:text="@string/select_to_play_subdivisions"
         style="@style/InstructionOverlayTextStyle"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -25,7 +25,7 @@
         />
     <TextView
         android:id="@+id/startstop_instruction"
-        android:text="Start and stop the metronome"
+        android:text="@string/start_and_stop_the_metronome"
         style="@style/InstructionOverlayTextStyle"
         android:gravity="end"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,37 +33,40 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/centerline"
         />
+
     <TextView
         android:id="@+id/tempo_instruction"
-        android:text="Swipe to change tempo."
         style="@style/InstructionOverlayTextStyle"
+        android:layout_width="240dp"
+        android:layout_height="124dp"
         android:gravity="end"
+        android:text="@string/swipe_to_change_tempo"
         app:layout_constraintBottom_toTopOf="@+id/subdivision_instruction"
-        app:layout_constraintTop_toBottomOf="@+id/startstop_instruction"
-        app:layout_constraintLeft_toRightOf="@id/centerline"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/startstop_instruction" />
+
     <TextView
         android:id="@+id/primary_pulse_instruction"
-        android:text="Tap and select new number to change primary beat length."
         style="@style/InstructionOverlayTextStyle"
         android:gravity="start"
+        android:text="@string/tap_and_select_new_number_to_change_primary_beat_length"
         app:layout_constraintBottom_toTopOf="@+id/subdivision_instruction"
-        app:layout_constraintTop_toBottomOf="@+id/startstop_instruction"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/centerline"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/startstop_instruction"
+        app:layout_constraintVertical_bias="0.138" />
 
     <TextView
         android:id="@+id/subdivision_instruction"
-        android:text="Click a number to add a beat with that many subdivisions. Click the \'X\' to delete last beat."
         style="@style/InstructionOverlayTextStyle"
         android:gravity="center"
+        android:text="@string/click_a_number_to_add_a_beat_with_that_many_subdivisions_click_the_x_to_delete_last_beat"
         app:layout_constraintBottom_toTopOf="@+id/help_cancel_button"
-        app:layout_constraintTop_toBottomOf="@+id/tempo_instruction"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/tempo_instruction" />
 
     <Button
         android:id="@+id/help_cancel_button"

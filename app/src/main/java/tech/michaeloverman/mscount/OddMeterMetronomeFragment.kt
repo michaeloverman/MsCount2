@@ -140,7 +140,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         if (wasRunning) metronomeStartStop()
     }
 
-    fun deleteSubdivision() {
+    private fun deleteSubdivision() {
         Timber.d("remove a subdivision")
         if (mSubdivisionsList!!.size == 0) return
         var wasRunning = false
@@ -154,7 +154,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         if (wasRunning && mSubdivisionsList!!.size > 0) metronomeStartStop()
     }
 
-    fun multiplierSelected() {
+    private fun multiplierSelected() {
         if (mMultiplierSelected) {
             mMultiplierSelected = false
             pulse_multiplier_view.background = ContextCompat.getDrawable(requireActivity(), R.drawable.roundcorner_light)
@@ -169,10 +169,6 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         if (mMetronomeRunning) {
             metronomeStartStop()
         }
-        //        if (mWearNotification != null) {
-//            mWearNotification.cancel();
-//        }
-//        requireActivity().unregisterReceiver(mBroadcastReceiver)
         super.onPause()
     }
 
@@ -182,7 +178,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         prefs.putFloat(PREF_KEY_BPM, mBPM)
         prefs.putInt(PREF_KEY_MULTIPLIER, mMultiplier)
         prefs.putInt(PREF_LIST_LENGTH, mSubdivisionsList!!.size)
-        prefs.putBoolean(PREF_KEY_INCLUDE_SUBDIVISIONS, include_subdivisions_checkBox.isChecked)
+        prefs.putBoolean(PREF_KEY_INCLUDE_SUBDIVISIONS, subdivCheck)
         for (i in mSubdivisionsList!!.indices) {
             prefs.remove(PREF_KEY_LIST + i)
             prefs.putInt(PREF_KEY_LIST + i, mSubdivisionsList!![i])
@@ -191,7 +187,8 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         super.onDestroy()
     }
 
-    fun subdivisionsOnOff() {
+    private fun subdivisionsOnOff() {
+        subdivCheck = include_subdivisions_checkBox.isChecked
         if (mMetronome.isRunning) {
             metronomeStartStop()
             metronomeStartStop()
@@ -214,7 +211,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
             mMetronomeRunning = true
             oddmeter_start_stop_fab.setImageResource(android.R.drawable.ic_media_pause)
             mMetronome.play(mBPM.toInt() * mMultiplier, mSubdivisionsList!!,
-                include_subdivisions_checkBox.isChecked)
+                subdivCheck)
         }
     }
 

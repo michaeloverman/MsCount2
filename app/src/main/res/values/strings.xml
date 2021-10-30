@@ -217,6 +217,11 @@
     <string name="subdivision_eight">subdivision eight</string>
     <string name="subdivision_nine">subdivision nine</string>
     <string name="subdivision_ten">subdivision ten</string>
+    <string name="swipe_to_change_tempo">Swipe to change tempo:\nup/down = fast change,\nright/left = slow</string>
+    <string name="tap_and_select_new_number_to_change_primary_beat_length">Tap and select new number to change primary beat length.</string>
+    <string name="click_a_number_to_add_a_beat_with_that_many_subdivisions_click_the_x_to_delete_last_beat">Click a number to add a beat with that many subdivisions. Click the \'X\' to delete last beat.</string>
+    <string name="start_and_stop_the_metronome">Start and stop the metronome</string>
+    <string name="select_to_play_subdivisions">Select to play subdivisions.</string>
 
 
 </resources>
