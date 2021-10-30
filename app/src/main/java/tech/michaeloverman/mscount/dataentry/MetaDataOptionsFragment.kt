@@ -4,16 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
+import kotlinx.android.synthetic.main.meta_data_options_layout.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.pojos.PieceOfMusic
 import timber.log.Timber
@@ -28,72 +24,69 @@ import timber.log.Timber
  */
 class MetaDataOptionsFragment : Fragment() {
     private lateinit var mContext: Context
-    private var mBuilder: PieceOfMusic.Builder? = null
+    private var mBuilder = PieceOfMusic.Builder()
     private var mBaselineRhythm = 0
 
-    @BindView(R.id.measure_offset_entry)
-    var mMeasureOffsetEntry: EditText? = null
+    private lateinit var mDisplayValueAdapter: NoteValueAdapter
 
-    @BindView(R.id.tempo_multiplier_entry)
-    var mTempoMultiplierEntry: EditText? = null
-
-    @BindView(R.id.display_rhythmic_value_recycler)
-    var mDisplayValueEntry: RecyclerView? = null
-    private var mDisplayValueAdapter: NoteValueAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.meta_data_options_layout, container, false)
-        ButterKnife.bind(this, view)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.meta_data_options_layout, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        options_cancel_button.setOnClickListener { parentFragmentManager.popBackStackImmediate() }
+        save_options_button.setOnClickListener { save() }
         val manager: RecyclerView.LayoutManager = LinearLayoutManager(mContext,
-                LinearLayoutManager.HORIZONTAL, false)
-        mDisplayValueEntry!!.layoutManager = manager
+            LinearLayoutManager.HORIZONTAL, false)
+        display_rhythmic_value_recycler.layoutManager = manager
         mDisplayValueAdapter = NoteValueAdapter(mContext,
-                resources.obtainTypedArray(R.array.note_values),
-                resources.getStringArray(R.array.note_value_content_descriptions))
-        mDisplayValueEntry!!.adapter = mDisplayValueAdapter
-        mDisplayValueAdapter!!.setSelectedPosition(mBaselineRhythm)
+            resources.obtainTypedArray(R.array.note_values),
+            resources.getStringArray(R.array.note_value_content_descriptions))
+        display_rhythmic_value_recycler.adapter = mDisplayValueAdapter
+        mDisplayValueAdapter.setSelectedPosition(mBaselineRhythm)
 
         // Remove soft keyboard when focus on recycler
-        mDisplayValueEntry!!.onFocusChangeListener = OnFocusChangeListener { v: View, hasFocus: Boolean ->
-            if (hasFocus) {
-                val imm = v.context
+        display_rhythmic_value_recycler.onFocusChangeListener =
+            View.OnFocusChangeListener { v: View, hasFocus: Boolean ->
+                if (hasFocus) {
+                    val imm = v.context
                         .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(v.windowToken, 0)
+                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+                }
             }
-        }
-        return view
     }
 
-    @OnClick(R.id.options_cancel_button)
-    fun cancelOptionsWithoutSave() {
-        parentFragmentManager.popBackStackImmediate()
-    }
-
-    @OnClick(R.id.save_options_button)
     fun save() {
-        var temp = mMeasureOffsetEntry!!.text.toString()
+        var temp = measure_offset_entry.text.toString()
         if (temp != "") {
             val offset = temp.toInt()
-            mBuilder!!.firstMeasureNumber(offset)
+            mBuilder.firstMeasureNumber(offset)
         }
-        temp = mTempoMultiplierEntry!!.text.toString()
+        temp = tempo_multiplier_entry.text.toString()
         if (temp != "") {
             val multiplier = temp.toFloat()
-            mBuilder!!.tempoMultiplier(multiplier.toDouble())
+            mBuilder.tempoMultiplier(multiplier.toDouble())
             Timber.d("mBuilder should have 0.5 multiplier...")
         }
-        val display = mDisplayValueAdapter!!.selectedRhythm
-        mBuilder!!.displayNoteValue(display)
+        val display = mDisplayValueAdapter.selectedRhythm
+        mBuilder.displayNoteValue(display)
         parentFragmentManager.popBackStackImmediate()
     }
 
     companion object {
-        fun newInstance(context: Context, builder: PieceOfMusic.Builder?, baselineRhythm: Int): Fragment {
+        fun newInstance(context: Context, builder: PieceOfMusic.Builder, baselineRhythm: Int): Fragment {
             val fragment = MetaDataOptionsFragment()
             fragment.mContext = context
             fragment.mBuilder = builder

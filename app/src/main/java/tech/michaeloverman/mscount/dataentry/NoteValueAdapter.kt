@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.note_value_image_view.view.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.dataentry.NoteValueAdapter.NoteViewHolder
 import tech.michaeloverman.mscount.pojos.PieceOfMusic
@@ -82,10 +83,9 @@ internal class NoteValueAdapter(private val mContext: Context, private val noteV
     }
 
     internal inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val image: ImageView
+        val image: ImageView = itemView.note_value_image
 
         init {
-            image = itemView.findViewById(R.id.note_value_image)
             Timber.d("NoteViewHolder created, image: ")
         }
     }

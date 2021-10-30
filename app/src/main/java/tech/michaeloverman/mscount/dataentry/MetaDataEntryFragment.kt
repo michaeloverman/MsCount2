@@ -11,17 +11,14 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
-import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
 import butterknife.OnClick
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -29,6 +26,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.perf.metrics.AddTrace
+import kotlinx.android.synthetic.main.meta_data_input_instructions.*
+import kotlinx.android.synthetic.main.meta_data_input_layout.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.database.LoadNewProgramActivity
 import tech.michaeloverman.mscount.database.ProgramDatabaseSchema
@@ -48,47 +47,17 @@ import java.util.*
  * items of metadata.
  */
 class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>, DataMultipliedListener {
-    @BindView(R.id.composer_last_name_text_entry)
-    var mComposerLastEntry: EditText? = null
 
-    @BindView(R.id.composer_first_name_text_entry)
-    var mComposerFirstEntry: EditText? = null
-
-    @BindView(R.id.title_text_entry)
-    var mTitleEntry: EditText? = null
-
-    @BindView(R.id.baseline_subdivision_entry)
-    var mBaselineSubdivisionEntry: EditText? = null
-
-    @BindView(R.id.countoff_subdivision_entry)
-    var mCountoffSubdivisionEntry: EditText? = null
-
-    @BindView(R.id.default_tempo_label)
-    var mDefaultTempoLabel: TextView? = null
-
-    @BindView(R.id.default_tempo_entry)
-    var mDefaultTempoEntry: EditText? = null
-
-    @BindView(R.id.options_button)
-    var mMetaDataOptionsButton: Button? = null
-
-    @BindView(R.id.enter_beats_button)
-    var mEnterBeatsButton: Button? = null
-
-    @BindView(R.id.baseline_rhythmic_value_recycler)
-    var mBaselineRhythmicValueEntry: RecyclerView? = null
-
-    @BindView(R.id.help_overlay)
-    var mInstructionsLayout: FrameLayout? = null
     private var mBaselineRhythmicValueAdapter: NoteValueAdapter? = null
     private var mTemporaryBaselineRhythm = 4
-    private var mPieceOfMusic: PieceOfMusic? = null
-    private var mBuilder: PieceOfMusic.Builder? = null
+    private lateinit var mPieceOfMusic: PieceOfMusic
+    private lateinit var mBuilder: PieceOfMusic.Builder
     private var mCurrentPieceKey: String? = null
     private var mFirebaseId: String? = null
     private var mDataEntries: MutableList<DataEntry>? = null
     private var mDataMultiplier = 1.0f
     private val mDownBeats: List<Int>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate()")
@@ -127,24 +96,35 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         //        menu.removeItem(R.id.create_new_program_option);
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         Timber.d("onCreateView()")
-        val view = inflater.inflate(R.layout.meta_data_input_layout, container, false)
-        ButterKnife.bind(this, view)
 
+        return inflater.inflate(R.layout.meta_data_input_layout, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        enter_beats_button.setOnClickListener { enterBeatsClicked() }
+        options_button.setOnClickListener { optionsButtonClicked() }
+        help_cancel_button.setOnClickListener { instructionsCancelled() }
         // When a countoff value is entered, make sure it is an even divisor of the baseline subdivisions
-        mCountoffSubdivisionEntry!!.addTextChangedListener(object : TextWatcher {
+        countoff_subdivision_entry.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
 //                try {
-                val temp = mBaselineSubdivisionEntry!!.text.toString()
+                val temp = baseline_subdivision_entry.text.toString()
                 val primary = if (temp == "") 0 else temp.toInt()
                 val countoff = if (s.toString() == "") 1 else s.toString().toInt()
                 if (primary % countoff != 0) {
                     Toast.makeText(context,
-                            R.string.countoff_must_fit_subdivisions,
-                            Toast.LENGTH_SHORT).show()
+                        R.string.countoff_must_fit_subdivisions,
+                        Toast.LENGTH_SHORT).show()
                 }
                 //                } catch (NumberFormatException n) {
 //                    // not used: only integers can be entered
@@ -153,55 +133,61 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         })
 
         // When default tempo is entered, make sure it is in the metronome's range
-        mDefaultTempoEntry!!.onFocusChangeListener = OnFocusChangeListener { v: View?, hasFocus: Boolean ->
-            if (!hasFocus) {
-                try {
-                    val tempo = mDefaultTempoEntry!!.text.toString().toInt()
-                    if (tempo < Metronome.MIN_TEMPO || tempo > Metronome.MAX_TEMPO) {
-                        Toast.makeText(context, getString(R.string.tempo_between_min_max,
-                                Metronome.MIN_TEMPO, Metronome.MAX_TEMPO), Toast.LENGTH_SHORT)
+        default_tempo_entry.onFocusChangeListener =
+            View.OnFocusChangeListener { v: View?, hasFocus: Boolean ->
+                if (!hasFocus) {
+                    try {
+                        val tempo = default_tempo_entry.text.toString().toInt()
+                        if (tempo < Metronome.MIN_TEMPO || tempo > Metronome.MAX_TEMPO) {
+                            Toast.makeText(
+                                context, getString(
+                                    R.string.tempo_between_min_max,
+                                    Metronome.MIN_TEMPO, Metronome.MAX_TEMPO
+                                ), Toast.LENGTH_SHORT
+                            )
                                 .show()
-                        mDefaultTempoEntry!!.setText("")
+                            default_tempo_entry.setText("")
+                        }
+                    } catch (n: NumberFormatException) {
+                        Toast.makeText(context, R.string.tempo_must_be_integer, Toast.LENGTH_SHORT)
+                            .show()
                     }
-                } catch (n: NumberFormatException) {
-                    Toast.makeText(context, R.string.tempo_must_be_integer, Toast.LENGTH_SHORT).show()
                 }
             }
-        }
+
         val manager: RecyclerView.LayoutManager = LinearLayoutManager(mActivity,
-                LinearLayoutManager.HORIZONTAL, false)
-        mBaselineRhythmicValueEntry!!.layoutManager = manager
+            LinearLayoutManager.HORIZONTAL, false)
+        baseline_rhythmic_value_recycler.layoutManager = manager
         mBaselineRhythmicValueAdapter = NoteValueAdapter(mActivity,
-                resources.obtainTypedArray(R.array.note_values),
-                resources.getStringArray(R.array.note_value_content_descriptions))
-        mBaselineRhythmicValueEntry!!.adapter = mBaselineRhythmicValueAdapter
+            resources.obtainTypedArray(R.array.note_values),
+            resources.getStringArray(R.array.note_value_content_descriptions))
+        baseline_rhythmic_value_recycler.adapter = mBaselineRhythmicValueAdapter
         mBaselineRhythmicValueAdapter!!.setSelectedPosition(mTemporaryBaselineRhythm)
 
         // Remove soft keyboard when display on recycler
-        mBaselineRhythmicValueEntry!!.onFocusChangeListener = OnFocusChangeListener { v: View, hasFocus: Boolean ->
-            if (hasFocus) {
-                val imm = v.context
+        baseline_rhythmic_value_recycler.onFocusChangeListener =
+            View.OnFocusChangeListener { v: View, hasFocus: Boolean ->
+                if (hasFocus) {
+                    val imm = v.context
                         .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(v.windowToken, 0)
+                    imm.hideSoftInputFromWindow(v.windowToken, 0)
+                }
             }
-        }
-        return view
     }
 
     override fun onResume() {
         super.onResume()
         if (mDataMultiplier != 1.0f) {
-            var currentBaseline = Integer.valueOf(mBaselineSubdivisionEntry!!.text.toString())
+            var currentBaseline = Integer.valueOf(baseline_subdivision_entry.text.toString())
             currentBaseline *= mDataMultiplier.toInt()
-            mBaselineSubdivisionEntry!!.setText(currentBaseline.toString())
+            baseline_subdivision_entry.setText(currentBaseline.toString())
             mDataMultiplier = 1.0f
         }
     }
 
-    @OnClick(R.id.enter_beats_button)
-    fun enterBeatsClicked() {
+    private fun enterBeatsClicked() {
         Timber.d("enterBeatsClicked()")
-        val title = mTitleEntry!!.text.toString()
+        val title = title_text_entry.text.toString()
         if (title == "") {
             toastError()
             return
@@ -213,11 +199,10 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
     }
 
     private fun gotoDataEntryFragment(title: String) {
-        val fragment: Fragment
-        fragment = if (mDataEntries == null) {
+        val fragment: Fragment = if (mDataEntries == null) {
             newInstance(title, mBuilder, this)
         } else {
-            newInstance(title, mBuilder, mDataEntries, this)
+            newInstance(title, mBuilder, mDataEntries!!, this)
         }
         val transaction = parentFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, fragment)
@@ -225,8 +210,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         transaction.commit()
     }
 
-    @OnClick(R.id.options_button)
-    fun optionsButtonClicked() {
+    private fun optionsButtonClicked() {
         mTemporaryBaselineRhythm = mBaselineRhythmicValueAdapter!!.selectedRhythm
         val fragment = MetaDataOptionsFragment.newInstance(mActivity,
                 mBuilder, mTemporaryBaselineRhythm)
@@ -251,12 +235,11 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
     }
 
     private fun makeInstructionsVisible() {
-        mInstructionsLayout!!.visibility = View.VISIBLE
+        help_overlay.visibility = View.VISIBLE
     }
 
-    @OnClick(R.id.help_cancel_button)
-    fun instructionsCancelled() {
-        mInstructionsLayout!!.visibility = View.INVISIBLE
+    private fun instructionsCancelled() {
+        help_overlay.visibility = View.INVISIBLE
     }
 
     private fun loadProgram() {
@@ -291,12 +274,12 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
     }
 
     private val pieceFromFirebase: Unit
-        private get() {
+        get() {
             Timber.d("getPieceFromFirebase()")
             FirebaseDatabase.getInstance().reference.child("pieces").child(mCurrentPieceKey!!)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            mPieceOfMusic = dataSnapshot.getValue(PieceOfMusic::class.java)
+                            mPieceOfMusic = dataSnapshot.getValue(PieceOfMusic::class.java) ?: PieceOfMusic()
                             updateVariables()
                         }
 
@@ -309,7 +292,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
 
     //        mCursor.close();
     private val pieceFromSql: Unit
-        private get() {
+        get() {
             Timber.d("getPieceFromSql()")
             val localDbId = mCurrentPieceKey!!.toInt()
             mCursor!!.moveToFirst()
@@ -343,33 +326,33 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
     }
 
     private fun updateVariables() {
-        if (mPieceOfMusic == null || mPieceOfMusic!!.rawData == null) {
-            mPieceOfMusic!!.constructRawData()
+        if (mPieceOfMusic.rawData == null) {
+            mPieceOfMusic.constructRawData()
         }
-        mFirebaseId = mPieceOfMusic!!.firebaseId
+        mFirebaseId = mPieceOfMusic.firebaseId
         updateGUI()
     }
 
     private fun updateGUI() {
         Timber.d("updating the GUI")
-        val names = mPieceOfMusic!!.author!!.split(", ").toTypedArray()
+        val names = mPieceOfMusic.author!!.split(", ").toTypedArray()
         if (names.size >= 2) {
-            mComposerLastEntry!!.setText(names[0])
-            mComposerFirstEntry!!.setText(names[1])
+            composer_last_name_text_entry.setText(names[0])
+            composer_first_name_text_entry.setText(names[1])
         } else if (names.size == 1) {
-            mComposerLastEntry!!.setText(mPieceOfMusic!!.author)
-            mComposerFirstEntry!!.setText("")
+            composer_last_name_text_entry.setText(mPieceOfMusic.author)
+            composer_first_name_text_entry.setText("")
         } else {
-            mComposerLastEntry!!.setText("")
-            mComposerFirstEntry!!.setText("")
+            composer_last_name_text_entry.setText("")
+            composer_first_name_text_entry.setText("")
         }
-        mTitleEntry!!.setText(mPieceOfMusic!!.title)
-        mBaselineSubdivisionEntry!!.setText(java.lang.String.valueOf(mPieceOfMusic!!.subdivision))
-        mCountoffSubdivisionEntry!!.setText(mPieceOfMusic!!.countOffSubdivision.toString())
-        mDefaultTempoEntry!!.setText(java.lang.String.valueOf(mPieceOfMusic!!.defaultTempo))
-        mBaselineRhythmicValueAdapter!!.setSelectedPosition(mPieceOfMusic!!.baselineNoteValue)
+        title_text_entry.setText(mPieceOfMusic.title)
+        baseline_subdivision_entry.setText(java.lang.String.valueOf(mPieceOfMusic.subdivision))
+        countoff_subdivision_entry.setText(mPieceOfMusic.countOffSubdivision.toString())
+        default_tempo_entry.setText(java.lang.String.valueOf(mPieceOfMusic.defaultTempo))
+        mBaselineRhythmicValueAdapter!!.setSelectedPosition(mPieceOfMusic.baselineNoteValue)
         mBaselineRhythmicValueAdapter!!.notifyDataSetChanged()
-        mDataEntries = mPieceOfMusic!!.rawData
+        mDataEntries = mPieceOfMusic.rawData
     }
 
     override fun dataValuesMultipliedBy(multiplier: Float) {
@@ -385,62 +368,60 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         Timber.d("checking metadata entries")
         if (!validateMetaDataEntries()) return
         Timber.d("building rest of mBuilder")
-        mBuilder!!.firebaseId(mFirebaseId)
-        mBuilder!!.creatorId(firebaseAuthId)
-        mPieceOfMusic = mBuilder!!.build()
-        if (mActivity!!.useFirebase) {
+        mBuilder.firebaseId(mFirebaseId)
+        mBuilder.creatorId(firebaseAuthId)
+        mPieceOfMusic = mBuilder.build()
+        if (mActivity.useFirebase) {
             checkFirebaseForExistingData() // beginning of method chain to save to cloud
         } else {
             saveToSqlDatabase()
         }
     }
 
-    private val firebaseAuthId: String?
-        private get() {
+    private val firebaseAuthId: String
+        get() {
             val auth = FirebaseAuth.getInstance()
-            return if (auth != null) {
-                auth.currentUser!!.uid
-            } else null
+            return auth.currentUser!!.uid
         }
 
     private fun validateMetaDataEntries(): Boolean {
-        val composerLast = mComposerLastEntry!!.text.toString()
-        val composerFirst = mComposerFirstEntry!!.text.toString()
-        val title = mTitleEntry!!.text.toString()
-        val subd = mBaselineSubdivisionEntry!!.text.toString()
-        val countoff = mCountoffSubdivisionEntry!!.text.toString()
-        val defaultTempo = mDefaultTempoEntry!!.text.toString()
+        val composerLast = composer_last_name_text_entry.text.toString()
+        val composerFirst = composer_first_name_text_entry.text.toString()
+        val title = title_text_entry.text.toString()
+        val subd = baseline_subdivision_entry.text.toString()
+        val countoff = countoff_subdivision_entry.text.toString()
+        val defaultTempo = default_tempo_entry.text.toString()
         val rhythm = mBaselineRhythmicValueAdapter!!.selectedRhythm
 
         // Check for null entries...
         if (composerLast == "") {
             Toast.makeText(context, R.string.error_no_composer_message,
                     Toast.LENGTH_SHORT).show()
-            mComposerLastEntry!!.requestFocus()
+            composer_last_name_text_entry.requestFocus()
             return false
         }
         if (composerFirst == "") {
             Toast.makeText(context, R.string.error_no_composer_message,
                     Toast.LENGTH_SHORT).show()
-            mComposerFirstEntry!!.requestFocus()
+            composer_first_name_text_entry.requestFocus()
             return false
         }
         if (title == "") {
             Toast.makeText(context, R.string.error_no_title_message,
                     Toast.LENGTH_SHORT).show()
-            mTitleEntry!!.requestFocus()
+            title_text_entry.requestFocus()
             return false
         }
         if (subd == "") {
             Toast.makeText(context, R.string.error_no_subdivision_message,
                     Toast.LENGTH_SHORT).show()
-            mBaselineSubdivisionEntry!!.requestFocus()
+            baseline_subdivision_entry.requestFocus()
             return false
         }
         if (countoff == "") {
             Toast.makeText(context, R.string.error_no_countoff_message,
                     Toast.LENGTH_SHORT).show()
-            mCountoffSubdivisionEntry!!.requestFocus()
+            countoff_subdivision_entry.requestFocus()
             return false
         }
 
@@ -456,7 +437,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
             }
         } catch (nfe: NumberFormatException) {
             Toast.makeText(context, R.string.enter_only_number_subdivs, Toast.LENGTH_SHORT).show()
-            mBaselineSubdivisionEntry!!.requestFocus()
+            baseline_subdivision_entry.requestFocus()
             return false
         }
         try {
@@ -464,13 +445,13 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
             if (countoffInt > subdInt || countoffInt == 0) {
                 Toast.makeText(context, R.string.countoff_must_be_even_divisor,
                         Toast.LENGTH_SHORT).show()
-                mCountoffSubdivisionEntry!!.requestFocus()
+                countoff_subdivision_entry.requestFocus()
                 return false
             }
         } catch (nfe: NumberFormatException) {
             Toast.makeText(context, R.string.please_enter_only_numbers_countoff,
                     Toast.LENGTH_SHORT).show()
-            mBaselineSubdivisionEntry!!.requestFocus()
+            baseline_subdivision_entry.requestFocus()
             return false
         }
         val composer = composerLast.trim { it <= ' ' } + ", " + composerFirst.trim { it <= ' ' }
@@ -550,9 +531,10 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         val pieceFromFirebase = dataSnapshot.getValue(PieceOfMusic::class.java)
-                        if (pieceFromFirebase!!.creatorId == mPieceOfMusic!!.creatorId) {
-                            overwriteFirebaseDataAlertDialog(mPieceOfMusic!!.title,
-                                    mPieceOfMusic!!.author)
+                        if (pieceFromFirebase!!.creatorId == mPieceOfMusic.creatorId) {
+                            overwriteFirebaseDataAlertDialog(
+                                mPieceOfMusic.title,
+                                    mPieceOfMusic.author)
                         } else {
                             Toast.makeText(mActivity, R.string.not_authorized_save_local,
                                     Toast.LENGTH_SHORT).show()
@@ -575,8 +557,8 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         dialog.setCancelable(false)
         dialog.setTitle("Overwrite Data?")
         dialog.setMessage(getString(R.string.overwrite_data_confirmation, title, composer))
-        dialog.setPositiveButton(android.R.string.yes) { dialogInt: DialogInterface?, id: Int -> saveToFirebase(mPieceOfMusic) }
-                .setNegativeButton(R.string.cancel) { dialogInt: DialogInterface, which: Int -> dialogInt.dismiss() }
+        dialog.setPositiveButton(android.R.string.yes) { _: DialogInterface?, _: Int -> saveToFirebase(mPieceOfMusic) }
+                .setNegativeButton(R.string.cancel) { dialogInt: DialogInterface, _: Int -> dialogInt.dismiss() }
         val alert = dialog.create()
         alert.show()
     }
@@ -593,8 +575,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         mPiecesDatabaseReference.child("composers").child(p.author!!).child(p.title!!)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        val key: String?
-                        key = if (dataSnapshot.exists()) {
+                        val key: String? = if (dataSnapshot.exists()) {
                             // update
                             dataSnapshot.value.toString()
                         } else {
@@ -632,7 +613,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         return if (id == ID_PIECE_LOADER) {
             val queryUri = ProgramDatabaseSchema.MetProgram.CONTENT_URI
             Timber.d("Uri: %s", queryUri.toString())
-            CursorLoader(mActivity!!,
+            CursorLoader(mActivity,
                     queryUri,
                     null,
                     null,
@@ -647,7 +628,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         Timber.d("loader finished...")
         if (data == null || data.count == 0) {
             Toast.makeText(mActivity, "Program Load Error", Toast.LENGTH_SHORT).show()
-            mPieceOfMusic = null
+            mPieceOfMusic = PieceOfMusic()
             updateGUI()
         } else {
             mCursor = data

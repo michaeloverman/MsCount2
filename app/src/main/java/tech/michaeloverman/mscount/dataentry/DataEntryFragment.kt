@@ -6,17 +6,16 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.google.firebase.perf.metrics.AddTrace
+import kotlinx.android.synthetic.main.data_input_instructions.*
+import kotlinx.android.synthetic.main.data_input_layout.*
+import kotlinx.android.synthetic.main.data_input_single_entry_layout.view.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.dataentry.DataEntryFragment.DataListAdapter.DataViewHolder
 import tech.michaeloverman.mscount.pojos.DataEntry
@@ -33,23 +32,12 @@ import java.util.*
 class DataEntryFragment : Fragment() {
     private var mBuilder: PieceOfMusic.Builder? = null
 
-    @BindView(R.id.data_title_view)
-    var mTitleView: TextView? = null
-
-    @BindView(R.id.entered_data_recycler_view)
-    var mEnteredDataRecycler: RecyclerView? = null
-
-    @BindView(R.id.help_overlay)
-    var mInstructionsLayout: FrameLayout? = null
-
-    @BindView(R.id.barline)
-    var mBarlineButton: TextView? = null
     private var mTitle: String? = null
-    private var mDataList: MutableList<DataEntry>? = null
+    private var mDataList: MutableList<DataEntry> = emptyList<DataEntry>().toMutableList()
     private var mDataMultipliedBy = 1.0f
     private var mDataMultipliedListener: DataMultipliedListener? = null
     private var mMeasureNumber = 0
-    private var mAdapter: DataListAdapter? = null
+    private var mAdapter: DataListAdapter = DataListAdapter()
     private var mDataItemSelected = false
 
     interface DataMultipliedListener {
@@ -63,27 +51,52 @@ class DataEntryFragment : Fragment() {
         mMeasureNumber = 0
 
         // set up measure numbers - add opening barline, if necessary
-        if (mDataList!!.size > 0) {
-            mMeasureNumber = mDataList!![mDataList!!.size - 1].data
+        if (mDataList.size > 0) {
+            mMeasureNumber = mDataList[mDataList.size - 1].data
         } else {
-            mDataList!!.add(DataEntry(++mMeasureNumber, BARLINE))
+            mDataList.add(DataEntry(++mMeasureNumber, BARLINE))
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.data_input_layout, container, false)
-        ButterKnife.bind(this, view)
-        mTitleView!!.text = mTitle
-        val manager = LinearLayoutManager(activity,
-                LinearLayoutManager.HORIZONTAL, false)
-        mEnteredDataRecycler!!.layoutManager = manager
-        mAdapter = DataListAdapter()
-        mEnteredDataRecycler!!.adapter = mAdapter
-        mAdapter!!.notifyDataSetChanged()
-        mEnteredDataRecycler!!.scrollToPosition(mDataList!!.size - 1)
-
 //        mBarlineButton.a
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        repeat_sign.setOnClickListener { repeatSignClicked() }
+        one.setOnClickListener { dataEntered(one) }
+        two.setOnClickListener { dataEntered(two) }
+        three.setOnClickListener { dataEntered(three) }
+        four.setOnClickListener { dataEntered(four) }
+        five.setOnClickListener { dataEntered(five) }
+        six.setOnClickListener { dataEntered(six) }
+        seven.setOnClickListener { dataEntered(seven) }
+        eight.setOnClickListener { dataEntered(eight) }
+        nine.setOnClickListener { dataEntered(nine) }
+        ten.setOnClickListener { dataEntered(ten) }
+        twelve.setOnClickListener { dataEntered(twelve) }
+        other.setOnClickListener { dataEntered(other) }
+        barline.setOnClickListener { dataEntered(barline) }
+
+        data_back_button.setOnClickListener { back() }
+        data_save_button.setOnClickListener { saveData() }
+        data_delete_button.setOnClickListener { delete() }
+
+        help_cancel_button.setOnClickListener { instructionsCancelled() }
+
+        data_title_view.text = mTitle
+        val manager = LinearLayoutManager(activity,
+            LinearLayoutManager.HORIZONTAL, false)
+        entered_data_recycler_view.layoutManager = manager
+//        mAdapter = DataListAdapter()
+        entered_data_recycler_view.adapter = mAdapter
+        mAdapter.notifyDataSetChanged()
+        entered_data_recycler_view.scrollToPosition(mDataList.size - 1)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -112,7 +125,7 @@ class DataEntryFragment : Fragment() {
                 entry.data = entry.data * multiplier
             }
         }
-        mAdapter!!.notifyDataSetChanged()
+        mAdapter.notifyDataSetChanged()
         mDataMultipliedBy *= multiplier.toFloat()
     }
 
@@ -127,7 +140,7 @@ class DataEntryFragment : Fragment() {
             }
         }
         mDataList = tempList
-        mAdapter!!.notifyDataSetChanged()
+        mAdapter.notifyDataSetChanged()
         mDataMultipliedBy /= divider.toFloat()
     }
 
@@ -136,42 +149,40 @@ class DataEntryFragment : Fragment() {
     }
 
     private fun makeInstructionsVisible() {
-        mInstructionsLayout!!.visibility = View.VISIBLE
+        help_overlay.visibility = View.VISIBLE
     }
 
-    @OnClick(R.id.help_cancel_button)
-    fun instructionsCancelled() {
-        mInstructionsLayout!!.visibility = View.INVISIBLE
+    private fun instructionsCancelled() {
+        help_overlay.visibility = View.INVISIBLE
     }
 
     /**
      * Delete the last item, or the selected item
      */
-    @OnClick(R.id.data_delete_button)
     fun delete() {
         var barline = false
         var resetMeasureNumbers = false
-        val itemToDelete = if (mDataItemSelected) mAdapter!!.selectedPosition else mDataList!!.size - 1
+        val itemToDelete = if (mDataItemSelected) mAdapter.selectedPosition else mDataList.size - 1
         if (itemToDelete == 0) return
-        if (mDataList!![itemToDelete].isBarline) {
+        if (mDataList[itemToDelete].isBarline) {
             barline = true
             resetMeasureNumbers = mDataItemSelected
         }
-        mDataList!!.removeAt(itemToDelete)
-        if (mAdapter!!.selectedPosition >= mDataList!!.size) {
-            mAdapter!!.selectedPosition = -1
+        mDataList.removeAt(itemToDelete)
+        if (mAdapter.selectedPosition >= mDataList.size) {
+            mAdapter.selectedPosition = -1
             mDataItemSelected = false
         }
         if (barline) mMeasureNumber--
         if (resetMeasureNumbers) resetMeasureNumbers()
-        mAdapter!!.notifyDataSetChanged()
+        mAdapter.notifyDataSetChanged()
     }
 
     private fun resetMeasureNumbers() {
         mMeasureNumber = 0
-        for (i in mDataList!!.indices) {
-            if (mDataList!![i].isBarline) {
-                mDataList!![i].data = ++mMeasureNumber
+        for (i in mDataList.indices) {
+            if (mDataList[i].isBarline) {
+                mDataList[i].data = ++mMeasureNumber
             }
         }
     }
@@ -181,15 +192,14 @@ class DataEntryFragment : Fragment() {
      * point it does...
      */
     @AddTrace(name = "DataEntryFrag.saveData")
-    @OnClick(R.id.data_save_button)
     fun saveData() {
         Timber.d("saveData()")
 
         // add barline to end, if not already there
-        if (!mDataList!![mDataList!!.size - 1].isBarline) {
-            mDataList!!.add(DataEntry(++mMeasureNumber, true))
+        if (!mDataList[mDataList.size - 1].isBarline) {
+            mDataList.add(DataEntry(++mMeasureNumber, true))
         }
-        mBuilder!!.dataEntries(mDataList!!)
+        mBuilder!!.dataEntries(mDataList)
         mDataMultipliedListener!!.dataValuesMultipliedBy(mDataMultipliedBy)
         parentFragmentManager.popBackStackImmediate()
     }
@@ -197,9 +207,8 @@ class DataEntryFragment : Fragment() {
     /**
      * returns to previous fragment WITHOUT saving the data
      */
-    @OnClick(R.id.data_back_button)
     fun back() {
-        if (mDataList == null || mDataList!!.size == 0) {
+        if (mDataList.size == 0) {
             parentFragmentManager.popBackStackImmediate()
         } else {
             losingDataAlertDialog()
@@ -211,17 +220,15 @@ class DataEntryFragment : Fragment() {
                 .setTitle(R.string.erase_data)
                 .setMessage(R.string.delete_for_sure_question)
                 .setPositiveButton(R.string.leave
-                ) { dialog: DialogInterface?, which: Int -> parentFragmentManager.popBackStackImmediate() }
+                ) { _: DialogInterface?, _: Int -> parentFragmentManager.popBackStackImmediate() }
                 .setNegativeButton(android.R.string.cancel
-                ) { dialog: DialogInterface, which: Int -> dialog.dismiss() }
+                ) { dialog: DialogInterface, _: Int -> dialog.dismiss() }
                 .show()
     }
 
-    @OnClick(R.id.one, R.id.two, R.id.three, R.id.four, R.id.five, R.id.six, R.id.seven, R.id.eight, R.id.nine, R.id.ten, R.id.twelve, R.id.other, R.id.barline)
-    fun dataEntered(view: TextView) {
-        val value = view.text.toString()
-        when (value) {
-            "|" -> if (!mDataItemSelected && mDataList!![mDataList!!.size - 1].isBarline) return else addDataEntry(null, BARLINE)
+    private fun dataEntered(view: TextView) {
+        when (val value = view.text.toString()) {
+            "|" -> if (!mDataItemSelected && mDataList[mDataList.size - 1].isBarline) return else addDataEntry(null, BARLINE)
             "?" -> integerDialogResponse
             else -> addDataEntry(value, BEAT)
         }
@@ -229,31 +236,30 @@ class DataEntryFragment : Fragment() {
 
     private fun addDataEntry(valueString: String?, isBarline: Boolean) {
         Timber.d("addDataEntry: %s, beatOrBarline: %s", valueString, isBarline)
-        val value: Int
-        value = if (isBarline) {
+        val value: Int = if (isBarline) {
             ++mMeasureNumber
         } else {
             valueString!!.toInt()
         }
         if (mDataItemSelected) {
-            mDataList!!.add(mAdapter!!.selectedPosition++, DataEntry(value, isBarline))
+            mDataList.add(mAdapter.selectedPosition++, DataEntry(value, isBarline))
             if (isBarline) {
                 resetMeasureNumbers()
             }
         } else {
-            mDataList!!.add(DataEntry(value, isBarline))
+            mDataList.add(DataEntry(value, isBarline))
         }
-        mAdapter!!.notifyDataSetChanged()
+        mAdapter.notifyDataSetChanged()
         if (mDataItemSelected) {
-            mEnteredDataRecycler!!.scrollToPosition(mAdapter!!.selectedPosition)
+            entered_data_recycler_view.scrollToPosition(mAdapter.selectedPosition)
         } else {
-            mEnteredDataRecycler!!.scrollToPosition(mDataList!!.size - 1)
+            entered_data_recycler_view.scrollToPosition(mDataList.size - 1)
         }
     }
 
     // force keyboard to show automatically
     private val integerDialogResponse: Unit
-        private get() {
+        get() {
             val view = View.inflate(context, R.layout.get_integer_dialog_layout, null)
             val editText = view.findViewById<EditText>(R.id.get_integer_edittext)
             val dialog = AlertDialog.Builder(context)
@@ -280,34 +286,32 @@ class DataEntryFragment : Fragment() {
      * Proceeds up the data list until finding the previous barline, copies from there back to the
      * end again.
      */
-    @OnClick(R.id.repeat_sign)
-    fun repeatSignClicked() {
-        var lastIndex = mDataList!!.size - 1
+    private fun repeatSignClicked() {
+        var lastIndex = mDataList.size - 1
         if (lastIndex == 0) return
 
         // if it's not a barline at the end, add it....
-        if (!mDataList!![lastIndex].isBarline) {
-            mDataList!!.add(DataEntry(++mMeasureNumber, BARLINE))
+        if (!mDataList[lastIndex].isBarline) {
+            mDataList.add(DataEntry(++mMeasureNumber, BARLINE))
             lastIndex++
         }
-        var i: Int
         // reverse up the list looking for the previous barline
-        i = lastIndex - 1
+        var i: Int = lastIndex - 1
         while (i >= 0) {
-            if (mDataList!![i].isBarline) break
+            if (mDataList[i].isBarline) break
             i--
         }
         // follow back to the end, copying beats
         ++i
         while (i < lastIndex) {
-            mDataList!!.add(DataEntry(mDataList!![i].data, BEAT))
+            mDataList.add(DataEntry(mDataList[i].data, BEAT))
             i++
         }
 
         // add barline at end
-        mDataList!!.add(DataEntry(++mMeasureNumber, BARLINE))
-        mAdapter!!.notifyDataSetChanged()
-        mEnteredDataRecycler!!.scrollToPosition(mDataList!!.size - 1)
+        mDataList.add(DataEntry(++mMeasureNumber, BARLINE))
+        mAdapter.notifyDataSetChanged()
+        entered_data_recycler_view.scrollToPosition(mDataList.size - 1)
     }
 
     /**
@@ -317,8 +321,7 @@ class DataEntryFragment : Fragment() {
     inner class DataListAdapter : RecyclerView.Adapter<DataViewHolder>() {
         var selectedPosition = -1
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder {
-            val layoutId: Int
-            layoutId = when (viewType) {
+            val layoutId: Int = when (viewType) {
                 Companion.VIEW_TYPE_BARLINE -> R.layout.data_input_barline_layout
                 Companion.VIEW_TYPE_BEAT -> R.layout.data_input_single_entry_layout
                 else -> throw IllegalArgumentException("Invalid view type, value of $viewType")
@@ -328,9 +331,9 @@ class DataEntryFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-            val data = mDataList!![position].data
-            holder.dataEntry!!.text = data.toString()
-            if (mDataList!![position].isBarline) {
+            val data = mDataList[position].data
+            holder.dataEntry.text = data.toString()
+            if (mDataList[position].isBarline) {
                 holder.itemView.contentDescription = getString(
                         R.string.barline_content_description, data)
             }
@@ -358,24 +361,20 @@ class DataEntryFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return if (mDataList == null) 0 else mDataList!!.size
+            return mDataList.size
         }
 
         override fun getItemViewType(position: Int): Int {
-            return if (mDataList!![position].isBarline) {
+            return if (mDataList[position].isBarline) {
                 Companion.VIEW_TYPE_BARLINE
             } else {
                 Companion.VIEW_TYPE_BEAT
             }
         }
 
-        inner class DataViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
-            @BindView(R.id.data_entry)
-            var dataEntry: TextView? = null
+        inner class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            var dataEntry: TextView = itemView.data_entry
 
-            init {
-                ButterKnife.bind(this, itemView!!)
-            }
         }
     }
 
@@ -390,7 +389,7 @@ class DataEntryFragment : Fragment() {
         }
 
         fun newInstance(title: String?, builder: PieceOfMusic.Builder?,
-                        data: MutableList<DataEntry>?, dml: DataMultipliedListener?): Fragment {
+                        data: MutableList<DataEntry>, dml: DataMultipliedListener?): Fragment {
             val fragment = DataEntryFragment()
             fragment.mTitle = title
             fragment.mBuilder = builder
