@@ -16,7 +16,6 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // get setting list file names from originating intent
-        val intent = intent
         mEntries = intent.getStringArrayExtra(MetronomeActivity.EXTRA_ENTRIES) as Array<String>
         mValues = intent.getStringArrayExtra(MetronomeActivity.EXTRA_VALUES) as Array<String>
         setContentView(R.layout.settings_activity)

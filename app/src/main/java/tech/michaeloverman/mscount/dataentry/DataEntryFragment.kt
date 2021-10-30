@@ -20,6 +20,7 @@ import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.dataentry.DataEntryFragment.DataListAdapter.DataViewHolder
 import tech.michaeloverman.mscount.pojos.DataEntry
 import tech.michaeloverman.mscount.pojos.PieceOfMusic
+import tech.michaeloverman.mscount.utils.PrefUtils
 import timber.log.Timber
 import java.util.*
 
@@ -97,6 +98,10 @@ class DataEntryFragment : Fragment() {
         mAdapter.notifyDataSetChanged()
         entered_data_recycler_view.scrollToPosition(mDataList.size - 1)
 
+        if (!PrefUtils.initialHelpShown(context, PrefUtils.PREF_DATA_HELP)) {
+            help_overlay.visibility = View.VISIBLE
+            PrefUtils.helpScreenShown(context, PrefUtils.PREF_DATA_HELP)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -36,6 +36,7 @@ import tech.michaeloverman.mscount.pojos.DataEntry
 import tech.michaeloverman.mscount.pojos.PieceOfMusic
 import tech.michaeloverman.mscount.programmed.ProgrammedMetronomeActivity
 import tech.michaeloverman.mscount.utils.Metronome
+import tech.michaeloverman.mscount.utils.PrefUtils
 import tech.michaeloverman.mscount.utils.Utilities.Companion.getContentValuesFromPiece
 import timber.log.Timber
 import java.util.*
@@ -173,6 +174,11 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
                     imm.hideSoftInputFromWindow(v.windowToken, 0)
                 }
             }
+
+        if (!PrefUtils.initialHelpShown(context, PrefUtils.PREF_META_HELP)) {
+            help_overlay.visibility = View.VISIBLE
+            PrefUtils.helpScreenShown(context, PrefUtils.PREF_META_HELP)
+        }
     }
 
     override fun onResume() {

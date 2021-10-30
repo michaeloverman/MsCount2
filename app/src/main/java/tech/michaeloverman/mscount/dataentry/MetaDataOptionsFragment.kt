@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.meta_data_options_layout.*
+import kotlinx.android.synthetic.main.programmed_fragment.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.pojos.PieceOfMusic
+import tech.michaeloverman.mscount.utils.PrefUtils
 import timber.log.Timber
 
 /**
@@ -66,6 +68,11 @@ class MetaDataOptionsFragment : Fragment() {
                     imm.hideSoftInputFromWindow(v.windowToken, 0)
                 }
             }
+
+        if (!PrefUtils.initialHelpShown(context, PrefUtils.PREF_META_OPT_HELP)) {
+            help_overlay.visibility = View.VISIBLE
+            PrefUtils.helpScreenShown(context, PrefUtils.PREF_META_OPT_HELP)
+        }
     }
 
     fun save() {

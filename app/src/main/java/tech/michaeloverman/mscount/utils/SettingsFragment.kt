@@ -44,10 +44,9 @@ class SettingsFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeLis
     private fun setPreferenceSummary(preference: Preference, value: Any?) {
         val stringValue = value.toString()
         if (preference is ListPreference) {
-            val listPref = preference
-            val prefIndex = listPref.findIndexOfValue(stringValue)
+            val prefIndex = preference.findIndexOfValue(stringValue)
             if (prefIndex >= 0) {
-                preference.setSummary(listPref.entries[prefIndex])
+                preference.setSummary(preference.entries[prefIndex])
             }
         } else {
             preference.summary = stringValue

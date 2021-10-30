@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.normal_metronome_fragment.*
 import kotlinx.android.synthetic.main.normal_metronome_instructions.*
 import tech.michaeloverman.mscount.utils.Metronome
 import tech.michaeloverman.mscount.utils.MetronomeStartStopListener
+import tech.michaeloverman.mscount.utils.PrefUtils
 import timber.log.Timber
 import java.util.*
 import kotlin.math.abs
@@ -137,6 +138,11 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         help_overlay.isSoundEffectsEnabled = false
 
         updateDisplay()
+
+        if (!PrefUtils.initialHelpShown(context, PrefUtils.PREF_NORMAL_HELP)) {
+            help_overlay.visibility = View.VISIBLE
+            PrefUtils.helpScreenShown(context, PrefUtils.PREF_NORMAL_HELP)
+        }
     }
 
     override fun onPause() {

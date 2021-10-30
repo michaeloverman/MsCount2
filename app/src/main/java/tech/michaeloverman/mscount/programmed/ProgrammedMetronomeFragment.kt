@@ -20,7 +20,9 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.perf.metrics.AddTrace
+import kotlinx.android.synthetic.main.oddmeter_metronome_layout.*
 import kotlinx.android.synthetic.main.programmed_fragment.*
+import kotlinx.android.synthetic.main.programmed_fragment.help_overlay
 import kotlinx.android.synthetic.main.programmed_metronome_instructions.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.database.LoadNewProgramActivity
@@ -143,6 +145,11 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         help_overlay.isSoundEffectsEnabled = false
         if (mCurrentPiece != null) {
             updateGUI()
+        }
+
+        if (!PrefUtils.initialHelpShown(context, PrefUtils.PREF_PROGRAM_HELP)) {
+            help_overlay.visibility = View.VISIBLE
+            PrefUtils.helpScreenShown(context, PrefUtils.PREF_PROGRAM_HELP)
         }
     }
 

@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.odd_metronome_instructions.*
 import kotlinx.android.synthetic.main.oddmeter_metronome_layout.*
 import tech.michaeloverman.mscount.utils.Metronome
 import tech.michaeloverman.mscount.utils.MetronomeStartStopListener
+import tech.michaeloverman.mscount.utils.PrefUtils
 import timber.log.Timber
 import java.util.*
 import kotlin.math.abs
@@ -113,6 +114,11 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         }
         help_overlay.isSoundEffectsEnabled = false
         updateTempoDisplay()
+
+        if (!PrefUtils.initialHelpShown(context, PrefUtils.PREF_ODD_HELP)) {
+            help_overlay.visibility = View.VISIBLE
+            PrefUtils.helpScreenShown(context, PrefUtils.PREF_ODD_HELP)
+        }
     }
 
     private fun ignoreClicks() {
