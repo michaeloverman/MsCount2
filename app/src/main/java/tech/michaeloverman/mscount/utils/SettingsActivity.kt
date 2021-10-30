@@ -18,6 +18,10 @@ class SettingsActivity : AppCompatActivity() {
         // get setting list file names from originating intent
         mEntries = intent.getStringArrayExtra(MetronomeActivity.EXTRA_ENTRIES) as Array<String>
         mValues = intent.getStringArrayExtra(MetronomeActivity.EXTRA_VALUES) as Array<String>
+    }
+
+    override fun onResume() {
+        super.onResume()
         setContentView(R.layout.settings_activity)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
