@@ -89,6 +89,7 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         decimals.setOnClickListener { onDecimalRadioButtonClicked() }
 
         help_cancel_button.setOnClickListener { help_overlay.visibility = View.INVISIBLE }
+        help_overlay.setOnClickListener { ignoreClicks() }
 
         // use the "naked" listener to catch ACTION_UP (release) for resetting tempo
         // otherwise defer to GestureDetector to handle scrolling

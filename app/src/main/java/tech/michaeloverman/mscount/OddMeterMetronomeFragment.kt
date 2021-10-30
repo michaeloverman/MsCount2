@@ -57,6 +57,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         help_cancel_button.setOnClickListener { help_overlay.visibility = View.INVISIBLE }
+        help_overlay.setOnClickListener { ignoreClicks() }
 
         one_subs_button.setOnClickListener { addSubdivision(one_subs_button.text.toString()) }
         two_subs_button.setOnClickListener { addSubdivision(two_subs_button.text.toString()) }
@@ -109,6 +110,10 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         }
         help_overlay.isSoundEffectsEnabled = false
         updateTempoDisplay()
+    }
+
+    private fun ignoreClicks() {
+        // catch and ignore click on the help screen, so other buttons aren't functional0
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

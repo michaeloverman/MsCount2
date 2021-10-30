@@ -2,7 +2,6 @@
 package tech.michaeloverman.mscount.programmed
 
 import android.app.Activity
-import android.content.BroadcastReceiver
 import android.content.ContentValues
 import android.content.Intent
 import android.database.Cursor
@@ -10,21 +9,19 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.view.*
-import android.widget.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.perf.metrics.AddTrace
+import kotlinx.android.synthetic.main.programmed_fragment.*
+import kotlinx.android.synthetic.main.programmed_metronome_instructions.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.database.LoadNewProgramActivity
 import tech.michaeloverman.mscount.database.ProgramDatabaseSchema
@@ -44,50 +41,19 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     private var mCurrentTempo = 0
     private var mCurrentComposer: String? = null
     private var mIsCurrentFavorite = false
-    private var mMetronome: Metronome? = null
+    private lateinit var mMetronome: Metronome
     private var mMetronomeRunning = false
 
-    //    private WearNotification mWearNotification;
-    private var mMetronomeBroadcastReceiver: BroadcastReceiver? = null
-
-    //    private boolean mHasWearDevice;
-    @BindView(R.id.current_composer_name)
-    var mTVCurrentComposer: TextView? = null
-
-    @BindView(R.id.current_program_title)
-    var mTVCurrentPiece: TextView? = null
-
-    @BindView(R.id.current_tempo_setting)
-    var mTVCurrentTempo: TextView? = null
-
-    @BindView(R.id.primary_beat_length_image)
-    var mBeatLengthImage: ImageView? = null
-
-    @BindView(R.id.start_stop_fab)
-    var mStartStopButton: FloatingActionButton? = null
-
-    @BindView(R.id.tempo_up_button)
-    var mTempoUpButton: ImageButton? = null
-
-    @BindView(R.id.tempo_down_button)
-    var mTempoDownButton: ImageButton? = null
-
-    @BindView(R.id.current_measure_number)
-    var mCurrentMeasureNumber: TextView? = null
-
-    @BindView(R.id.help_overlay)
-    var mInstructionsLayout: FrameLayout? = null
-
-    //    private InterstitialAd mInterstitialAd;
     private var mRunnableHandler: Handler? = null
     private var mDownRunnable: Runnable? = null
     private var mUpRunnable: Runnable? = null
     private lateinit var mActivity: ProgrammedMetronomeActivity
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
+
     private fun setUpMetronome() {
-        mMetronome = context?.let { Metronome(it) }
-        mMetronome!!.setMetronomeStartStopListener(this)
-        mMetronome!!.setProgrammedMetronomeListener(this)
+        mMetronome = Metronome(requireContext())
+        mMetronome.setMetronomeStartStopListener(this)
+        mMetronome.setProgrammedMetronomeListener(this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -97,11 +63,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         mActivity = activity as ProgrammedMetronomeActivity
         setUpMetronome()
 
-//        mHasWearDevice = PrefUtils.wearPresent(mActivity);
-//        if(mHasWearDevice) {
-//            createAndRegisterBroadcastReceiver();
-//        }
-        mActivity!!.title = getString(R.string.app_name)
+        mActivity.title = getString(R.string.app_name)
         if (savedInstanceState != null) {
             Timber.d("found savedInstanceState")
             //            mCurrentTempo = savedInstanceState.getInt(CURRENT_TEMPO_KEY);
@@ -139,26 +101,24 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.programmed_fragment, container, false)
-        ButterKnife.bind(this, view)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.programmed_fragment, container, false)
+    }
 
-//        mInterstitialAd = new InterstitialAd(mActivity);
-//        mInterstitialAd.setAdUnitId(getString(R.string.programmed_interstitial_unit_id));
-//        AdRequest.Builder adBuilder = new AdRequest.Builder();
-//        if(BuildConfig.DEBUG) {
-//            adBuilder.addTestDevice(getString(R.string.test_device_code));
-//        }
-//        final AdRequest adRequest = adBuilder.build();
-//        mInterstitialAd.loadAd(adRequest);
-//        mInterstitialAd.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdClosed() {
-//                super.onAdClosed();
-//                mInterstitialAd.loadAd(adRequest);
-//            }
-//        });
-        mTempoDownButton!!.setOnTouchListener { v: View?, event: MotionEvent ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        help_cancel_button.setOnClickListener { help_overlay.visibility = View.INVISIBLE }
+        current_composer_name.setOnClickListener { selectNewProgram() }
+        current_program_title.setOnClickListener { selectNewProgram() }
+        start_stop_fab.setOnClickListener { metronomeStartStop() }
+        help_overlay.setOnClickListener { ignoreClicks() }
+
+        tempo_down_button.setOnTouchListener { v: View?, event: MotionEvent ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> mRunnableHandler!!.post(mDownRunnable!!)
                 MotionEvent.ACTION_UP -> {
@@ -169,7 +129,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             }
             true
         }
-        mTempoUpButton!!.setOnTouchListener { v: View?, event: MotionEvent ->
+        tempo_up_button.setOnTouchListener { v: View?, event: MotionEvent ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> mRunnableHandler!!.post(mUpRunnable!!)
                 MotionEvent.ACTION_UP -> {
@@ -180,11 +140,10 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             }
             true
         }
-        mInstructionsLayout!!.isSoundEffectsEnabled = false
+        help_overlay.isSoundEffectsEnabled = false
         if (mCurrentPiece != null) {
             updateGUI()
         }
-        return view
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -202,10 +161,6 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         Timber.d("onPause()")
         if (mMetronomeRunning) metronomeStartStop()
 
-//        cancelWearNotification();
-        if (mMetronomeBroadcastReceiver != null) {
-            requireActivity().unregisterReceiver(mMetronomeBroadcastReceiver)
-        }
         PrefUtils.saveCurrentProgramToPrefs(mActivity, mActivity!!.useFirebase,
                 mCurrentPieceKey, mCurrentTempo)
         super.onPause()
@@ -288,24 +243,16 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     }
 
     private fun makeInstructionsVisible() {
-        mInstructionsLayout!!.visibility = View.VISIBLE
+        help_overlay.visibility = View.VISIBLE
     }
 
-    @OnClick(R.id.help_cancel_button)
-    fun instructionsCancelled() {
-        mInstructionsLayout!!.visibility = View.INVISIBLE
-    }
-
-    @OnClick(R.id.current_composer_name, R.id.current_program_title)
-    fun selectNewProgram() {
-//        cancelWearNotification();
+    private fun selectNewProgram() {
         val intent = Intent(mActivity, LoadNewProgramActivity::class.java)
                 .putExtra(EXTRA_COMPOSER_NAME, mCurrentComposer)
                 .putExtra(EXTRA_USE_FIREBASE, mActivity!!.useFirebase)
         startActivityForResult(intent, REQUEST_NEW_PROGRAM)
     }
 
-    @OnClick(R.id.start_stop_fab)
     override fun metronomeStartStop() {
         if (mCurrentTempo == 0) {
             return
@@ -324,31 +271,26 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             Timber.d("metronomeStop() %s", mCurrentComposer)
             mMetronome!!.stop()
             mMetronomeRunning = false
-            mStartStopButton!!.setImageResource(android.R.drawable.ic_media_play)
-            mCurrentMeasureNumber!!.setText(R.string.double_dash_no_measure_number)
+            start_stop_fab.setImageResource(android.R.drawable.ic_media_play)
+            current_measure_number.setText(R.string.double_dash_no_measure_number)
         } else {
             Timber.d("metronomeStart() %s", mCurrentPiece!!.title)
             mMetronomeRunning = true
-            mStartStopButton!!.setImageResource(android.R.drawable.ic_media_pause)
+            start_stop_fab.setImageResource(android.R.drawable.ic_media_pause)
             mMetronome!!.play(mCurrentPiece!!, mCurrentTempo)
         }
-        //        if(mHasWearDevice) mWearNotification.sendStartStop();
     }
 
     override fun metronomeMeasureNumber(mm: String?) {
-        mCurrentMeasureNumber!!.text = mm
+        current_measure_number.text = mm
     }
 
     override fun metronomeStopAndShowAd() {
         metronomeStartStop()
 
-//        if(mInterstitialAd.isLoaded()) {
-//            mInterstitialAd.show();
-//        }
     }
 
-    @OnClick(R.id.help_overlay)
-    fun ignoreClicks() {
+    private fun ignoreClicks() {
         // catch and ignore click on the help screen, so other buttons aren't functional0
     }
 
@@ -458,7 +400,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     }
 
     private fun updateTempoView() {
-        mTVCurrentTempo!!.text = mCurrentTempo.toString()
+        current_tempo_setting.text = mCurrentTempo.toString()
     }
 
     private fun getNoteImageResource(noteValue: Int): Int {
@@ -504,7 +446,6 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         }
         updateGUI()
 
-//        updateWearNotif();
         if (mCurrentPiece!!.firebaseId != null) {
             CheckIfFavoriteTask().execute(mCurrentPiece!!.firebaseId)
         } else {
@@ -514,43 +455,19 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
 
     private fun updateGUI() {
         if (mCurrentPiece == null) {
-            mTVCurrentPiece!!.setText(R.string.no_composer_empty_space)
-            mTVCurrentComposer!!.setText(R.string.select_a_program)
+            current_program_title.setText(R.string.no_composer_empty_space)
+            current_composer_name.setText(R.string.select_a_program)
         } else {
-            mTVCurrentPiece!!.text = mCurrentPiece!!.title
-            mTVCurrentComposer!!.text = mCurrentComposer
-            mBeatLengthImage!!.setImageResource(getNoteImageResource(mCurrentPiece!!.displayNoteValue))
-            mBeatLengthImage!!.contentDescription = getString(R.string.note_value_note_equals,
+            current_program_title.text = mCurrentPiece!!.title
+            current_composer_name.text = mCurrentComposer
+            primary_beat_length_image.setImageResource(getNoteImageResource(mCurrentPiece!!.displayNoteValue))
+            primary_beat_length_image.contentDescription = getString(R.string.note_value_note_equals,
                     getBeatLengthContentDescription(mCurrentPiece!!.displayNoteValue))
             mCurrentTempo = mCurrentPiece!!.defaultTempo
             updateTempoView()
         }
     }
 
-//    private fun createAndRegisterBroadcastReceiver() {
-//        if (mMetronomeBroadcastReceiver == null) {
-//            mMetronomeBroadcastReceiver = MetronomeBroadcastReceiver(this)
-//        }
-//        val filter = IntentFilter(Metronome.ACTION_METRONOME_START_STOP)
-//        //        BroadcastManager manager = LocalBroadcastManager.getInstance(mActivity);
-//        mActivity!!.registerReceiver(mMetronomeBroadcastReceiver, filter)
-//    }
-
-    //    private void updateWearNotif() {
-    //        if(mHasWearDevice) {
-    //            mWearNotification = new WearNotification(mActivity,
-    //                    mCurrentComposer, mCurrentPiece.getTitle());
-    //            mWearNotification.sendStartStop();
-    //        }
-    //    }
-    //    private void cancelWearNotification() {
-    //        if(mWearNotification != null) {
-    //            mWearNotification.cancel();
-    //        }
-    ////        if(mMetronomeBroadcastReceiver != null) {
-    ////            mActivity.unregisterReceiver(mMetronomeBroadcastReceiver);
-    ////        }
-    //    }
     private fun openProgramEditor() {
         val fragment = MetaDataEntryFragment.newInstance(mActivity, mCursor)
         parentFragmentManager.beginTransaction()
@@ -622,7 +539,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
 
         override fun onPostExecute(aBoolean: Boolean) {
             mIsCurrentFavorite = aBoolean
-            mActivity!!.invalidateOptionsMenu()
+            mActivity.invalidateOptionsMenu()
         }
 
     }
@@ -632,7 +549,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         return if (id == ID_PIECE_LOADER) {
             val queryUri = ProgramDatabaseSchema.MetProgram.CONTENT_URI
             Timber.d("Uri: %s", queryUri.toString())
-            CursorLoader(mActivity!!,
+            CursorLoader(mActivity,
                     queryUri,
                     null,
                     null,
