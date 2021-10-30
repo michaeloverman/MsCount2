@@ -19,7 +19,6 @@ import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import butterknife.OnClick
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -112,6 +111,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         enter_beats_button.setOnClickListener { enterBeatsClicked() }
         options_button.setOnClickListener { optionsButtonClicked() }
         help_cancel_button.setOnClickListener { instructionsCancelled() }
+        save_program_button.setOnClickListener { saveProgram() }
         // When a countoff value is entered, make sure it is an even divisor of the baseline subdivisions
         countoff_subdivision_entry.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -359,8 +359,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         mDataMultiplier *= multiplier
     }
 
-    @OnClick(R.id.save_program_button)
-    fun saveProgram() {
+    private fun saveProgram() {
         Timber.d("checking data entries")
         if (!validateDataEntries()) return
 
