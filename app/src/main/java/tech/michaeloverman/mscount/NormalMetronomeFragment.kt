@@ -260,8 +260,7 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         updateDisplay()
     }
 
-//    @OnClick(R.id.help_overlay)
-    fun ignoreClicks() {
+    private fun ignoreClicks() {
         // catch and ignore click on the help screen, so other buttons aren't functional
     }
 

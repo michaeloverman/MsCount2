@@ -4,7 +4,7 @@ package tech.michaeloverman.mscount.utils
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import tech.michaeloverman.mscount.R
+import kotlinx.android.synthetic.main.settings_activity.*
 
 /**
  * Created by Michael on 4/4/2017.
@@ -12,6 +12,7 @@ import tech.michaeloverman.mscount.R
 class SettingsActivity : AppCompatActivity() {
     lateinit var mEntries: Array<String>
     lateinit var mValues: Array<String>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,7 +23,9 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        setContentView(R.layout.settings_activity)
+        var l = settings_fragment
+//        setContentView(l)
+//        setContentView(R.layout.settings_frament)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 

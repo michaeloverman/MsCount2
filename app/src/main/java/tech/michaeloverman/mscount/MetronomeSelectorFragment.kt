@@ -16,13 +16,15 @@ import tech.michaeloverman.mscount.programmed.ProgrammedMetronomeActivity
  * Fragment handles selection of & transition to the different metronomes.
  * Created by Michael on 2/24/2017.
  */
-class MetronomeSelectorFragment : Fragment(), View.OnClickListener {
+class MetronomeSelectorFragment : Fragment() {
     var mBigRoundButton: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
         setHasOptionsMenu(true)
+//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.ms_count_navigation) as NavHostFragment
+//        val navController = navHostFragment.navController
     }
 
     override fun onCreateView(
@@ -36,9 +38,22 @@ class MetronomeSelectorFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mBigRoundButton = big_round_button
-        normal_metronome_button.setOnClickListener(this)
-        preprogrammed_metronome_button.setOnClickListener(this)
-        odd_meter_metronome_button.setOnClickListener(this)
+        normal_metronome_button.setOnClickListener {
+            navigateToNewFragment(NormalMetronomeFragment(), "normal")
+        }
+        preprogrammed_metronome_button.setOnClickListener {
+            navigateToProgram()
+        }
+        odd_meter_metronome_button.setOnClickListener {
+            navigateToNewFragment(OddMeterMetronomeFragment(), "odd")
+        }
+    }
+
+    private fun navigateToNewFragment(frag: Fragment, fragName: String) {
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.replace(R.id.fragment_container, frag)
+            ?.addToBackStack(fragName)
+            ?.commit()
     }
 
     companion object {
@@ -48,19 +63,12 @@ class MetronomeSelectorFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View?) {
-        val intent: Intent? = when (v) {
-            normal_metronome_button -> Intent(context, NormalMetronomeActivity::class.java)
-            odd_meter_metronome_button -> Intent(context, OddMeterMetronomeActivity::class.java)
-            preprogrammed_metronome_button -> Intent(context, ProgrammedMetronomeActivity::class.java)
-            else -> null
-        }
+    private fun navigateToProgram() {
+        val intent = Intent(context, ProgrammedMetronomeActivity::class.java)
         val sharedView: View? = mBigRoundButton
         val transitionName = getString(R.string.round_button_transition)
         val transitionOptions = ActivityOptionsCompat
             .makeSceneTransitionAnimation(requireActivity(), sharedView!!, transitionName)
-        if (intent != null) {
-            startActivity(intent, transitionOptions.toBundle())
-        }
+        startActivity(intent, transitionOptions.toBundle())
     }
 }

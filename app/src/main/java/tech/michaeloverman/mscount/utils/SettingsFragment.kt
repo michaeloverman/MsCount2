@@ -4,6 +4,8 @@ package tech.michaeloverman.mscount.utils
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -16,6 +18,11 @@ import tech.michaeloverman.mscount.R
  * Created by Michael on 4/4/2017.
  */
 class SettingsFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         val pref: Preference? = findPreference(key)
         if (pref != null) {

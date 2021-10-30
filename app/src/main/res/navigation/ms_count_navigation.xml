@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ms_count_navigation"
+    app:startDestination="@id/metronomeSelectorFragment">
+
+    <fragment
+        android:id="@+id/metronomeSelectorFragment"
+        android:name="tech.michaeloverman.mscount.MetronomeSelectorFragment"
+        android:label="MetronomeSelectorFragment"
+        tools:layout="@layout/met_selector_fragment">
+        <action
+            android:id="@+id/action_metronomeSelectorFragment_to_normalMetronomeFragment"
+            app:destination="@id/normalMetronomeFragment"
+            app:exitAnim="@android:anim/fade_out"
+            app:popUpTo="@id/metronomeSelectorFragment" />
+        <action
+            android:id="@+id/action_metronomeSelectorFragment_to_oddMeterMetronomeFragment"
+            app:destination="@id/oddMeterMetronomeFragment"
+            app:exitAnim="@android:anim/fade_out"
+            app:popUpTo="@id/metronomeSelectorFragment"  />
+        <action
+            android:id="@+id/action_metronomeSelectorFragment_to_programmedMetronomeFragment"
+            app:destination="@id/programmedMetronomeFragment"
+            app:exitAnim="@android:anim/fade_out"
+            app:popUpTo="@id/metronomeSelectorFragment"  />
+    </fragment>
+    <fragment
+        android:id="@+id/normalMetronomeFragment"
+        android:name="tech.michaeloverman.mscount.NormalMetronomeFragment"
+        android:label="NormalMetronomeFragment"
+        tools:layout="@layout/normal_metronome_fragment"/>
+    <fragment
+        android:id="@+id/oddMeterMetronomeFragment"
+        android:name="tech.michaeloverman.mscount.OddMeterMetronomeFragment"
+        android:label="OddMeterMetronomeFragment"
+        tools:layout="@layout/oddmeter_metronome_layout"/>
+    <fragment
+        android:id="@+id/programmedMetronomeFragment"
+        android:name="tech.michaeloverman.mscount.programmed.ProgrammedMetronomeFragment"
+        android:label="ProgrammedMetronomeFragment"
+        tools:layout="@layout/programmed_fragment"/>
+</navigation>

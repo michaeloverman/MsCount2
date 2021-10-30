@@ -5,24 +5,30 @@ import android.annotation.TargetApi
 import android.os.Bundle
 import android.transition.Slide
 import android.transition.TransitionInflater
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import tech.michaeloverman.mscount.utils.ClickSounds
 import timber.log.Timber
 
 /**
  * Activity that handles the 'global' app issues (API Client for wear) and the MetSelect Fragment
  */
-class MsCountActivity : SingleFragmentActivity() {
+class MsCountActivity : AppCompatActivity() {
     //    private GoogleApiClient client;
     //    private static final long CONNECTION_TIME_OUT_MS = 3000;
-    override fun createFragment(): Fragment {
-        Timber.d("MsCountActivity createFragment()")
-        return MetronomeSelectorFragment.newInstance()
-    }
+//    override fun createFragment(): Fragment {
+//        Timber.d("MsCountActivity createFragment()")
+//        return MetronomeSelectorFragment.newInstance()
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("MsCountActivity onCreate()")
+
+        setContentView(R.layout.activity_fragment)
+        supportFragmentManager.findFragmentById(R.id.fragment_container)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, MetronomeSelectorFragment())
+            .commit()
 
 //        MobileAds.initialize(getApplicationContext(), "ca-app-pub-9915736656105375~9633528243");
 
