@@ -10,16 +10,22 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.ErrorCodes
+import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.perf.metrics.AddTrace
+import tech.michaeloverman.mscount.BuildConfig
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.database.LoadNewProgramActivity
 import tech.michaeloverman.mscount.database.ProgramDatabaseSchema
@@ -35,6 +41,11 @@ import timber.log.Timber
  * Created by Michael on 2/24/2017.
  */
 class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, ProgrammedMetronomeListener, LoaderManager.LoaderCallbacks<Cursor?> {
+    private var mAuth: FirebaseAuth? = null
+    private var mAuthListener: FirebaseAuth.AuthStateListener? = null
+    var useFirebase = false
+    private var databaseMenuItem: MenuItem? = null
+
     private var mCurrentPiece: PieceOfMusic? = null
     private var mCurrentPieceKey: String? = null
     private var mCurrentTempo = 0
@@ -46,7 +57,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     private var mRunnableHandler: Handler? = null
     private var mDownRunnable: Runnable? = null
     private var mUpRunnable: Runnable? = null
-    private lateinit var mActivity: ProgrammedMetronomeActivity
+    private lateinit var mActivity: AppCompatActivity
     private var mFirebaseAnalytics: FirebaseAnalytics? = null
 
     private fun setUpMetronome() {
@@ -59,8 +70,26 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         super.onCreate(savedInstanceState)
         retainInstance = true
         setHasOptionsMenu(true)
-        mActivity = activity as ProgrammedMetronomeActivity
+        mActivity = activity as AppCompatActivity
         setUpMetronome()
+
+        useFirebase = PrefUtils.usingFirebase(mActivity)
+        mAuth = FirebaseAuth.getInstance()
+        mAuthListener = FirebaseAuth.AuthStateListener { firebaseAuth: FirebaseAuth ->
+            val user = firebaseAuth.currentUser
+            if (user != null) {
+                // User is signed in
+                Timber.d("onAuthStateChanged:signed_in: %s", user.uid)
+                //                    useFirebase = true;
+            } else {
+                // User is signed out
+                Timber.d("onAuthStateChanged:signed_out")
+                goLocal()
+            }
+        }
+        if (mAuth!!.currentUser == null) {
+            signInToFirebase()
+        }
 
         mActivity.title = getString(R.string.app_name)
         if (savedInstanceState != null) {
@@ -98,6 +127,12 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             }
         }
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
+        mAuth!!.addAuthStateListener(mAuthListener!!)
+        useFirebase = PrefUtils.usingFirebase(mActivity)
+        if (databaseMenuItem != null) {
+            updateDatabaseOptionMenuItem()
+        }
     }
 
     private var _binding: ProgrammedFragmentBinding? = null
@@ -114,6 +149,9 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        if (mAuthListener != null) {
+            mAuth!!.removeAuthStateListener(mAuthListener!!)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -160,7 +198,10 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         Timber.d("onCreateOptionsMenu")
+        inflater.inflate(R.menu.programmed_global_menu, menu)
         inflater.inflate(R.menu.programmed_menu, menu)
+        databaseMenuItem = menu.findItem(R.id.firebase_local_database)
+        updateDatabaseOptionMenuItem()
         val item = menu.findItem(R.id.mark_as_favorite_menu)
         if (mIsCurrentFavorite) {
             fillFavoriteMenuItem(item)
@@ -173,7 +214,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         Timber.d("onPause()")
         if (mMetronomeRunning) metronomeStartStop()
 
-        PrefUtils.saveCurrentProgramToPrefs(mActivity, mActivity!!.useFirebase,
+        PrefUtils.saveCurrentProgramToPrefs(mActivity, useFirebase,
                 mCurrentPieceKey, mCurrentTempo)
         super.onPause()
     }
@@ -189,6 +230,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(KEY_USE_FIREBASE, useFirebase)
         if (mCurrentPiece != null) {
             outState.putString(CURRENT_PIECE_TITLE_KEY, mCurrentPiece!!.title)
             outState.putString(CURRENT_PIECE_KEY_KEY, mCurrentPieceKey)
@@ -200,7 +242,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
 
     override fun onDestroy() {
         Timber.d("onDestroy() saving prefs....")
-        PrefUtils.saveCurrentProgramToPrefs(mActivity, mActivity!!.useFirebase,
+        PrefUtils.saveCurrentProgramToPrefs(mActivity, useFirebase,
                 mCurrentPieceKey, mCurrentTempo)
         Timber.d("Should have just saved $mCurrentPieceKey at $mCurrentTempo BPM")
         mCursor = null
@@ -210,21 +252,59 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Timber.d("FRAGMENT: onActivityResult()")
+        if (requestCode == FIREBASE_SIGN_IN) {
+            val response = IdpResponse.fromResultIntent(data)
+
+            // Successfully signed in
+            if (resultCode == AppCompatActivity.RESULT_OK) {
+//                startActivity(SignedInActivity.createIntent(this, response));
+//                finish();
+                Timber.d("signed into Firebase")
+            } else {
+                // Sign in failed
+                if (response == null) {
+                    // User pressed back button
+                    showToast(R.string.sign_in_cancelled)
+                } else if (response.error!!.errorCode == ErrorCodes.NO_NETWORK) {
+                    showToast(R.string.no_internet_connection)
+                } else if (response.error!!.errorCode == ErrorCodes.UNKNOWN_ERROR) {
+                    showToast(R.string.unknown_error)
+                } else {
+                    showToast(R.string.unknown_sign_in_response)
+                }
+                goLocal()
+            }
+        }
         if (resultCode != Activity.RESULT_OK) {
             Toast.makeText(mActivity, R.string.return_result_problem, Toast.LENGTH_SHORT).show()
             return
         }
         if (requestCode == REQUEST_NEW_PROGRAM) {
             Timber.d("REQUEST_NEW_PROGRAM result received")
-            mActivity.useFirebase = PrefUtils.usingFirebase(mActivity)
+            useFirebase = PrefUtils.usingFirebase(mActivity)
             mCurrentPieceKey = data!!.getStringExtra(LoadNewProgramActivity.EXTRA_NEW_PROGRAM)
             pieceFromKey
         }
+    }
+    private fun showToast(message: Int) {
+        val m = getString(message)
+        Toast.makeText(mActivity, m, Toast.LENGTH_SHORT).show()
+        Timber.d(m)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Timber.d("FRAGMENT: onOptionsItemSelected()")
         return when (item.itemId) {
+            R.id.firebase_local_database -> {
+                useFirebase = !useFirebase
+                if (useFirebase) {
+                    if (mAuth!!.currentUser == null) {
+                        signInToFirebase()
+                    }
+                }
+                updateDatabaseOptionMenuItem()
+                true
+            }
             R.id.create_new_program_option -> {
                 openProgramEditor()
                 true
@@ -253,6 +333,33 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             else -> super.onOptionsItemSelected(item)
         }
     }
+    private fun signInToFirebase() {
+        val providers = listOf(
+            AuthUI.IdpConfig.EmailBuilder().build() //				new AuthUI.IdpConfig.PhoneBuilder().build(),
+            //				new AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setIsSmartLockEnabled(!BuildConfig.DEBUG)
+                .setTheme(R.style.AppTheme_FirebaseSignIn)
+                .setAvailableProviders(providers)
+                .build(),
+            FIREBASE_SIGN_IN
+        )
+    }
+
+    private fun updateDatabaseOptionMenuItem() {
+        Timber.d("updateDatabaseOptionMenuItem")
+        PrefUtils.saveFirebaseStatus(mActivity, useFirebase)
+        databaseMenuItem?.setTitle(if (useFirebase) R.string.use_local_database else R.string.use_cloud_database)
+    }
+
+    private fun goLocal() {
+        useFirebase = false
+        updateDatabaseOptionMenuItem()
+    }
+
 
     private fun makeInstructionsVisible() {
         binding.helpOverlay.visibility = View.VISIBLE
@@ -261,7 +368,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     private fun selectNewProgram() {
         val intent = Intent(mActivity, LoadNewProgramActivity::class.java)
                 .putExtra(EXTRA_COMPOSER_NAME, mCurrentComposer)
-                .putExtra(EXTRA_USE_FIREBASE, mActivity!!.useFirebase)
+                .putExtra(EXTRA_USE_FIREBASE, useFirebase)
         startActivityForResult(intent, REQUEST_NEW_PROGRAM)
     }
 
@@ -281,7 +388,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         }
         if (mMetronomeRunning) {
             Timber.d("metronomeStop() %s", mCurrentComposer)
-            mMetronome!!.stop()
+            mMetronome.stop()
             mMetronomeRunning = false
             binding.startStopFab.setImageResource(android.R.drawable.ic_media_play)
             binding.currentMeasureNumber.setText(R.string.double_dash_no_measure_number)
@@ -289,7 +396,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             Timber.d("metronomeStart() %s", mCurrentPiece!!.title)
             mMetronomeRunning = true
             binding.startStopFab.setImageResource(android.R.drawable.ic_media_pause)
-            mMetronome!!.play(mCurrentPiece!!, mCurrentTempo)
+            mMetronome.play(mCurrentPiece!!, mCurrentTempo)
         }
     }
 
@@ -307,18 +414,18 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     }
 
     private fun checkKeyFormat() {
-        Timber.d("Firebase: " + mActivity!!.useFirebase + " :: key: " + mCurrentPieceKey!![0])
+        Timber.d("Firebase: " + useFirebase + " :: key: " + mCurrentPieceKey!![0])
         if (mCurrentPieceKey!![0] == '-') {
-            mActivity!!.useFirebase = true
+            useFirebase = true
             PrefUtils.saveFirebaseStatus(mActivity, true)
         } else {
-            mActivity!!.useFirebase = false
+            useFirebase = false
             PrefUtils.saveFirebaseStatus(mActivity, false)
         }
     }
 
     private val pieceFromKey: Unit
-        private get() {
+        get() {
             Timber.d("getPieceFromKey() %s", mCurrentPieceKey)
             if (mCurrentPieceKey!![0] == '-') {
                 pieceFromFirebase
@@ -335,7 +442,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
 
     @get:AddTrace(name = "getPieceFromFirebase", enabled = true)
     private val pieceFromFirebase: Unit
-        private get() {
+        get() {
             Timber.d("getPieceFromFirebase()")
             FirebaseDatabase.getInstance().reference.child("pieces").child(mCurrentPieceKey!!)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -355,10 +462,9 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     //        mCursor.close();
     @get:AddTrace(name = "getPieceFromSql", enabled = true)
     private val pieceFromSql: Unit
-        private get() {
+        get() {
             Timber.d("getPieceFromSql()")
-            val localDbId: Int
-            localDbId = try { // TODO This needs to be handled better. This method should NOT be called unless we are in the local database. How is it being called with Firebase ids in the first place?
+            val localDbId: Int = try { // TODO This needs to be handled better. This method should NOT be called unless we are in the local database. How is it being called with Firebase ids in the first place?
                 mCurrentPieceKey!!.toInt()
             } catch (nfe: NumberFormatException) {
                 Timber.d("Piece id not a number (Firebase/local databases confused again...")
@@ -481,7 +587,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     }
 
     private fun openProgramEditor() {
-        val fragment = MetaDataEntryFragment.newInstance(mActivity, mCursor)
+        val fragment = MetaDataEntryFragment.newInstance(mActivity, mCursor, useFirebase)
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
@@ -610,6 +716,9 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         private const val ONE_LESS = INITIAL_TEMPO_CHANGE_DELAY - 2
         private const val MIN_TEMPO_CHANGE_DELAY = 20
         private var mCursor: Cursor? = null
+        private const val FIREBASE_SIGN_IN = 456
+        private const val KEY_USE_FIREBASE = "use_firebase_key"
+        const val PROGRAM_ID_EXTRA = "program_id_extra_from_widget"
         fun newInstance(): Fragment {
             return ProgrammedMetronomeFragment()
         }

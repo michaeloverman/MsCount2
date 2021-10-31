@@ -1,16 +1,14 @@
 /* Copyright (C) 2017 Michael Overman - All Rights Reserved */
 package tech.michaeloverman.mscount
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import tech.michaeloverman.mscount.databinding.MetSelectorFragmentBinding
-import tech.michaeloverman.mscount.programmed.ProgrammedMetronomeActivity
+import tech.michaeloverman.mscount.programmed.ProgrammedMetronomeFragment
 
 /**
  * Fragment handles selection of & transition to the different metronomes.
@@ -22,7 +20,6 @@ class MetronomeSelectorFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-        setHasOptionsMenu(true)
 //        val navHostFragment = supportFragmentManager.findFragmentById(R.id.ms_count_navigation) as NavHostFragment
 //        val navController = navHostFragment.navController
     }
@@ -50,7 +47,7 @@ class MetronomeSelectorFragment : Fragment() {
             navigateToNewFragment(NormalMetronomeFragment(), "normal")
         }
         binding.preprogrammedMetronomeButton.setOnClickListener {
-            navigateToProgram()
+            navigateToNewFragment(ProgrammedMetronomeFragment(), "program")
         }
         binding.oddMeterMetronomeButton.setOnClickListener {
             navigateToNewFragment(OddMeterMetronomeFragment(), "odd")
@@ -71,12 +68,12 @@ class MetronomeSelectorFragment : Fragment() {
         }
     }
 
-    private fun navigateToProgram() {
-        val intent = Intent(context, ProgrammedMetronomeActivity::class.java)
-        val sharedView: View? = mBigRoundButton
-        val transitionName = getString(R.string.round_button_transition)
-        val transitionOptions = ActivityOptionsCompat
-            .makeSceneTransitionAnimation(requireActivity(), sharedView!!, transitionName)
-        startActivity(intent, transitionOptions.toBundle())
-    }
+//    private fun navigateToProgram() {
+//        val intent = Intent(context, ProgrammedMetronomeActivity::class.java)
+//        val sharedView: View? = mBigRoundButton
+//        val transitionName = getString(R.string.round_button_transition)
+//        val transitionOptions = ActivityOptionsCompat
+//            .makeSceneTransitionAnimation(requireActivity(), sharedView!!, transitionName)
+//        startActivity(intent, transitionOptions.toBundle())
+//    }
 }

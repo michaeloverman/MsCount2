@@ -13,6 +13,7 @@ import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
@@ -33,12 +34,12 @@ import tech.michaeloverman.mscount.dataentry.DataEntryFragment.Companion.newInst
 import tech.michaeloverman.mscount.dataentry.DataEntryFragment.DataMultipliedListener
 import tech.michaeloverman.mscount.pojos.DataEntry
 import tech.michaeloverman.mscount.pojos.PieceOfMusic
-import tech.michaeloverman.mscount.programmed.ProgrammedMetronomeActivity
 import tech.michaeloverman.mscount.utils.Metronome
 import tech.michaeloverman.mscount.utils.PrefUtils
 import tech.michaeloverman.mscount.utils.Utilities.Companion.getContentValuesFromPiece
 import timber.log.Timber
 import java.util.*
+import kotlin.properties.Delegates
 
 /**
  * This fragment manages the UI and handles the logic for all metadata surrounding a program,
@@ -376,7 +377,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         mBuilder.firebaseId(mFirebaseId)
         mBuilder.creatorId(firebaseAuthId)
         mPieceOfMusic = mBuilder.build()
-        if (mActivity.useFirebase) {
+        if (mUseFirebase) {
             checkFirebaseForExistingData() // beginning of method chain to save to cloud
         } else {
             saveToSqlDatabase()
@@ -649,13 +650,15 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
 
     companion object {
         private const val REQUEST_NEW_PROGRAM = 1984
-        private lateinit var mActivity: ProgrammedMetronomeActivity
+        private lateinit var mActivity: AppCompatActivity
+        private var mUseFirebase by Delegates.notNull<Boolean>()
         private const val ID_PIECE_LOADER = 435
         private var mCursor: Cursor? = null
-        fun newInstance(a: ProgrammedMetronomeActivity, c: Cursor?): Fragment {
+        fun newInstance(a: AppCompatActivity, c: Cursor?, f: Boolean): Fragment {
             Timber.d("newInstance()")
             mActivity = a
             mCursor = c
+            mUseFirebase = f
             return MetaDataEntryFragment()
         }
     }

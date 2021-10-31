@@ -50,11 +50,8 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
     private val binding get() = _binding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.program_select_fragment, container, false)
-
-        Timber.d("onCreateView useFirebase: %s", mActivity.useFirebase)
-        Timber.d("Returning completed view....!!!")
-        return view
+        _binding = ProgramSelectFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
