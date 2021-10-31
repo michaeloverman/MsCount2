@@ -10,7 +10,6 @@ import android.transition.TransitionInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig.EmailBuilder
 import com.firebase.ui.auth.ErrorCodes
@@ -35,9 +34,9 @@ class ProgrammedMetronomeActivity : MetronomeActivity() {
     private var mAuthListener: AuthStateListener? = null
 	var useFirebase = false
     private var databaseMenuItem: MenuItem? = null
-    override fun createFragment(): Fragment? {
-        return ProgrammedMetronomeFragment.newInstance()
-    }
+//    override fun createFragment(): Fragment? {
+//        return ProgrammedMetronomeFragment.newInstance()
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

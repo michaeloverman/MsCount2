@@ -5,14 +5,14 @@ import android.annotation.TargetApi
 import android.os.Bundle
 import android.transition.Slide
 import android.transition.TransitionInflater
-import androidx.appcompat.app.AppCompatActivity
 import tech.michaeloverman.mscount.utils.ClickSounds
+import tech.michaeloverman.mscount.utils.MetronomeActivity
 import timber.log.Timber
 
 /**
  * Activity that handles the 'global' app issues (API Client for wear) and the MetSelect Fragment
  */
-class MsCountActivity : AppCompatActivity() {
+class MsCountActivity : MetronomeActivity() {
     //    private GoogleApiClient client;
     //    private static final long CONNECTION_TIME_OUT_MS = 3000;
 //    override fun createFragment(): Fragment {

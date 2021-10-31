@@ -69,7 +69,14 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
         }
         mSubdivisionFabColors = requireContext().resources.getIntArray(R.array.subdivision_colors)
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
+        setHasOptionsMenu(true)
     }
+
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//        inflater.inflate(R.menu.normal_menu, menu)
+//    }
 
     private var _binding: NormalMetronomeFragmentBinding? = null
     private val binding get() = _binding!!
