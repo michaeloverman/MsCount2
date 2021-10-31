@@ -43,6 +43,7 @@
             />
     </FrameLayout>
     <include layout="@layout/select_program_list_layout"
+        android:id="@+id/select_program_include"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

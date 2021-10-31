@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.list_item_work.view.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.database.WorksListAdapter.WorksViewHolder
 import tech.michaeloverman.mscount.pojos.TitleKeyObject
@@ -77,7 +76,7 @@ class WorksListAdapter     //        mTitles = titles;
     }
 
     inner class WorksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        var title: TextView = itemView.work_title
+        var title: TextView = itemView.findViewById(R.id.work_title)
         override fun onClick(v: View) {
             Timber.d("WorksViewHolder onClick()")
             val position = adapterPosition

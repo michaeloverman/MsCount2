@@ -11,8 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
-import kotlinx.android.synthetic.main.odd_metronome_instructions.*
-import kotlinx.android.synthetic.main.oddmeter_metronome_layout.*
+import tech.michaeloverman.mscount.databinding.OddmeterMetronomeLayoutBinding
 import tech.michaeloverman.mscount.utils.Metronome
 import tech.michaeloverman.mscount.utils.MetronomeStartStopListener
 import tech.michaeloverman.mscount.utils.PrefUtils
@@ -49,45 +48,47 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         mSubdivisionViews = ArrayList()
     }
 
+    private var _binding: OddmeterMetronomeLayoutBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        return inflater.inflate(R.layout.oddmeter_metronome_layout, container, false)
+        _binding = OddmeterMetronomeLayoutBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        help_cancel_button.setOnClickListener { help_overlay.visibility = View.INVISIBLE }
-        help_overlay.setOnClickListener { ignoreClicks() }
+        binding.overlayInclude.helpCancelButton.setOnClickListener { binding.helpOverlay.visibility = View.INVISIBLE }
+        binding.helpOverlay.setOnClickListener { ignoreClicks() }
 
-        one_subs_button.setOnClickListener { addSubdivision(one_subs_button.text.toString()) }
-        two_subs_button.setOnClickListener { addSubdivision(two_subs_button.text.toString()) }
-        three_subs_button.setOnClickListener { addSubdivision(three_subs_button.text.toString()) }
-        four_subs_button.setOnClickListener { addSubdivision(four_subs_button.text.toString()) }
-        five_subs_button.setOnClickListener { addSubdivision(five_subs_button.text.toString()) }
-        six_subs_button.setOnClickListener { addSubdivision(six_subs_button.text.toString()) }
-        seven_subs_button.setOnClickListener { addSubdivision(seven_subs_button.text.toString()) }
-        eight_subs_button.setOnClickListener { addSubdivision(eight_subs_button.text.toString()) }
-        nine_subs_button.setOnClickListener { addSubdivision(nine_subs_button.text.toString()) }
-        ten_subs_button.setOnClickListener { addSubdivision(ten_subs_button.text.toString()) }
-        other_subs_button.setOnClickListener {
-            extra_subdivision_buttons.visibility = if (extra_subdivision_buttons.isShown) View.GONE
+        binding.oneSubsButton.setOnClickListener { addSubdivision(binding.oneSubsButton.text.toString()) }
+        binding.twoSubsButton.setOnClickListener { addSubdivision(binding.twoSubsButton.text.toString()) }
+        binding.threeSubsButton.setOnClickListener { addSubdivision(binding.threeSubsButton.text.toString()) }
+        binding.fourSubsButton.setOnClickListener { addSubdivision(binding.fourSubsButton.text.toString()) }
+        binding.fiveSubsButton.setOnClickListener { addSubdivision(binding.fiveSubsButton.text.toString()) }
+        binding.sixSubsButton.setOnClickListener { addSubdivision(binding.sixSubsButton.text.toString()) }
+        binding.sevenSubsButton.setOnClickListener { addSubdivision(binding.sevenSubsButton.text.toString()) }
+        binding.eightSubsButton.setOnClickListener { addSubdivision(binding.eightSubsButton.text.toString()) }
+        binding.nineSubsButton.setOnClickListener { addSubdivision(binding.nineSubsButton.text.toString()) }
+        binding.tenSubsButton.setOnClickListener { addSubdivision(binding.tenSubsButton.text.toString()) }
+        binding.otherSubsButton.setOnClickListener {
+            binding.extraSubdivisionButtons.visibility = if (binding.extraSubdivisionButtons.isShown) View.GONE
             else View.VISIBLE
         }
-        delete_button.setOnClickListener { deleteSubdivision() }
+        binding.deleteButton.setOnClickListener { deleteSubdivision() }
 
-        pulse_multiplier_view.setOnClickListener { multiplierSelected() }
-        include_subdivisions_checkBox.setOnClickListener { subdivisionsOnOff() }
-        include_subdivisions_checkBox.isChecked = subdivCheck
+        binding.pulseMultiplierView.setOnClickListener { multiplierSelected() }
+        binding.includeSubdivisionsCheckBox.setOnClickListener { subdivisionsOnOff() }
+        binding.includeSubdivisionsCheckBox.isChecked = subdivCheck
 
-        oddmeter_start_stop_fab.setOnClickListener { metronomeStartStop() }
+        binding.oddmeterStartStopFab.setOnClickListener { metronomeStartStop() }
 
-        // use the "naked" listener to catch ACTION_UP (release) to reset tempo
+        // use the "naked" listener to catch ACTIONuP (release) to reset tempo
         // defer to GestureDetector to handle scrolling/changing tempo
-        oddmeter_tempo_view.setOnTouchListener { _: View?, event: MotionEvent ->
+        binding.oddmeterTempoView.setOnTouchListener { _: View?, event: MotionEvent ->
             val action = event.action
             if (action == MotionEvent.ACTION_UP) {
                 if (mMetronomeRunning) {
@@ -112,11 +113,11 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
             mSubdivisionsList!!.add(subdiv)
             mSubdivisionViews!!.add(getNewSubdivisionView(subdiv))
         }
-        help_overlay.isSoundEffectsEnabled = false
+        binding.helpOverlay.isSoundEffectsEnabled = false
         updateTempoDisplay()
 
         if (!PrefUtils.initialHelpShown(context, PrefUtils.PREF_ODD_HELP)) {
-            help_overlay.visibility = View.VISIBLE
+            binding.helpOverlay.visibility = View.VISIBLE
             PrefUtils.helpScreenShown(context, PrefUtils.PREF_ODD_HELP)
         }
     }
@@ -128,7 +129,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Timber.d("menu item caught: %s", item.title)
         return if (item.itemId == R.id.help_menu_item) {
-            help_overlay.visibility = View.VISIBLE
+            binding.helpOverlay.visibility = View.VISIBLE
             true
         } else {
             super.onOptionsItemSelected(item)
@@ -144,13 +145,13 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         val beat = button.toInt()
         if (mMultiplierSelected) {
             mMultiplier = beat
-            pulse_multiplier_view.text = getString(R.string.pulse_equals, beat)
+            binding.pulseMultiplierView.text = getString(R.string.pulse_equals, beat)
             multiplierSelected()
             return
         }
         mSubdivisionsList!!.add(beat)
         mSubdivisionViews!!.add(getNewSubdivisionView(beat))
-        if (extra_subdivision_buttons.isShown) extra_subdivision_buttons.visibility = View.GONE
+        if (binding.extraSubdivisionButtons.isShown) binding.extraSubdivisionButtons.visibility = View.GONE
         if (wasRunning) metronomeStartStop()
     }
 
@@ -163,7 +164,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
             metronomeStartStop()
         }
         mSubdivisionsList!!.removeAt(mSubdivisionsList!!.size - 1)
-        subdivision_layout.removeView(mSubdivisionViews!![mSubdivisionViews!!.size - 1])
+        binding.subdivisionLayout.removeView(mSubdivisionViews!![mSubdivisionViews!!.size - 1])
         mSubdivisionViews!!.removeAt(mSubdivisionViews!!.size - 1)
         if (wasRunning && mSubdivisionsList!!.size > 0) metronomeStartStop()
     }
@@ -171,10 +172,10 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
     private fun multiplierSelected() {
         if (mMultiplierSelected) {
             mMultiplierSelected = false
-            pulse_multiplier_view.background = ContextCompat.getDrawable(requireActivity(), R.drawable.roundcorner_light)
-            if (extra_subdivision_buttons.isShown) extra_subdivision_buttons.visibility = View.GONE
+            binding.pulseMultiplierView.background = ContextCompat.getDrawable(requireActivity(), R.drawable.roundcorner_light)
+            if (binding.extraSubdivisionButtons.isShown) binding.extraSubdivisionButtons.visibility = View.GONE
         } else {
-            pulse_multiplier_view.background = ContextCompat.getDrawable(requireActivity(), R.drawable.roundcorner_accent)
+            binding.pulseMultiplierView.background = ContextCompat.getDrawable(requireActivity(), R.drawable.roundcorner_accent)
             mMultiplierSelected = true
         }
     }
@@ -202,7 +203,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
     }
 
     private fun subdivisionsOnOff() {
-        subdivCheck = include_subdivisions_checkBox.isChecked
+        subdivCheck = binding.includeSubdivisionsCheckBox.isChecked
         if (mMetronome.isRunning) {
             metronomeStartStop()
             metronomeStartStop()
@@ -215,7 +216,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         if (mMetronomeRunning) {
             mMetronome.stop()
             mMetronomeRunning = false
-            oddmeter_start_stop_fab.setImageResource(android.R.drawable.ic_media_play)
+            binding.oddmeterStartStopFab.setImageResource(android.R.drawable.ic_media_play)
         } else {
             if (mSubdivisionsList!!.size == 0) {
                 Toast.makeText(context, R.string.need_subdivs_to_click_subdivs,
@@ -223,7 +224,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
                 return
             }
             mMetronomeRunning = true
-            oddmeter_start_stop_fab.setImageResource(android.R.drawable.ic_media_pause)
+            binding.oddmeterStartStopFab.setImageResource(android.R.drawable.ic_media_pause)
             mMetronome.play(mBPM.toInt() * mMultiplier, mSubdivisionsList!!,
                 subdivCheck)
         }
@@ -236,8 +237,8 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
     }
 
     private fun updateTempoDisplay() {
-        oddmeter_tempo_view.text = mBPM.toInt().toString()
-        pulse_multiplier_view.text = getString(R.string.pulse_equals, mMultiplier)
+        binding.oddmeterTempoView.text = mBPM.toInt().toString()
+        binding.pulseMultiplierView.text = getString(R.string.pulse_equals, mMultiplier)
     }
 
     private fun getNewSubdivisionView(value: Int): View {
@@ -251,7 +252,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         params.setMargins(MARGIN, MARGIN, MARGIN, MARGIN)
         view.layoutParams = params
-        subdivision_layout.addView(view)
+        binding.subdivisionLayout.addView(view)
         return view
     }
 

@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.met_selector_fragment.*
+import tech.michaeloverman.mscount.databinding.MetSelectorFragmentBinding
 import tech.michaeloverman.mscount.programmed.ProgrammedMetronomeActivity
 
 /**
@@ -27,24 +27,32 @@ class MetronomeSelectorFragment : Fragment() {
 //        val navController = navHostFragment.navController
     }
 
+    private var _binding: MetSelectorFragmentBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.met_selector_fragment, container, false)
+        _binding = MetSelectorFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mBigRoundButton = big_round_button
-        normal_metronome_button.setOnClickListener {
+        mBigRoundButton = binding.bigRoundButton
+        binding.normalMetronomeButton.setOnClickListener {
             navigateToNewFragment(NormalMetronomeFragment(), "normal")
         }
-        preprogrammed_metronome_button.setOnClickListener {
+        binding.preprogrammedMetronomeButton.setOnClickListener {
             navigateToProgram()
         }
-        odd_meter_metronome_button.setOnClickListener {
+        binding.oddMeterMetronomeButton.setOnClickListener {
             navigateToNewFragment(OddMeterMetronomeFragment(), "odd")
         }
     }

@@ -234,6 +234,7 @@
         android:background="@color/transparentBlack"
         android:elevation="12dp">
         <include layout="@layout/odd_metronome_instructions"
+            android:id="@+id/overlay_include"
                  android:layout_height="match_parent"
                  android:layout_width="match_parent"
             />

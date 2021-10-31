@@ -13,10 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.perf.metrics.AddTrace
-import kotlinx.android.synthetic.main.data_input_instructions.*
-import kotlinx.android.synthetic.main.data_input_layout.*
-import kotlinx.android.synthetic.main.data_input_single_entry_layout.view.*
 import tech.michaeloverman.mscount.R
+import tech.michaeloverman.mscount.databinding.DataInputLayoutBinding
 import tech.michaeloverman.mscount.dataentry.DataEntryFragment.DataListAdapter.DataViewHolder
 import tech.michaeloverman.mscount.pojos.DataEntry
 import tech.michaeloverman.mscount.pojos.PieceOfMusic
@@ -59,47 +57,48 @@ class DataEntryFragment : Fragment() {
         }
     }
 
+    private var _binding: DataInputLayoutBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.data_input_layout, container, false)
-//        mBarlineButton.a
-        return view
+        _binding = DataInputLayoutBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        repeat_sign.setOnClickListener { repeatSignClicked() }
-        one.setOnClickListener { dataEntered(one) }
-        two.setOnClickListener { dataEntered(two) }
-        three.setOnClickListener { dataEntered(three) }
-        four.setOnClickListener { dataEntered(four) }
-        five.setOnClickListener { dataEntered(five) }
-        six.setOnClickListener { dataEntered(six) }
-        seven.setOnClickListener { dataEntered(seven) }
-        eight.setOnClickListener { dataEntered(eight) }
-        nine.setOnClickListener { dataEntered(nine) }
-        ten.setOnClickListener { dataEntered(ten) }
-        twelve.setOnClickListener { dataEntered(twelve) }
-        other.setOnClickListener { dataEntered(other) }
-        barline.setOnClickListener { dataEntered(barline) }
+        binding.repeatSign.setOnClickListener { repeatSignClicked() }
+        binding.one.setOnClickListener { dataEntered(binding.one) }
+        binding.two.setOnClickListener { dataEntered(binding.two) }
+        binding.three.setOnClickListener { dataEntered(binding.three) }
+        binding.four.setOnClickListener { dataEntered(binding.four) }
+        binding.five.setOnClickListener { dataEntered(binding.five) }
+        binding.six.setOnClickListener { dataEntered(binding.six) }
+        binding.seven.setOnClickListener { dataEntered(binding.seven) }
+        binding.eight.setOnClickListener { dataEntered(binding.eight) }
+        binding.nine.setOnClickListener { dataEntered(binding.nine) }
+        binding.ten.setOnClickListener { dataEntered(binding.ten) }
+        binding.twelve.setOnClickListener { dataEntered(binding.twelve) }
+        binding.other.setOnClickListener { dataEntered(binding.other) }
+        binding.barline.setOnClickListener { dataEntered(binding.barline) }
 
-        data_back_button.setOnClickListener { back() }
-        data_save_button.setOnClickListener { saveData() }
-        data_delete_button.setOnClickListener { delete() }
+        binding.dataBackButton.setOnClickListener { back() }
+        binding.dataSaveButton.setOnClickListener { saveData() }
+        binding.dataDeleteButton.setOnClickListener { delete() }
 
-        help_cancel_button.setOnClickListener { instructionsCancelled() }
+        binding.overlayInclude.helpCancelButton.setOnClickListener { instructionsCancelled() }
 
-        data_title_view.text = mTitle
+        binding.dataTitleView.text = mTitle
         val manager = LinearLayoutManager(activity,
             LinearLayoutManager.HORIZONTAL, false)
-        entered_data_recycler_view.layoutManager = manager
+        binding.enteredDataRecyclerView.layoutManager = manager
 //        mAdapter = DataListAdapter()
-        entered_data_recycler_view.adapter = mAdapter
+        binding.enteredDataRecyclerView.adapter = mAdapter
         mAdapter.notifyDataSetChanged()
-        entered_data_recycler_view.scrollToPosition(mDataList.size - 1)
+        binding.enteredDataRecyclerView.scrollToPosition(mDataList.size - 1)
 
         if (!PrefUtils.initialHelpShown(context, PrefUtils.PREF_DATA_HELP)) {
-            help_overlay.visibility = View.VISIBLE
+            binding.helpOverlay.visibility = View.VISIBLE
             PrefUtils.helpScreenShown(context, PrefUtils.PREF_DATA_HELP)
         }
     }
@@ -154,11 +153,11 @@ class DataEntryFragment : Fragment() {
     }
 
     private fun makeInstructionsVisible() {
-        help_overlay.visibility = View.VISIBLE
+        binding.helpOverlay.visibility = View.VISIBLE
     }
 
     private fun instructionsCancelled() {
-        help_overlay.visibility = View.INVISIBLE
+        binding.helpOverlay.visibility = View.INVISIBLE
     }
 
     /**
@@ -256,9 +255,9 @@ class DataEntryFragment : Fragment() {
         }
         mAdapter.notifyDataSetChanged()
         if (mDataItemSelected) {
-            entered_data_recycler_view.scrollToPosition(mAdapter.selectedPosition)
+            binding.enteredDataRecyclerView.scrollToPosition(mAdapter.selectedPosition)
         } else {
-            entered_data_recycler_view.scrollToPosition(mDataList.size - 1)
+            binding.enteredDataRecyclerView.scrollToPosition(mDataList.size - 1)
         }
     }
 
@@ -316,7 +315,7 @@ class DataEntryFragment : Fragment() {
         // add barline at end
         mDataList.add(DataEntry(++mMeasureNumber, BARLINE))
         mAdapter.notifyDataSetChanged()
-        entered_data_recycler_view.scrollToPosition(mDataList.size - 1)
+        binding.enteredDataRecyclerView.scrollToPosition(mDataList.size - 1)
     }
 
     /**
@@ -378,7 +377,7 @@ class DataEntryFragment : Fragment() {
         }
 
         inner class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var dataEntry: TextView = itemView.data_entry
+            var dataEntry: TextView = itemView.findViewById(R.id.data_entry)
 
         }
     }

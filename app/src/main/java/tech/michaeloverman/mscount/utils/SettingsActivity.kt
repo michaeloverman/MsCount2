@@ -4,7 +4,6 @@ package tech.michaeloverman.mscount.utils
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.settings_activity.*
 
 /**
  * Created by Michael on 4/4/2017.
@@ -23,8 +22,6 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        var l = settings_fragment
-//        setContentView(l)
 //        setContentView(R.layout.settings_frament)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }

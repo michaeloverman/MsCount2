@@ -17,10 +17,9 @@ import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.program_select_fragment.*
-import kotlinx.android.synthetic.main.select_program_list_layout.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.database.WorksListAdapter.WorksListAdapterOnClickHandler
+import tech.michaeloverman.mscount.databinding.ProgramSelectFragmentBinding
 import tech.michaeloverman.mscount.pojos.TitleKeyObject
 import timber.log.Timber
 import java.util.*
@@ -47,6 +46,8 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
         mActivity = activity as LoadNewProgramActivity
     }
 
+    private var _binding: ProgramSelectFragmentBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.program_select_fragment, container, false)
@@ -59,13 +60,13 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        select_composer_button.setOnClickListener { selectComposer() }
-        composers_name_label.setOnClickListener { selectComposer() }
+        binding.selectProgramInclude.selectComposerButton.setOnClickListener { selectComposer() }
+        binding.composersNameLabel.setOnClickListener { selectComposer() }
 
         val manager = LinearLayoutManager(this.activity)
-        piece_list_recycler_view.layoutManager = manager
+        binding.selectProgramInclude.pieceListRecyclerView.layoutManager = manager
         mAdapter = WorksListAdapter(requireContext(), this)
-        piece_list_recycler_view.adapter = mAdapter
+        binding.selectProgramInclude.pieceListRecyclerView.adapter = mAdapter
 
         mCurrentComposer = mActivity.mCurrentComposer
         Timber.d("onCreate() Composer: %s", mCurrentComposer)
@@ -229,8 +230,8 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
                             for (snap in pieceList) {
                                 list.add(TitleKeyObject(snap.key!!, snap.value.toString()))
                             }
-                            mAdapter!!.setTitles(list)
-                            composers_name_label.text = mCurrentComposer
+                            mAdapter.setTitles(list)
+                            binding.composersNameLabel.text = mCurrentComposer
                             progressSpinner(false)
                         }
 
@@ -261,17 +262,21 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
     override fun onLoadFinished(loader: Loader<Cursor?>, data: Cursor?) {
         Timber.d("onLoadFinished - cursor data ready")
         progressSpinner(false)
-        if (data == null) {
-            Timber.d("data == null")
-            error_view.visibility = View.VISIBLE
-            updateEmptyProgramList()
-        } else if (data.count == 0) {
-            Timber.d("data.getCount() == 0")
-            error_view.visibility = View.VISIBLE
-            updateEmptyProgramList()
-        } else {
-            error_view.visibility = View.GONE
-            mAdapter!!.newCursor(data)
+        when {
+            data == null -> {
+                Timber.d("data == null")
+                binding.selectProgramInclude.errorView.visibility = View.VISIBLE
+                updateEmptyProgramList()
+            }
+            data.count == 0 -> {
+                Timber.d("data.getCount() == 0")
+                binding.selectProgramInclude.errorView.visibility = View.VISIBLE
+                updateEmptyProgramList()
+            }
+            else -> {
+                binding.selectProgramInclude.errorView.visibility = View.GONE
+                mAdapter.newCursor(data)
+            }
         }
     }
 
@@ -281,7 +286,7 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
 
     override fun updateData() {
         Timber.d("updateData()")
-        if (mActivity!!.useFirebase) {
+        if (mActivity.useFirebase) {
             makeComposerRelatedViewsVisible()
             selectComposer()
         } else {
@@ -293,34 +298,34 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
 
     private fun makeComposerRelatedViewsVisible() {
         Timber.d("showing views")
-        select_composer_button.visibility = View.VISIBLE
-        composers_name_label.text = mCurrentComposer
+        binding.selectProgramInclude.selectComposerButton.visibility = View.VISIBLE
+        binding.composersNameLabel.text = mCurrentComposer
         if (mDeleteCancelMenuItem != null) mDeleteCancelMenuItem!!.isEnabled = true
-        local_database_label.visibility = View.INVISIBLE
+        binding.localDatabaseLabel.visibility = View.INVISIBLE
         mActivity.title = getString(R.string.select_piece_by)
     }
 
     private fun makeComposerRelatedViewsInvisible() {
         Timber.d("removing views")
-        composers_name_label.visibility = View.INVISIBLE
-        local_database_label.visibility = View.VISIBLE
-        select_composer_button.visibility = View.GONE
+        binding.composersNameLabel.visibility = View.INVISIBLE
+        binding.localDatabaseLabel.visibility = View.VISIBLE
+        binding.selectProgramInclude.selectComposerButton.visibility = View.GONE
         mActivity.title = getString(R.string.select_a_piece)
     }
 
     private fun updateEmptyProgramList() {
-        error_view.text = getString(R.string.no_programs_currently_in_database)
-        error_view.contentDescription = getString(R.string.no_programs_currently_in_database)
+        binding.selectProgramInclude.errorView.text = getString(R.string.no_programs_currently_in_database)
+        binding.selectProgramInclude.errorView.contentDescription = getString(R.string.no_programs_currently_in_database)
         if (mDeleteCancelMenuItem != null) mDeleteCancelMenuItem!!.isEnabled = false
     }
 
     private fun progressSpinner(on: Boolean) {
         if (on) {
-            composers_name_label.visibility = View.INVISIBLE
-            program_select_progress_bar.visibility = View.VISIBLE
+            binding.composersNameLabel.visibility = View.INVISIBLE
+            binding.selectProgramInclude.programSelectProgressBar.visibility = View.VISIBLE
         } else {
-            composers_name_label.visibility = View.VISIBLE
-            program_select_progress_bar.visibility = View.INVISIBLE
+            binding.composersNameLabel.visibility = View.VISIBLE
+            binding.selectProgramInclude.programSelectProgressBar.visibility = View.INVISIBLE
         }
     }
 

@@ -20,13 +20,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.perf.metrics.AddTrace
-import kotlinx.android.synthetic.main.oddmeter_metronome_layout.*
-import kotlinx.android.synthetic.main.programmed_fragment.*
-import kotlinx.android.synthetic.main.programmed_fragment.help_overlay
-import kotlinx.android.synthetic.main.programmed_metronome_instructions.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.database.LoadNewProgramActivity
 import tech.michaeloverman.mscount.database.ProgramDatabaseSchema
+import tech.michaeloverman.mscount.databinding.ProgrammedFragmentBinding
 import tech.michaeloverman.mscount.dataentry.MetaDataEntryFragment
 import tech.michaeloverman.mscount.favorites.FavoritesContract
 import tech.michaeloverman.mscount.favorites.FavoritesDBHelper
@@ -103,24 +100,32 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
     }
 
+    private var _binding: ProgrammedFragmentBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.programmed_fragment, container, false)
+        _binding = ProgrammedFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        help_cancel_button.setOnClickListener { help_overlay.visibility = View.INVISIBLE }
-        current_composer_name.setOnClickListener { selectNewProgram() }
-        current_program_title.setOnClickListener { selectNewProgram() }
-        start_stop_fab.setOnClickListener { metronomeStartStop() }
-        help_overlay.setOnClickListener { ignoreClicks() }
+        binding.overlayInclude.helpCancelButton.setOnClickListener { binding.helpOverlay.visibility = View.INVISIBLE }
+        binding.currentComposerName.setOnClickListener { selectNewProgram() }
+        binding.currentProgramTitle.setOnClickListener { selectNewProgram() }
+        binding.startStopFab.setOnClickListener { metronomeStartStop() }
+        binding.helpOverlay.setOnClickListener { ignoreClicks() }
 
-        tempo_down_button.setOnTouchListener { v: View?, event: MotionEvent ->
+        binding.tempoDownButton.setOnTouchListener { v: View?, event: MotionEvent ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> mRunnableHandler!!.post(mDownRunnable!!)
                 MotionEvent.ACTION_UP -> {
@@ -131,7 +136,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             }
             true
         }
-        tempo_up_button.setOnTouchListener { v: View?, event: MotionEvent ->
+        binding.tempoUpButton.setOnTouchListener { v: View?, event: MotionEvent ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> mRunnableHandler!!.post(mUpRunnable!!)
                 MotionEvent.ACTION_UP -> {
@@ -142,13 +147,13 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             }
             true
         }
-        help_overlay.isSoundEffectsEnabled = false
+        binding.helpOverlay.isSoundEffectsEnabled = false
         if (mCurrentPiece != null) {
             updateGUI()
         }
 
         if (!PrefUtils.initialHelpShown(context, PrefUtils.PREF_PROGRAM_HELP)) {
-            help_overlay.visibility = View.VISIBLE
+            binding.helpOverlay.visibility = View.VISIBLE
             PrefUtils.helpScreenShown(context, PrefUtils.PREF_PROGRAM_HELP)
         }
     }
@@ -211,7 +216,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         }
         if (requestCode == REQUEST_NEW_PROGRAM) {
             Timber.d("REQUEST_NEW_PROGRAM result received")
-            mActivity!!.useFirebase = PrefUtils.usingFirebase(mActivity)
+            mActivity.useFirebase = PrefUtils.usingFirebase(mActivity)
             mCurrentPieceKey = data!!.getStringExtra(LoadNewProgramActivity.EXTRA_NEW_PROGRAM)
             pieceFromKey
         }
@@ -250,7 +255,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     }
 
     private fun makeInstructionsVisible() {
-        help_overlay.visibility = View.VISIBLE
+        binding.helpOverlay.visibility = View.VISIBLE
     }
 
     private fun selectNewProgram() {
@@ -278,18 +283,18 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             Timber.d("metronomeStop() %s", mCurrentComposer)
             mMetronome!!.stop()
             mMetronomeRunning = false
-            start_stop_fab.setImageResource(android.R.drawable.ic_media_play)
-            current_measure_number.setText(R.string.double_dash_no_measure_number)
+            binding.startStopFab.setImageResource(android.R.drawable.ic_media_play)
+            binding.currentMeasureNumber.setText(R.string.double_dash_no_measure_number)
         } else {
             Timber.d("metronomeStart() %s", mCurrentPiece!!.title)
             mMetronomeRunning = true
-            start_stop_fab.setImageResource(android.R.drawable.ic_media_pause)
+            binding.startStopFab.setImageResource(android.R.drawable.ic_media_pause)
             mMetronome!!.play(mCurrentPiece!!, mCurrentTempo)
         }
     }
 
     override fun metronomeMeasureNumber(mm: String?) {
-        current_measure_number.text = mm
+        binding.currentMeasureNumber.text = mm
     }
 
     override fun metronomeStopAndShowAd() {
@@ -407,7 +412,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
     }
 
     private fun updateTempoView() {
-        current_tempo_setting.text = mCurrentTempo.toString()
+        binding.currentTempoSetting.text = mCurrentTempo.toString()
     }
 
     private fun getNoteImageResource(noteValue: Int): Int {
@@ -462,13 +467,13 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
 
     private fun updateGUI() {
         if (mCurrentPiece == null) {
-            current_program_title.setText(R.string.no_composer_empty_space)
-            current_composer_name.setText(R.string.select_a_program)
+            binding.currentProgramTitle.setText(R.string.no_composer_empty_space)
+            binding.currentComposerName.setText(R.string.select_a_program)
         } else {
-            current_program_title.text = mCurrentPiece!!.title
-            current_composer_name.text = mCurrentComposer
-            primary_beat_length_image.setImageResource(getNoteImageResource(mCurrentPiece!!.displayNoteValue))
-            primary_beat_length_image.contentDescription = getString(R.string.note_value_note_equals,
+            binding.currentProgramTitle.text = mCurrentPiece!!.title
+            binding.currentComposerName.text = mCurrentComposer
+            binding.primaryBeatLengthImage.setImageResource(getNoteImageResource(mCurrentPiece!!.displayNoteValue))
+            binding.primaryBeatLengthImage.contentDescription = getString(R.string.note_value_note_equals,
                     getBeatLengthContentDescription(mCurrentPiece!!.displayNoteValue))
             mCurrentTempo = mCurrentPiece!!.defaultTempo
             updateTempoView()

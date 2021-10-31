@@ -9,9 +9,8 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.meta_data_options_layout.*
-import kotlinx.android.synthetic.main.programmed_fragment.*
 import tech.michaeloverman.mscount.R
+import tech.michaeloverman.mscount.databinding.MetaDataOptionsLayoutBinding
 import tech.michaeloverman.mscount.pojos.PieceOfMusic
 import tech.michaeloverman.mscount.utils.PrefUtils
 import timber.log.Timber
@@ -37,30 +36,33 @@ class MetaDataOptionsFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
+    private var _binding: MetaDataOptionsLayoutBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.meta_data_options_layout, container, false)
+        _binding = MetaDataOptionsLayoutBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        options_cancel_button.setOnClickListener { parentFragmentManager.popBackStackImmediate() }
-        save_options_button.setOnClickListener { save() }
+        binding.optionsCancelButton.setOnClickListener { parentFragmentManager.popBackStackImmediate() }
+        binding.saveOptionsButton.setOnClickListener { save() }
         val manager: RecyclerView.LayoutManager = LinearLayoutManager(mContext,
             LinearLayoutManager.HORIZONTAL, false)
-        display_rhythmic_value_recycler.layoutManager = manager
+        binding.displayRhythmicValueRecycler.layoutManager = manager
         mDisplayValueAdapter = NoteValueAdapter(mContext,
             resources.obtainTypedArray(R.array.note_values),
             resources.getStringArray(R.array.note_value_content_descriptions))
-        display_rhythmic_value_recycler.adapter = mDisplayValueAdapter
+        binding.displayRhythmicValueRecycler.adapter = mDisplayValueAdapter
         mDisplayValueAdapter.setSelectedPosition(mBaselineRhythm)
 
         // Remove soft keyboard when focus on recycler
-        display_rhythmic_value_recycler.onFocusChangeListener =
+        binding.displayRhythmicValueRecycler.onFocusChangeListener =
             View.OnFocusChangeListener { v: View, hasFocus: Boolean ->
                 if (hasFocus) {
                     val imm = v.context
@@ -70,18 +72,18 @@ class MetaDataOptionsFragment : Fragment() {
             }
 
         if (!PrefUtils.initialHelpShown(context, PrefUtils.PREF_META_OPT_HELP)) {
-            help_overlay.visibility = View.VISIBLE
+//            binding.help.visibility = View.VISIBLE
             PrefUtils.helpScreenShown(context, PrefUtils.PREF_META_OPT_HELP)
         }
     }
 
     fun save() {
-        var temp = measure_offset_entry.text.toString()
+        var temp = binding.measureOffsetEntry.text.toString()
         if (temp != "") {
             val offset = temp.toInt()
             mBuilder.firstMeasureNumber(offset)
         }
-        temp = tempo_multiplier_entry.text.toString()
+        temp = binding.tempoMultiplierEntry.text.toString()
         if (temp != "") {
             val multiplier = temp.toFloat()
             mBuilder.tempoMultiplier(multiplier.toDouble())

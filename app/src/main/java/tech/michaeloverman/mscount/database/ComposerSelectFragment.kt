@@ -14,10 +14,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.list_item_composer.view.*
-import kotlinx.android.synthetic.main.select_composer_layout.*
 import tech.michaeloverman.mscount.R
 import tech.michaeloverman.mscount.database.ComposerSelectFragment.ComposerListAdapter.ComposerViewHolder
+import tech.michaeloverman.mscount.databinding.SelectComposerLayoutBinding
 import timber.log.Timber
 import java.util.*
 
@@ -43,19 +42,21 @@ class ComposerSelectFragment : DatabaseAccessFragment() {
         setHasOptionsMenu(true)
     }
 
+    private var _binding: SelectComposerLayoutBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         Timber.d("onCreateView()")
-        val view = inflater.inflate(R.layout.select_composer_layout, container, false)
+        _binding = SelectComposerLayoutBinding.inflate(inflater, container, false)
         mActivity.title = getString(R.string.select_a_composer)
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val manager = LinearLayoutManager(mActivity)
-        composer_recycler_view.layoutManager = manager
+        binding.composerRecyclerView.layoutManager = manager
         mAdapter = ComposerListAdapter(this.context)
-        composer_recycler_view.adapter = mAdapter
+        binding.composerRecyclerView.adapter = mAdapter
         loadComposers()
     }
 
@@ -115,7 +116,7 @@ class ComposerSelectFragment : DatabaseAccessFragment() {
         }
 
         internal inner class ComposerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-            var composerName: TextView = itemView.composer_name_tv
+            var composerName: TextView = itemView.findViewById(R.id.composer_name_tv)
             override fun onClick(v: View) {
                 val position = adapterPosition
 
@@ -135,9 +136,9 @@ class ComposerSelectFragment : DatabaseAccessFragment() {
 
     private fun progressSpinner(on: Boolean) {
         if (on) {
-            composer_select_progress_bar.visibility = View.VISIBLE
+            binding.composerSelectProgressBar.visibility = View.VISIBLE
         } else {
-            composer_select_progress_bar.visibility = View.INVISIBLE
+            binding.composerSelectProgressBar.visibility = View.INVISIBLE
         }
     }
 
