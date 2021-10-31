@@ -2,10 +2,8 @@
 package tech.michaeloverman.mscount.favorites
 
 import android.content.Context
-import android.database.sqlite.SQLiteOpenHelper
-import tech.michaeloverman.mscount.favorites.FavoritesDBHelper
 import android.database.sqlite.SQLiteDatabase
-import tech.michaeloverman.mscount.favorites.FavoritesContract
+import android.database.sqlite.SQLiteOpenHelper
 
 /**
  * Helper class for accessing SQLite database of pieces marked as favorites.

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/AppThemeTransBlackBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -16,7 +14,7 @@
         app:layout_constraintGuide_percent="0.5"/>
     <TextView
         android:id="@+id/radio_instruction"
-        android:text="Select for whole number or tenths."
+        android:text="@string/select_for_whole_number_or_tenths"
         style="@style/InstructionOverlayTextStyle"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -25,7 +23,7 @@
         />
     <TextView
         android:id="@+id/startstop_instruction"
-        android:text="Start and stop the metronome"
+        android:text="@string/start_stop_met"
         style="@style/InstructionOverlayTextStyle"
         android:gravity="end"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,7 +33,7 @@
         />
     <TextView
         android:id="@+id/tempo_instruction"
-        android:text="Swipe to change tempo: up and down for large changes, side to side for small."
+        android:text="@string/swipe_to_change_tempo_up_and_down_for_large_changes_side_to_side_for_small"
         style="@style/InstructionOverlayTextStyle"
         android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/subdivision_volume_instruction"
@@ -45,7 +43,7 @@
         />
     <TextView
         android:id="@+id/subdivision_volume_instruction"
-        android:text="Click and hold orange buttons, slide up and down to adjust individual beat volume."
+        android:text="@string/click_and_hold_orange_buttons"
         style="@style/InstructionOverlayTextStyle"
         android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/subdivision_instruction"
@@ -55,7 +53,7 @@
         />
     <TextView
         android:id="@+id/subdivision_instruction"
-        android:text="Click \'+\' to add \'x\' to subtract beats to the measure."
+        android:text="@string/click_to_add_x_to_subtract_beats_to_the_measure"
         style="@style/InstructionOverlayTextStyle"
         android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/help_cancel_button"

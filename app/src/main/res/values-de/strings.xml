@@ -6,7 +6,7 @@
 	<string name="cancel">Stornieren</string>
 	<string name="composer">Komponist:</string>
 	<string name="select_a_composer">Wählen Sie ein Komponist:</string>
-	<string name="select_a_piece">Wählen Sie ein Stück...</string>
+	<string name="select_a_piece">Wählen Sie ein Stück…</string>
 	<string name="normal_metronome">Normaler Metronom</string>
 	<string name="pre_programmed_metronome">Fr. Zähl Metronom</string>
 	<string name="tenths_num_format">#,#</string>
@@ -14,7 +14,7 @@
 	<string name="sign_in_cancelled">Anmelden um die Datenbank gelöscht.</string>
 	<string name="no_internet_connection">Erneut eine Verbindung zum Internet, und melden Sie sich erneut.</string>
 	<string name="unknown_error">Ein Fehler ist die Anmeldung in die Datenbank aufgetreten. Bitte versuche es erneut.</string>
-	<string name="unknown_sign_in_response">Eine Antwort aus der Datenbank zurückgekommen ist, dass wir nicht verstehen. Nicht sicher, ob Sie in oder nicht angemeldet sind...</string>
+	<string name="unknown_sign_in_response">Eine Antwort aus der Datenbank zurückgekommen ist, dass wir nicht verstehen. Nicht sicher, ob Sie in oder nicht angemeldet sind…</string>
 	<string name="overwrite_data_confirmation">%1$s von %2$s existiert bereits in der Datenbank. Sind Sie sicher, dass Sie mit neuen Daten überschrieben werden soll?</string>
 	<string name="title_of_the_piece_dummy_data">Titel des Stückes</string>
 	<string name="save">Sparen</string>
@@ -36,11 +36,11 @@
 	<string name="local_database_label">Lokale Datenbank:</string>
 	<string name="delete_program">Programm löschen</string>
 	<string name="cancel_delete">Abbrechen löschen</string>
-	<string name="select_to_delete">Wählen Sie Programm zu löschen...</string>
+	<string name="select_to_delete">Wählen Sie Programm zu löschen…</string>
 	<string name="delete_confirmation_question">Sind Sie sicher, dass Sie %1$s aus der Datenbank löschen?</string>
 	<string name="delete_program_dialog_title">Programm löschen?</string>
-	<string name="deleting_title">Löschen von %1$s...</string>
-	<string name="select_a_program">wählen Sie ein Programm ...</string>
+	<string name="deleting_title">Löschen von %1$s…</string>
+	<string name="select_a_program">wählen Sie ein Programm …</string>
 	<string name="halve_all_data_values">Halbieren Sie alle Datenwerte</string>
 	<string name="double_all_data_values">Doppel alle Datenwerte</string>
 	<string name="erase_data">Löschen von Daten?</string>
@@ -48,9 +48,9 @@
 	<string name="leave">Verlassen</string>
 	<string name="leave_without_save">Sind Sie sicher, dass Sie, ohne zu speichern Ihre Daten verlassen wollen?</string>
 	<string name="favorite_database_error_try_again">Datenbankfehler. Versuchen Programm neu zu laden und als Favorit markiert.</string>
-	<string name="delete_from_sql_toast">Das Löschen der lokalen Datenbank...</string>
-	<string name="incorrect_format_database_id">Datenbank-ID nicht korrekt Integer-Format ...</string>
-	<string name="delete_from_firebase_toast">Das Löschen von Cloud-Datenbank...</string>
+	<string name="delete_from_sql_toast">Das Löschen der lokalen Datenbank…</string>
+	<string name="incorrect_format_database_id">Datenbank-ID nicht korrekt Integer-Format …</string>
+	<string name="delete_from_firebase_toast">Das Löschen von Cloud-Datenbank…</string>
 	<string name="not_authorized_to_delete_toast">Sie sind nicht zu löschen dieses Programm autorisiert.</string>
 	<string name="title_hint_string">Sonate Nr 3, Allegro</string>
 	<string name="title">Titel:</string>
@@ -81,5 +81,5 @@
 	<string name="help">Hilfe</string>
 	<string name="select_new_prog_instr">Tippen Titel neues Programm auszuwählen. Lokale/Cloud-Datenbanken können aus dem Optionsmenü umgeschaltet werden.</string>
 	<string name="use_arrows">Mit den Pfeiltasten Tempo ändern.</string>
-	<string name="pencil_heart_does_what">Bleistift führt die Erstellung/Bearbeitung zu programmieren. Herz markiert Programm als Favorit und umfasst es in Widget für die Einführung von Homescreen lenken.</string>
+	<string name="pencil_heart_does_what">Bleistift führt die Erstellung/Bearbeitung zu programmieren. Herz markiert Programm als Favorit.</string>
 </resources>

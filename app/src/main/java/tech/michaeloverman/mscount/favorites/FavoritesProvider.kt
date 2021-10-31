@@ -21,7 +21,7 @@ class FavoritesProvider : ContentProvider() {
 
     override fun query(uri: Uri, projection: Array<String>?,
                        selection: String?, selectionArgs: Array<String>?,
-                       sortOrder: String?): Cursor? {
+                       sortOrder: String?): Cursor {
         val cursor: Cursor = if (sUriMatcher.match(uri) == CODE_FAVORITES) {
             mDBHelper!!.readableDatabase.query(
                     FavoritesContract.FavoriteEntry.TABLE_NAME,
@@ -42,7 +42,7 @@ class FavoritesProvider : ContentProvider() {
         throw RuntimeException("getType not implemented")
     }
 
-    override fun insert(uri: Uri, value: ContentValues?): Uri? {
+    override fun insert(uri: Uri, value: ContentValues?): Uri {
         val db = mDBHelper!!.writableDatabase
         val _id: Long
         if (sUriMatcher.match(uri) == CODE_FAVORITES) {
@@ -70,9 +70,8 @@ class FavoritesProvider : ContentProvider() {
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
         var selection = selection
-        val numRowsDeleted: Int
         if (selection == null) selection = "1"
-        numRowsDeleted = if (sUriMatcher.match(uri) == CODE_FAVORITES) {
+        val numRowsDeleted: Int = if (sUriMatcher.match(uri) == CODE_FAVORITES) {
             mDBHelper!!.writableDatabase.delete(
                     FavoritesContract.FavoriteEntry.TABLE_NAME,
                     selection,

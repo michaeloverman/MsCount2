@@ -54,7 +54,7 @@ class OddMeterMetronomeFragment : Fragment(), MetronomeStartStopListener {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = OddmeterMetronomeLayoutBinding.inflate(inflater, container, false)
         return binding.root
     }

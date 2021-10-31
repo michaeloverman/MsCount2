@@ -90,13 +90,12 @@ class ProgramProvider : ContentProvider() {
                                 ProgramDatabaseSchema.MetProgram.COLUMN_COMPOSER)?.toString(),
                         values?.get(
                                 ProgramDatabaseSchema.MetProgram.COLUMN_TITLE)?.toString())
-                val _id: Long
-                _id = if (lineNumber == -1) {
+                val _id: Long = if (lineNumber == -1) {
                     db.insert(ProgramDatabaseSchema.MetProgram.TABLE_NAME,
                             null, values)
                 } else {
                     db.update(ProgramDatabaseSchema.MetProgram.TABLE_NAME, values,
-                            "_id=?", arrayOf(Integer.toString(lineNumber))).toLong()
+                            "_id=?", arrayOf(lineNumber.toString())).toLong()
                 }
                 Timber.d("long returned = %s", _id)
                 if (_id == -1L) {

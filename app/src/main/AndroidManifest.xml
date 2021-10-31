@@ -23,26 +23,26 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".NormalMetronomeActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation"
-            android:parentActivityName=".MsCountActivity">
+<!--        <activity android:name=".NormalMetronomeActivity"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:configChanges="orientation"-->
+<!--            android:parentActivityName=".MsCountActivity">-->
 
-        </activity>
-        <activity android:name=".OddMeterMetronomeActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation"
-            android:parentActivityName=".MsCountActivity">
+<!--        </activity>-->
+<!--        <activity android:name=".OddMeterMetronomeActivity"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:configChanges="orientation"-->
+<!--            android:parentActivityName=".MsCountActivity">-->
 
-        </activity>
-        <activity android:name=".programmed.ProgrammedMetronomeActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation"
-            android:parentActivityName=".MsCountActivity">
+<!--        </activity>-->
+<!--        <activity android:name=".programmed.ProgrammedMetronomeActivity"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:configChanges="orientation"-->
+<!--            android:parentActivityName=".MsCountActivity">-->
 
-        </activity>
+<!--        </activity>-->
         <activity android:name=".database.LoadNewProgramActivity"
-            android:parentActivityName=".programmed.ProgrammedMetronomeActivity"
+            android:parentActivityName=".MsCountActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation"
             android:theme="@style/AppTheme.SelectProgram">

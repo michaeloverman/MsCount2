@@ -10,7 +10,7 @@ import android.provider.BaseColumns
  */
 object FavoritesContract {
     const val CONTENT_AUTHORITY = "tech.michaeloverman.android.mscount"
-    private val BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY)
+    private val BASE_CONTENT_URI = Uri.parse("content://$CONTENT_AUTHORITY")
     const val PATH_FAVORITES = "favorites"
 
     object FavoriteEntry : BaseColumns {

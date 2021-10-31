@@ -14,7 +14,6 @@ import tech.michaeloverman.mscount.dataentry.MetaDataEntryFragment
  * Created by Michael on 4/5/2017.
  */
 abstract class MetronomeActivity : AppCompatActivity() {
-    protected var mMetronome: Metronome? = null
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.global_menu, menu)
@@ -70,6 +69,5 @@ abstract class MetronomeActivity : AppCompatActivity() {
 //        startActivity(intent)
     }
 
-    companion object {
-    }
+    companion object
 }

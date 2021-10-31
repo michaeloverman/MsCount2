@@ -50,7 +50,7 @@ object ClickSounds {
             }
             for (filename in soundNames!!) {
                 try {
-                    val assetPath = SOUNDS_FOLDER + "/" + filename
+                    val assetPath = "$SOUNDS_FOLDER/$filename"
                     val click = Click(assetPath)
                     load(click)
                     mClicks.add(click)

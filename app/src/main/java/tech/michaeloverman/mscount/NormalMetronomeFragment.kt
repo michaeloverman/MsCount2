@@ -1,6 +1,7 @@
 /* Copyright (C) 2017 Michael Overman - All Rights Reserved */
 package tech.michaeloverman.mscount
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.*
@@ -81,11 +82,12 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
     private var _binding: NormalMetronomeFragmentBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+        savedInstanceState: Bundle?): View {
         _binding = NormalMetronomeFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -289,10 +291,7 @@ class NormalMetronomeFragment : Fragment(), MetronomeStartStopListener {
 
     private fun addSubdivisionVolumeChangeListeners() {
 //        mSubdivisionDetector = new GestureDetectorCompat[MAX_SUBDIVISIONS];
-        mSubdivisionIndicators.forEach {
-
-        }
-        for (i in 0 until MAX_SUBDIVISIONS) {
+        (0 until MAX_SUBDIVISIONS).forEach { i ->
             //            mSubdivisionDetector[subdivisionID] = new GestureDetectorCompat(this.getContext(),
 //                    new SubdivisionGestureListener(subdivisionID));
             mSubdivisionIndicators[i]?.setOnTouchListener(object : OnTouchListener {

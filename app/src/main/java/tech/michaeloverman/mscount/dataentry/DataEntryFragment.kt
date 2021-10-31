@@ -59,7 +59,7 @@ class DataEntryFragment : Fragment() {
 
     private var _binding: DataInputLayoutBinding? = null
     private val binding get() = _binding!!
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = DataInputLayoutBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -124,7 +124,7 @@ class DataEntryFragment : Fragment() {
     }
 
     private fun multiplyValues(multiplier: Int) {
-        for (entry in mDataList!!) {
+        for (entry in mDataList) {
             if (!entry.isBarline) {
                 entry.data = entry.data * multiplier
             }
@@ -135,7 +135,7 @@ class DataEntryFragment : Fragment() {
 
     private fun divideValues(divider: Int) {
         val tempList: MutableList<DataEntry> = ArrayList()
-        for (entry in mDataList!!) {
+        for (entry in mDataList) {
             if (!entry.isBarline && entry.data % divider != 0) {
                 cantDivideError()
                 return

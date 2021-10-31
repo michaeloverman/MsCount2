@@ -102,7 +102,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = MetaDataInputLayoutBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -199,7 +199,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
             toastError()
             return
         }
-        mBuilder!!.title(title)
+        mBuilder.title(title)
         mTemporaryBaselineRhythm = mBaselineRhythmicValueAdapter!!.selectedRhythm
         //        Timber.d("mTemporaryBaselineRhythm" + mTemporaryBaselineRhythm);
         gotoDataEntryFragment(title)
@@ -272,7 +272,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
         } else {
             if (mCursor == null) {
                 Timber.d("mCursor is null, initing loader...")
-                LoaderManager.getInstance(mActivity!!).initLoader(ID_PIECE_LOADER, null, this)
+                LoaderManager.getInstance(mActivity).initLoader(ID_PIECE_LOADER, null, this)
             } else {
                 Timber.d("mCursor exists, going straight to data")
                 pieceFromSql
@@ -461,7 +461,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
             return false
         }
         val composer = composerLast.trim { it <= ' ' } + ", " + composerFirst.trim { it <= ' ' }
-        mBuilder!!.author(composer)
+        mBuilder.author(composer)
                 .title(title)
                 .subdivision(subdInt)
                 .countOffSubdivision(countoffInt)
@@ -496,7 +496,7 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
     @AddTrace(name = "saveToSqlDatabase")
     private fun saveToSqlDatabase() {
         Timber.d("this where it should be saving to sql")
-        val contentValues = getContentValuesFromPiece(mPieceOfMusic!!)
+        val contentValues = getContentValuesFromPiece(mPieceOfMusic)
         val resolver = context?.contentResolver
         val returnUri = resolver?.insert(ProgramDatabaseSchema.MetProgram.CONTENT_URI, contentValues)
         if (returnUri != null) {
@@ -512,8 +512,8 @@ class MetaDataEntryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor?>
 
         // Look for piece first, and if exists, get that key to update; otherwise push() to create
         // new key for new piece.
-        val composer = mPieceOfMusic!!.author
-        val title = mPieceOfMusic!!.title
+        val composer = mPieceOfMusic.author
+        val title = mPieceOfMusic.title
         databaseReference.child("composers").child(composer!!).child(title!!)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {

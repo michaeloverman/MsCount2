@@ -11,7 +11,7 @@ import timber.log.Timber
  */
 object ProgramDatabaseSchema {
     const val AUTHORITY = "tech.michaeloverman.android.mscount"
-    private val BASE_URI = Uri.parse("content://" + AUTHORITY)
+    private val BASE_URI = Uri.parse("content://$AUTHORITY")
     const val PATH_PROGRAMS = "programs"
 
     object MetProgram : BaseColumns {
@@ -20,7 +20,7 @@ object ProgramDatabaseSchema {
                 .build()
         const val TABLE_NAME = "programs"
 
-        const val _ID = "_id";
+        const val _ID = "_id"
         const val COLUMN_COMPOSER = "composer"
         const val COLUMN_TITLE = "title"
         const val COLUMN_PRIMARY_SUBDIVISIONS = "primary_subs"
@@ -55,7 +55,7 @@ object ProgramDatabaseSchema {
 
         fun buildUriWithId(id: Int): Uri {
             return CONTENT_URI.buildUpon()
-                    .appendPath(Integer.toString(id))
+                    .appendPath(id.toString())
                     .build()
         }
     }

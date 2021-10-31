@@ -42,7 +42,7 @@ class MetaDataOptionsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = MetaDataOptionsLayoutBinding.inflate(inflater, container, false)
         return binding.root
     }

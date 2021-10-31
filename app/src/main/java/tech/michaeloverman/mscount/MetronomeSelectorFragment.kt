@@ -30,7 +30,7 @@ class MetronomeSelectorFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = MetSelectorFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -62,7 +62,6 @@ class MetronomeSelectorFragment : Fragment() {
     }
 
     companion object {
-        private val TAG = MetronomeSelectorFragment::class.java.simpleName
         fun newInstance(): Fragment {
             return MetronomeSelectorFragment()
         }

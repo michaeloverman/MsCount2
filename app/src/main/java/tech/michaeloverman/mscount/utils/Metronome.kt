@@ -37,10 +37,6 @@ class Metronome(private val mContext: Context) {
     private var mListener: MetronomeStartStopListener? = null
     private var mPListener: ProgrammedMetronomeListener? = null
 
-    //
-    //    public void setContext(Context context) {
-    //        mContext = context;
-    //    }
     fun setMetronomeStartStopListener(ml: MetronomeStartStopListener?) {
         mListener = ml
     }
@@ -141,10 +137,10 @@ class Metronome(private val mContext: Context) {
      * Programmed click, accepts a PieceOfMusic to define changing click patterns, and a
      * tempo marking.
      * @param p - the piece/program
-     * @param tempo - tempo of playback
+     * @param tempo1 - tempo of playback
      */
-    fun play(p: PieceOfMusic, tempo: Int) {
-        var tempo = tempo
+    fun play(p: PieceOfMusic, tempo1: Int) {
+        var tempo = tempo1
         if (tempo == 0) {
             Timber.d("Big problem - tempo == 0 - how did that happen?")
             Toast.makeText(mContext, "Tempo cannot be 0", Toast.LENGTH_SHORT).show()
@@ -154,7 +150,7 @@ class Metronome(private val mContext: Context) {
         Timber.d("metronome play()")
         if (p.tempoMultiplier != 0.0) {
             Timber.d("tempo multiplier!! %s", p.tempoMultiplier)
-            tempo *= p.tempoMultiplier.toInt()
+            tempo = (tempo * p.tempoMultiplier).toInt()
         }
         mDelay = (60000 / p.subdivision / tempo).toLong()
         //        Timber.d(p.toString());
@@ -186,7 +182,6 @@ class Metronome(private val mContext: Context) {
                     nextClick += beats[beatPointer++] // set the subdivision counter for next beat
                     beatsPerMeasureCount-- // count down one beat in the measure
                     if (measurePointer == 1) {
-//                        Log.d(TAG, "Countoff Measure, beat" + beatPointer);
                         if (beatPointer >= 3 + countOffSubs) {
                             mPListener!!.metronomeMeasureNumber("GO")
                         } else if (beatPointer >= 3) {
@@ -270,7 +265,7 @@ class Metronome(private val mContext: Context) {
     }
 
     private val clicksFromSharedPrefs: Unit
-        private get() {
+        get() {
             mDownBeatClickId = getDownBeatClickId(mContext)
             mInnerBeatClickId = getInnerBeatClickId(mContext)
             mSubdivisionBeatClickId = getSubdivisionBeatClickId(mContext)

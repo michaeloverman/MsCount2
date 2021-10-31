@@ -37,14 +37,14 @@ class ComposerSelectFragment : DatabaseAccessFragment() {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate()")
         mActivity = activity as LoadNewProgramActivity
-        Timber.d("useFirebase = %s", mActivity!!.useFirebase)
+        Timber.d("useFirebase = ${mActivity.useFirebase}")
         retainInstance = true
         setHasOptionsMenu(true)
     }
 
     private var _binding: SelectComposerLayoutBinding? = null
     private val binding get() = _binding!!
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         Timber.d("onCreateView()")
         _binding = SelectComposerLayoutBinding.inflate(inflater, container, false)
         mActivity.title = getString(R.string.select_a_composer)
@@ -76,7 +76,7 @@ class ComposerSelectFragment : DatabaseAccessFragment() {
                             snap.key?.let { list.add(it) }
                         }
                         list.sort()
-                        mAdapter!!.setComposers(list)
+                        mAdapter.setComposers(list)
                         progressSpinner(false)
                     }
 
@@ -84,7 +84,7 @@ class ComposerSelectFragment : DatabaseAccessFragment() {
                 })
     }
 
-    public override fun updateData() {
+    override fun updateData() {
         Timber.d("updateData()")
         loadComposers()
     }
@@ -92,17 +92,14 @@ class ComposerSelectFragment : DatabaseAccessFragment() {
     /**
      * Adapter class to handle recycler view, listing composer names
      */
-    internal inner class ComposerListAdapter     //            Timber.d("ComposerListAdapter constructor");
-    (private val mContext: Context?) : RecyclerView.Adapter<ComposerViewHolder>() {
+    internal inner class ComposerListAdapter (private val mContext: Context?) : RecyclerView.Adapter<ComposerViewHolder>() {
         private var composers: List<String?> = emptyList()
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComposerViewHolder {
-//            Timber.d("onCreateViewHolder");
             val item = LayoutInflater.from(mContext).inflate(R.layout.list_item_composer, parent, false)
             return ComposerViewHolder(item)
         }
 
         override fun onBindViewHolder(holder: ComposerViewHolder, position: Int) {
-//            Timber.d("onBindViewHolder()");
             holder.composerName.text = composers[position]
         }
 
@@ -128,7 +125,6 @@ class ComposerSelectFragment : DatabaseAccessFragment() {
             }
 
             init {
-                //                Timber.d("ComposerViewHolder constructor");
                 itemView.setOnClickListener(this)
             }
         }

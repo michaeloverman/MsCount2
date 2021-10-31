@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/AppThemeTransBlackBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -16,7 +14,7 @@
         app:layout_constraintGuide_percent="0.5"/>
     <TextView
         android:id="@+id/meta_data_entry_instruction"
-        android:text="Enter composer name and piece title."
+        android:text="@string/enter_composer_name_and_piece_title"
         style="@style/InstructionOverlayTextStyle"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
@@ -26,7 +24,7 @@
         />
     <TextView
         android:id="@+id/subdivision_entry_instruction"
-        android:text="Enter number of subdivisions in primary beat, and number of inner clicks in countoff (usually 2 or 3)."
+        android:text="@string/enter_number_of_subdivisions_in_primary_beat"
         style="@style/InstructionOverlayTextStyle"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/meta_data_entry_instruction"
@@ -36,7 +34,7 @@
         />
     <TextView
         android:id="@+id/rhythmic_value_instruction"
-        android:text="Enter default tempo and select rhythmic value of primary beat."
+        android:text="@string/enter_default_tempo_and_select_rhythmic_value_of_primary_beat"
         style="@style/InstructionOverlayTextStyle"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/subdivision_entry_instruction"
@@ -47,7 +45,7 @@
 
     <TextView
         android:id="@+id/other_instructions"
-        android:text="Click \'Options\' to enter measure number offset or tempo multiplier.\nClick \'Program Beats\' to enter the beat data for the program."
+        android:text="@string/click_options"
         style="@style/InstructionOverlayTextStyle"
         android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/help_cancel_button"

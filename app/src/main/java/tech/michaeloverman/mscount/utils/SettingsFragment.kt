@@ -20,8 +20,8 @@ import tech.michaeloverman.mscount.R
  */
 class SettingsFragment private constructor() : PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
 
-    lateinit var mEntries: Array<String>
-    lateinit var mValues: Array<String>
+    private lateinit var mEntries: Array<String>
+    private lateinit var mValues: Array<String>
     private lateinit var localContext: AppCompatActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {

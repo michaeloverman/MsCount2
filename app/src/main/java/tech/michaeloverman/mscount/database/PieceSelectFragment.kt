@@ -49,7 +49,7 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
     private var _binding: ProgramSelectFragmentBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         _binding = ProgramSelectFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -121,7 +121,7 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
         progressSpinner(false)
     }
 
-    fun selectComposer() {
+    private fun selectComposer() {
         val fragment = ComposerSelectFragment.newInstance()
 
 //        android.transition.ChangeBounds changeBounds = (android.transition.ChangeBounds) TransitionInflater.from(mActivity).inflateTransition(R.transition.change_bounds);
@@ -217,7 +217,7 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
     private fun composerSelected() {
         progressSpinner(true)
         Timber.d("composerSelected() - %s", mCurrentComposer)
-        if (mActivity!!.useFirebase) {
+        if (mActivity.useFirebase) {
             Timber.d("Checking Firebase for composer %s", mCurrentComposer)
             FirebaseDatabase.getInstance().reference.child("composers").child(mCurrentComposer!!)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -236,7 +236,7 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
                     })
         } else {
             Timber.d("Checking SQL for pieces ")
-            LoaderManager.getInstance(mActivity!!).initLoader(ID_PROGRAM_LOADER, null, this)
+            LoaderManager.getInstance(mActivity).initLoader(ID_PROGRAM_LOADER, null, this)
         }
     }
 
@@ -245,7 +245,8 @@ class PieceSelectFragment : DatabaseAccessFragment(), WorksListAdapterOnClickHan
             val queryUri = ProgramDatabaseSchema.MetProgram.CONTENT_URI
             Timber.d("onCreateLoader() queryUri: %s", queryUri)
             val sortOrder = ProgramDatabaseSchema.MetProgram.COLUMN_TITLE + " ASC"
-            CursorLoader(mActivity!!,
+            CursorLoader(
+                mActivity,
                     queryUri,
                     null,
                     null,

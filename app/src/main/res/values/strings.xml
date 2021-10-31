@@ -206,7 +206,7 @@
     <string name="select_new_prog_instr">Tap title to select new program. Local/Cloud databases can be toggled from the options menu.</string>
     <string name="start_stop_met">Start and stop the metronome</string>
     <string name="use_arrows">Use arrow keys to change tempo.</string>
-    <string name="pencil_heart_does_what">Pencil takes you to program creation/editing. Heart marks program as favorite, and includes it in widget for launch direct from homescreen.</string>
+    <string name="pencil_heart_does_what">Pencil takes you to program creation/editing. Heart marks program as favorite.</string>
     <string name="subdivision_one">subdivision one</string>
     <string name="subdivision_two">subdivision two</string>
     <string name="subdivision_three">subdivision three</string>
@@ -220,8 +220,15 @@
     <string name="swipe_to_change_tempo">Swipe to change tempo:\nup/down = fast change,\nright/left = slow</string>
     <string name="tap_and_select_new_number_to_change_primary_beat_length">Tap and select new number to change primary beat length.</string>
     <string name="click_a_number_to_add_a_beat_with_that_many_subdivisions_click_the_x_to_delete_last_beat">Click a number to add a beat with that many subdivisions. Click the \'X\' to delete last beat.</string>
-    <string name="start_and_stop_the_metronome">Start and stop the metronome</string>
     <string name="select_to_play_subdivisions">Select to play subdivisions.</string>
+    <string name="enter_composer_name_and_piece_title">Enter composer name and piece title.</string>
+    <string name="enter_number_of_subdivisions_in_primary_beat">Enter number of subdivisions in primary beat, and number of inner clicks in countoff (usually 2 or 3).</string>
+    <string name="enter_default_tempo_and_select_rhythmic_value_of_primary_beat">Enter default tempo and select rhythmic value of primary beat.</string>
+    <string name="click_options">Click \'Options\' to enter measure number offset or tempo multiplier.\nClick \'Program Beats\' to enter the beat data for the program.</string>
+    <string name="select_for_whole_number_or_tenths">Select for whole number or tenths.</string>
+    <string name="swipe_to_change_tempo_up_and_down_for_large_changes_side_to_side_for_small">Swipe to change tempo: up and down for large changes, side to side for small.</string>
+    <string name="click_and_hold_orange_buttons">Click and hold orange buttons, slide up and down to adjust individual beat volume.</string>
+    <string name="click_to_add_x_to_subtract_beats_to_the_measure">Click \'+\' to add \'x\' to subtract beats to the measure.</string>
 
 
 </resources>

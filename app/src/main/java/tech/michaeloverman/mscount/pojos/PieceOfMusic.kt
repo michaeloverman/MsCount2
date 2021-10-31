@@ -105,8 +105,7 @@ class PieceOfMusic : Serializable {
     private fun buildCountoff() {
         mCountOffMeasureLength = COUNTOFF_LENGTH + mCountOffSubdivision - 1
         mCountOff = IntArray(mCountOffMeasureLength)
-        var i: Int
-        i = 0
+        var i: Int = 0
         while (i < mCountOff.size) {
             if (i != COUNTOFF_LENGTH - 2) {
                 mCountOff[i++] = subdivision
@@ -116,7 +115,7 @@ class PieceOfMusic : Serializable {
                 }
             }
         }
-        appendCountoff(mCountOff, mBeats!!, downBeats)
+        appendCountoff(mCountOff, mBeats, downBeats)
     }
 
     fun countOffArray(): IntArray {
@@ -128,14 +127,14 @@ class PieceOfMusic : Serializable {
             return
         }
         mRawData = ArrayList()
-        var currentBeatCount = downBeats!![0]
-        for (i in 1 until downBeats!!.size) {
+        var currentBeatCount = downBeats[0]
+        for (i in 1 until downBeats.size) {
             mRawData?.add(DataEntry(i, true))
-            for (j in 0 until downBeats!![i]) {
-                if (currentBeatCount >= mBeats!!.size) {
-                    mBeats!!.add(subdivision)
+            for (j in 0 until downBeats[i]) {
+                if (currentBeatCount >= mBeats.size) {
+                    mBeats.add(subdivision)
                 }
-                mRawData?.add(DataEntry(mBeats!![currentBeatCount++]!!, false))
+                mRawData?.add(DataEntry(mBeats[currentBeatCount++], false))
             }
         }
         resaveToFirebase()
@@ -252,10 +251,10 @@ class PieceOfMusic : Serializable {
             var beatsPerMeasureCount = 0
             for (i in start until data.size) {
                 if (data[i].isBarline) {
-                    downBeats?.add(beatsPerMeasureCount)
+                    downBeats.add(beatsPerMeasureCount)
                     beatsPerMeasureCount = 0
                 } else {
-                    beats?.add(data[i].data)
+                    beats.add(data[i].data)
                     beatsPerMeasureCount++
                 }
             }

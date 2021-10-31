@@ -31,7 +31,7 @@ class LoadNewProgramActivity : SingleFragmentActivity() {
     private var mAuthListener: AuthStateListener? = null
     var useFirebase = false
     var mCurrentComposer: String? = null
-    override fun createFragment(): Fragment? {
+    override fun createFragment(): Fragment {
         return PieceSelectFragment.newInstance()
     }
 
@@ -123,13 +123,13 @@ class LoadNewProgramActivity : SingleFragmentActivity() {
     }
 
     private fun updateData() {
-        val f = supportFragmentManager.findFragmentById(R.id.fragment_container) as DatabaseAccessFragment?
-        if (!useFirebase && f is ComposerSelectFragment) {
+        val fm = supportFragmentManager.findFragmentById(R.id.fragment_container) as DatabaseAccessFragment?
+        if (!useFirebase && fm is ComposerSelectFragment) {
 //            Timber.d("popping......");
-            f.getFragmentManager()!!.popBackStackImmediate()
+            supportFragmentManager.popBackStackImmediate()
         } else {
 //            Timber.d("switching to cloud");
-            f!!.updateData()
+            fm!!.updateData()
         }
     }
 

@@ -43,7 +43,7 @@ import timber.log.Timber
 class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, ProgrammedMetronomeListener, LoaderManager.LoaderCallbacks<Cursor?> {
     private var mAuth: FirebaseAuth? = null
     private var mAuthListener: FirebaseAuth.AuthStateListener? = null
-    var useFirebase = false
+    private var useFirebase = false
     private var databaseMenuItem: MenuItem? = null
 
     private var mCurrentPiece: PieceOfMusic? = null
@@ -141,7 +141,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = ProgrammedFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -262,15 +262,20 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
                 Timber.d("signed into Firebase")
             } else {
                 // Sign in failed
-                if (response == null) {
-                    // User pressed back button
-                    showToast(R.string.sign_in_cancelled)
-                } else if (response.error!!.errorCode == ErrorCodes.NO_NETWORK) {
-                    showToast(R.string.no_internet_connection)
-                } else if (response.error!!.errorCode == ErrorCodes.UNKNOWN_ERROR) {
-                    showToast(R.string.unknown_error)
-                } else {
-                    showToast(R.string.unknown_sign_in_response)
+                when {
+                    response == null -> {
+                        // User pressed back button
+                        showToast(R.string.sign_in_cancelled)
+                    }
+                    response.error!!.errorCode == ErrorCodes.NO_NETWORK -> {
+                        showToast(R.string.no_internet_connection)
+                    }
+                    response.error!!.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
+                        showToast(R.string.unknown_error)
+                    }
+                    else -> {
+                        showToast(R.string.unknown_sign_in_response)
+                    }
                 }
                 goLocal()
             }
@@ -432,7 +437,7 @@ class ProgrammedMetronomeFragment : Fragment(), MetronomeStartStopListener, Prog
             } else {
                 if (mCursor == null) {
                     Timber.d("mCursor is null, initing loader...")
-                    LoaderManager.getInstance(mActivity!!).initLoader(ID_PIECE_LOADER, null, this)
+                    LoaderManager.getInstance(mActivity).initLoader(ID_PIECE_LOADER, null, this)
                 } else {
                     Timber.d("mCursor exists, going straight to data")
                     pieceFromSql
